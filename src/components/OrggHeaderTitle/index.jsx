@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, LogoContainer, HeaderText } from './styles';
 import LogoSVG from '../../../assets/LogoIcon';
 
-const LogoTitle = () => (
+const OrggHeaderTitle = () => (
   <Container>
     <LogoContainer>
       <LogoSVG />
@@ -11,4 +11,4 @@ const LogoTitle = () => (
   </Container>
 );
 
-export default LogoTitle;
+export default OrggHeaderTitle;

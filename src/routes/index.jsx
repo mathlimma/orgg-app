@@ -3,7 +3,7 @@ import StatusBar from '@emmanuel312/react-native-statusbar';
 import { createStackNavigator } from '@react-navigation/stack';
 import AddTodo from '../pages/AddTodo';
 import Colors from '../utils/colors';
-import LogoTitle from '../components/LogoTitle';
+import OrggHeaderTitle from '../components/OrggHeaderTitle';
 
 const MainStack = createStackNavigator();
 
@@ -17,7 +17,7 @@ const Routes = () => (
           backgroundColor: Colors.background,
           elevation: 0,
         },
-        title: <LogoTitle />,
+        title: <OrggHeaderTitle />,
       }}
     >
       <MainStack.Screen name="AddTodo" component={AddTodo} />
