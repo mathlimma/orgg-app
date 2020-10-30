@@ -1,7 +1,7 @@
 import React from 'react';
 import StatusBar from '@emmanuel312/react-native-statusbar';
 import { createStackNavigator } from '@react-navigation/stack';
-import AddTodo from '../pages/AddTodo';
+import StartingScreen from '../pages/StartingScreen';
 import Colors from '../utils/colors';
 import OrggHeaderTitle from '../components/OrggHeaderTitle';
 
@@ -11,7 +11,7 @@ const Routes = () => (
   <>
     <StatusBar backgroundColor={Colors.background} barStyle="dark-content" />
     <MainStack.Navigator
-      initialRouteName="AddTodo"
+      initialRouteName="StartingScreen"
       screenOptions={{
         headerStyle: {
           backgroundColor: Colors.background,
@@ -20,7 +20,7 @@ const Routes = () => (
         title: <OrggHeaderTitle />,
       }}
     >
-      <MainStack.Screen name="AddTodo" component={AddTodo} />
+      <MainStack.Screen name="StartingScreen" component={StartingScreen} />
     </MainStack.Navigator>
   </>
 );

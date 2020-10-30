@@ -12,6 +12,6 @@ export const LogoContainer = styled.View`
 `;
 
 export const HeaderText = styled.Text` 
-  color: ${Colors.text.header};
+  color: ${Colors.text.appHeader};
   font-family: Poppins_500Medium;
 `;

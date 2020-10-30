@@ -8,6 +8,9 @@ import {
   Poppins_500Medium,
   Poppins_700Bold,
 } from '@expo-google-fonts/poppins';
+import {
+  Rubik_400Regular,
+} from '@expo-google-fonts/rubik';
 import { AppLoading } from 'expo';
 import Routes from './src/routes';
 
@@ -16,6 +19,7 @@ const App = () => {
     Poppins_400Regular,
     Poppins_500Medium,
     Poppins_700Bold,
+    Rubik_400Regular,
   });
 
   return fontsLoaded ? (
