@@ -1,5 +1,4 @@
 import React from 'react';
-import { Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { Button, Label } from './styles';
 

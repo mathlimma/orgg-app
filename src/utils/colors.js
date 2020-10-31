@@ -5,7 +5,10 @@ const Colors = {
     appHeader: '#828282',
     button: '#2D3748',
     screenTitle: '#000000',
-    screenBody: '#7D7D7D',
+    screenSubtitle: '#7D7D7D',
+    inputLabel: '#718096',
+    inputLabelDarker: '#515767',
+    inputBorder: '#E2E8F0',
   },
 };
 

@@ -11,6 +11,9 @@ import {
 import {
   Rubik_400Regular,
 } from '@expo-google-fonts/rubik';
+import {
+  Inter_600SemiBold,
+} from '@expo-google-fonts/inter';
 import { AppLoading } from 'expo';
 import Routes from './src/routes';
 
@@ -20,6 +23,7 @@ const App = () => {
     Poppins_500Medium,
     Poppins_700Bold,
     Rubik_400Regular,
+    Inter_600SemiBold,
   });
 
   return fontsLoaded ? (

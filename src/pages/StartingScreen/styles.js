@@ -25,7 +25,7 @@ export const TitleText = styled.Text`
 `;
 
 export const BodyText = styled.Text`
-    color: ${Colors.text.screenBody};
+    color: ${Colors.text.screenSubtitle};
     font-family: Rubik_400Regular;
     margin-top: 16px;
 `;

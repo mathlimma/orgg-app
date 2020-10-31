@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Modal, TouchableWithoutFeedback } from 'react-native';
 import { Overlay, ContentContainer } from './styles';
 
+// FIX: Clicking on content calls onPressOpacity
 // TODO: Animate Content going up and Overlay transparency
 
 const OrggBottomSheet = ({ children, onPressOpacity }) => (
