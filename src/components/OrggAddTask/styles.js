@@ -9,5 +9,5 @@ export const TitleText = styled.Text`
     color: ${Colors.text.screenTitle};
     font-family: Rubik_400Regular;
     font-size: 25px;
-    margin-bottom: 30px;
+    margin-bottom: 26px;
 `;
