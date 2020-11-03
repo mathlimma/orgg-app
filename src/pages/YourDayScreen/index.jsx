@@ -10,22 +10,22 @@ import {
 // TODO: Implement onPress in "Organizar" OrggButton
 // TODO: User cam add more tasks
 
-const TaskListScreen = () => {
+const YourDayScreen = () => {
   const { state: tasks } = useContext(tasksContext);
   const navigation = useNavigation();
 
   return (
     <Container>
-      <TitleText>Sua Lista</TitleText>
+      <TitleText>Seu dia</TitleText>
       <List
         data={tasks}
         renderItem={TaskListItem}
         keyExtractor={(item) => item.name}
         showsVerticalScrollIndicator={false}
       />
-      <OrggButton label="Organizar" onPress={() => navigation.replace('Organizing')} />
+      <OrggButton label="Começar" onPress={() => null} />
     </Container>
   );
 };
 
-export default TaskListScreen;
+export default YourDayScreen;

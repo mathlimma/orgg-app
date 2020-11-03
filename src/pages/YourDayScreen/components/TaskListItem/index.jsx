@@ -7,7 +7,7 @@ import MediumPriorityIcon from '../../../../../assets/MediumPriorityIcon';
 import HighPriorityIcon from '../../../../../assets/HighPriorityIcon';
 import VeryHighPriorityIcon from '../../../../../assets/VeryHighPriorityIcon';
 
-// TODO: User can delete tasks
+// TODO: Add time estimation and "Editar" button
 
 const TaskListItem = ({ item }) => {
   let Icon;
