@@ -12,6 +12,7 @@
     "@expo-google-fonts/inter": "^0.1.0",
     "@expo-google-fonts/poppins": "^0.1.0",
     "@expo-google-fonts/rubik": "^0.1.0",
+    "@react-native-community/async-storage": "~1.12.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/picker": "1.6.6",
     "@react-navigation/native": "^5.8.0",

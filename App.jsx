@@ -8,14 +8,11 @@ import {
   Poppins_500Medium,
   Poppins_700Bold,
 } from '@expo-google-fonts/poppins';
-import {
-  Rubik_400Regular,
-} from '@expo-google-fonts/rubik';
-import {
-  Inter_600SemiBold,
-} from '@expo-google-fonts/inter';
+import { Rubik_400Regular } from '@expo-google-fonts/rubik';
+import { Inter_600SemiBold } from '@expo-google-fonts/inter';
 import { AppLoading } from 'expo';
 import Routes from './src/routes';
+import { TasksProvider } from './src/state/tasks';
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -27,9 +24,11 @@ const App = () => {
   });
 
   return fontsLoaded ? (
-    <NavigationContainer>
-      <Routes />
-    </NavigationContainer>
+    <TasksProvider>
+      <NavigationContainer>
+        <Routes />
+      </NavigationContainer>
+    </TasksProvider>
   ) : (
     <AppLoading />
   );
