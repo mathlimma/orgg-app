@@ -8,6 +8,7 @@ import StartingScreen from '../pages/StartingScreen';
 import TaskListScreen from '../pages/TaskListScreen';
 import OrganizingScreen from '../pages/OrganizingScreen';
 import YourDayScreen from '../pages/YourDayScreen';
+import TaskScreen from '../pages/TaskScreen';
 
 const MainStack = createStackNavigator();
 
@@ -32,6 +33,8 @@ const Routes = () => {
         <MainStack.Screen name="TaskList" component={TaskListScreen} />
         <MainStack.Screen name="Organizing" component={OrganizingScreen} />
         <MainStack.Screen name="YourDay" component={YourDayScreen} />
+        <MainStack.Screen name="Task" component={TaskScreen} />
+
       </MainStack.Navigator>
     </>
   );

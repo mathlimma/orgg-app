@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
+
 import { Container, TaskTitle } from './styles';
 import LowPriorityIcon from '../../../../../assets/LowPriorityIcon';
 import MediumPriorityIcon from '../../../../../assets/MediumPriorityIcon';
@@ -9,7 +10,7 @@ import VeryHighPriorityIcon from '../../../../../assets/VeryHighPriorityIcon';
 
 // TODO: Add time estimation and "Editar" button
 
-const TaskListItem = ({ item }) => {
+const TaskListItem = ({ item, handleNavigation }) => {
   let Icon;
   if (item.priority === 0) Icon = LowPriorityIcon;
   else if (item.priority === 1) Icon = MediumPriorityIcon;
@@ -17,9 +18,9 @@ const TaskListItem = ({ item }) => {
   else if (item.priority === 3) Icon = VeryHighPriorityIcon;
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => handleNavigation(item)}>
       <Container>
-        <TaskTitle>{item.name}</TaskTitle>
+        <TaskTitle>{item?.name}</TaskTitle>
         <Icon />
       </Container>
     </TouchableOpacity>
@@ -30,6 +31,7 @@ TaskListItem.propTypes = {
     name: PropTypes.string.isRequired,
     priority: PropTypes.number.isRequired,
   }).isRequired,
+  handleNavigation: PropTypes.func.isRequired,
 };
 
 export default TaskListItem;

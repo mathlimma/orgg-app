@@ -8,6 +8,7 @@ export const Button = styled(TouchableOpacity)`
   align-items: center;
   background-color: ${Colors.buttonBackground};
   border-radius: 8px;
+  margin-bottom: ${(props) => (props.marginBottom ? 18 : 0)}px;
 `;
 
 export const Label = styled.Text`

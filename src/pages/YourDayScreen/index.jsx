@@ -14,12 +14,16 @@ const YourDayScreen = () => {
   const { state: tasks } = useContext(tasksContext);
   const navigation = useNavigation();
 
+  function handleNavigation(item) {
+    navigation.push('Task', { item });
+  }
+
   return (
     <Container>
       <TitleText>Seu dia</TitleText>
       <List
         data={tasks}
-        renderItem={TaskListItem}
+        renderItem={(item) => <TaskListItem handleNavigation={handleNavigation} item={item.item} />}
         keyExtractor={(item) => item.name}
         showsVerticalScrollIndicator={false}
       />
