@@ -24,3 +24,14 @@ export const List = styled.FlatList`
     margin-bottom: 16px;
     flex-grow: 0;
 `;
+
+export const ButtonContainer = styled.View`
+    flex: 1;
+    margin: 0 4px;
+`;
+
+export const ButtonRow = styled.View`
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+`;

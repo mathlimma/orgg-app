@@ -1,16 +1,19 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { tasksContext } from '../../state/tasks';
 import TaskListItem from './components/TaskListItem';
-import OrggButton from '../../components/OrggButton';
 import {
-  Container, List, TitleText,
+  Container, List, TitleText, ButtonContainer, ButtonRow,
 } from './styles';
+import OrggBottomSheet from '../../components/OrggBottomSheet';
+import OrggAddTask from '../../components/OrggAddTask';
+import OrggButton from '../../components/OrggButton';
 
 // TODO: Implement onPress in "Organizar" OrggButton
-// TODO: User cam add more tasks
 
 const TaskListScreen = () => {
+  const [showAddTask, setShowAddTask] = useState(false);
+
   const { state: tasks } = useContext(tasksContext);
   const navigation = useNavigation();
 
@@ -23,7 +26,19 @@ const TaskListScreen = () => {
         keyExtractor={(item) => item.name}
         showsVerticalScrollIndicator={false}
       />
-      <OrggButton label="Organizar" onPress={() => navigation.replace('Organizing')} />
+      <ButtonRow>
+        <ButtonContainer>
+          <OrggButton label="+" onPress={() => setShowAddTask(!showAddTask)} />
+        </ButtonContainer>
+        <ButtonContainer>
+          <OrggButton label="Organizar" onPress={() => navigation.replace('Organizing')} />
+        </ButtonContainer>
+      </ButtonRow>
+      {showAddTask && (
+        <OrggBottomSheet onPressOpacity={() => setShowAddTask(!showAddTask)}>
+          <OrggAddTask onFinish={() => setShowAddTask(!showAddTask)} />
+        </OrggBottomSheet>
+      )}
     </Container>
   );
 };

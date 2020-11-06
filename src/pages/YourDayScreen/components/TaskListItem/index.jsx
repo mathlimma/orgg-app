@@ -29,7 +29,7 @@ const TaskListItem = ({ item, handleNavigation }) => {
     <>
       {showEditTask && (
       <OrggBottomSheet onPressOpacity={toggleEdit}>
-        <OrggEditTask onFinish={toggleEdit} />
+        <OrggEditTask task={item} onFinish={toggleEdit} />
       </OrggBottomSheet>
       )}
       <TouchableOpacity onPress={() => handleNavigation(item)}>
@@ -40,9 +40,7 @@ const TaskListItem = ({ item, handleNavigation }) => {
           </TopContent>
 
           <BottomContent>
-            <TimeText>
-              tempo estimado: 01h30
-            </TimeText>
+            <TimeText>{`${item.estimate} minutos`}</TimeText>
             <TouchableOpacity onPress={toggleEdit}>
               <EditButtonText>
                 Editar
@@ -59,6 +57,7 @@ TaskListItem.propTypes = {
   item: PropTypes.shape({
     name: PropTypes.string.isRequired,
     priority: PropTypes.number.isRequired,
+    estimate: PropTypes.number.isRequired,
   }).isRequired,
   handleNavigation: PropTypes.func.isRequired,
 };

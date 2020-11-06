@@ -5,18 +5,16 @@ import OrggTextInput from '../OrggTextInput';
 import OrggPicker from '../OrggPicker';
 import OrggButton from '../OrggButton';
 import { Container, TitleText } from './styles';
-import { add, tasksContext, mock } from '../../state/tasks';
+import { update, tasksContext } from '../../state/tasks';
 
-const OrggEditTask = ({ onFinish }) => {
-  const [task, setTask] = useState('');
-  const [estimatedTime, setEstimatedTime] = useState('');
-
-  const [priority, setPriority] = useState(1);
+const OrggEditTask = ({ task, onFinish }) => {
+  const [taskName, setTaskName] = useState(task.name);
+  const [priority, setPriority] = useState(task.priority);
+  const [estimatedTime, setEstimatedTime] = useState(task.estimate);
 
   const { dispatch } = useContext(tasksContext);
-  const createTask = () => {
-    // NEXT_SPRINT: dispatch(add(task, priority));
-    dispatch(mock(task, priority));
+  const updateTask = () => {
+    dispatch(update(0, taskName, priority, Number(estimatedTime)));
     onFinish();
   };
 
@@ -24,7 +22,7 @@ const OrggEditTask = ({ onFinish }) => {
     <Container>
       <TitleText>Editar tarefa</TitleText>
 
-      <OrggTextInput label="Sua tarefa" onChangeText={(text) => setTask(text)} />
+      <OrggTextInput label="Sua tarefa" onChangeText={(text) => setTaskName(text)} defaultValue={taskName} />
       <OrggPicker
         label="Prioridade"
         onValueChange={(value) => setPriority(value)}
@@ -35,14 +33,23 @@ const OrggEditTask = ({ onFinish }) => {
         <Picker.Item label="Alta" value={2} />
         <Picker.Item label="Muito alta" value={3} />
       </OrggPicker>
-      <OrggTextInput label="Tempo Estimado" onChangeText={(text) => setEstimatedTime(text)} />
+      <OrggTextInput
+        label="Tempo Estimado"
+        onChangeText={(text) => setEstimatedTime(text)}
+        defaultValue={String(estimatedTime)}
+      />
 
-      <OrggButton label="Editar" onPress={createTask} />
+      <OrggButton label="Editar" onPress={updateTask} />
     </Container>
   );
 };
 
 OrggEditTask.propTypes = {
+  task: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    priority: PropTypes.number.isRequired,
+    estimate: PropTypes.number.isRequired,
+  }).isRequired,
   onFinish: PropTypes.func,
 };
 
