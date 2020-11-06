@@ -27,7 +27,7 @@ const YourDayScreen = () => {
         keyExtractor={(item) => item.name}
         showsVerticalScrollIndicator={false}
       />
-      <OrggButton label="Começar" onPress={() => null} />
+      <OrggButton label="Começar" onPress={() => handleNavigation(tasks[0])} />
     </Container>
   );
 };
