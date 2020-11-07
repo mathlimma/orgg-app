@@ -12,6 +12,6 @@ export const Input = styled.TextInput`
   border: 1px solid ${Colors.text.inputBorder};
   border-radius: 8px;
   height: 40px;
-  margin: 16px 0;
+  margin-bottom: 16px;
   padding: 0 8px;
 `;
