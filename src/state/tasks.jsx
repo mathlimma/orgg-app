@@ -109,7 +109,7 @@ const TasksProvider = ({ children }) => {
               arr[j+1] = aux;
             }
             if (arr[j].priority == arr[j+1].priority) {
-              if (arr[j].name > arr[j+1].name) {
+              if (arr[j].name.toLowerCase() > arr[j+1].name.toLowerCase()) {
                 let aux = arr[j];
                 arr[j] = arr[j+1];
                 arr[j+1] = aux;
