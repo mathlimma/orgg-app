@@ -19,7 +19,7 @@ const TaskScreen = ({ route }) => {
       <Content>
         <OrdinaryText>Fazendo agora</OrdinaryText>
         <TaskNameText>{item?.name}</TaskNameText>
-        <TimeText>tempo estimado: 1h20min</TimeText>
+        <TimeText>Tempo estimado: {Math.floor(item?.estimate/60)}h{item?.estimate - Math.floor(item?.estimate/60)*60}min</TimeText>
 
         <OrggButton label="Iniciar pomodoro" onPress={() => null} />
       </Content>
