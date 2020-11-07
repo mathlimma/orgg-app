@@ -98,7 +98,28 @@ const TasksProvider = ({ children }) => {
       case Types.MOCK:
         return mockedState;
       case Types.ORGANIZE:
-        // TODO: Implement organization
+        const arr = currentState;
+        const n = arr.length;
+        
+        for (let i = n-1; i > 0 ; i--) {
+          for (let j = 0; j < i ; j++) {
+            if (arr[j].priority < arr[j+1].priority) {
+              let aux = arr[j];
+              arr[j] = arr[j+1];
+              arr[j+1] = aux;
+            }
+            if (arr[j].priority == arr[j+1].priority) {
+              if (arr[j].name > arr[j+1].name) {
+                let aux = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = aux;
+              }
+            }
+          }
+        }
+        
+        currentState = arr;
+        
         return currentState;
       default:
         return currentState;
