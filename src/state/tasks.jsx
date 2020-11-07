@@ -46,9 +46,20 @@ export const add = (name, priority) => ({
   payload: {
     name,
     priority,
-    estimate: 90, // This should be handled on organize
+    estimate: estimateTime(priority), // This should be handled on organize
   },
 });
+
+// Function to estimate task time
+function estimateTime(priority) {
+  switch (priority) {
+    case 0: return 0 +  Math.floor(Math.random()*30);
+    case 1: return 30 + Math.floor(Math.random()*30);
+    case 2: return 60 + Math.floor(Math.random()*30);
+    case 3: return 90 + Math.floor(Math.random()*30);
+    default: return 60;
+  }
+}
 
 export const update = (index, name, priority, estimate) => ({
   type: Types.UPDATE,
