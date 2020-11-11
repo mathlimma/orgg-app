@@ -86,29 +86,56 @@ export const getIndexUserTask = (name) => {
   return null;
 };
 
-export const organizeUserTasks = () => {
-  var arr = UserDatabase;
-  const n = arr.length;
-  
-  for (let i = n-1; i > 0 ; i--) {
-    for (let j = 0; j < i ; j++) {
-      if (arr[j].Priority < arr[j+1].Priority) {
-        let aux = arr[j];
-        arr[j] = arr[j+1];
-        arr[j+1] = aux;
+export const getAllUserTasksByPriority = (priority) => {
+  var databaseByPriority = [];
+  const database = getAllUserTasks();
+
+  for(var i = 0 ; i < database.length ; i++) {
+      if (database[i].Priority == priority) {
+          databaseByPriority.push(database[i]);
       }
-      if (arr[j].Priority == arr[j+1].Priority) {
-        if (arr[j].Name.toLowerCase() > arr[j+1].Name.toLowerCase()) {
-          let aux = arr[j];
-          arr[j] = arr[j+1];
-          arr[j+1] = aux;
+  }
+
+  if (databaseByPriority.length != 0) {
+      return databaseByPriority;
+  } else {
+      return null;
+  }
+};
+
+export const organizeUserTasks = () => {
+  var newDB = [];
+      
+  for (var i = 3 ; i >= 0 ; i--) {
+    var arr = getAllUserTasksByPriority(i);
+    if (arr != null) {
+      const n = arr.length;
+      
+      for (let i = n-1; i > 0 ; i--) {
+        for (let j = 0; j < i ; j++) {
+          if (arr[j].EstimatedTime < arr[j+1].EstimatedTime) {
+            let aux = arr[j];
+            arr[j] = arr[j+1];
+            arr[j+1] = aux;
+          }
+          if (arr[j].EstimatedTime == arr[j+1].EstimatedTime) {
+            if (arr[j].Name.toLowerCase() > arr[j+1].Name.toLowerCase()) {
+              let aux = arr[j];
+              arr[j] = arr[j+1];
+              arr[j+1] = aux;
+            }
+          }
         }
+      }
+      
+      for (let i = 0 ; i < n ; i++) {
+          newDB.push(arr[i]);
       }
     }
   }
-  
-  UserDatabase = arr;
-}
+
+  UserDatabase = newDB;
+};
 
 // Types
 export const Types = {
