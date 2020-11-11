@@ -24,7 +24,7 @@ const YourDayScreen = () => {
       <List
         data={tasks}
         renderItem={(item) => <TaskListItem handleNavigation={handleNavigation} item={item.item} />}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.Name}
         showsVerticalScrollIndicator={false}
       />
       <OrggButton label="Começar" onPress={() => handleNavigation(tasks[0])} />

@@ -1,83 +1,152 @@
 import React, { createContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
+import * as database from '../db/orgg-database.json';
 
-const mockedState = [{
-  name: 'Item 1 com prioridade super alta',
-  priority: 3,
-  estimate: 90,
-}, {
-  name: 'Item 2 com prioridade super alta',
-  priority: 3,
-  estimate: 45,
-}, {
-  name: 'Item 3 com prioridade alta',
-  priority: 2,
-  estimate: 30,
-}, {
-  name: 'Item 4 com prioridade alta',
-  priority: 2,
-  estimate: 60,
-}, {
-  name: 'Item 5 com prioridade normal',
-  priority: 1,
-  estimate: 75,
-}, {
-  name: 'Item 6 com prioridade baixa',
-  priority: 0,
-  estimate: 90,
-}];
+const OrggDatabase = database;
+var UserDatabase = database.UserDB;
 
-const initialState = [];
+const initialState = OrggDatabase.UserDB;
 const tasksContext = createContext(initialState);
 const { Provider } = tasksContext;
+
+// Orgg database functions
+export const getAllOrggTasks = () => {
+  return OrggDatabase.OrggDB;
+};
+
+export const getOrggTask = (name) => {
+  const OrggTasks = getAllOrggTasks();
+  
+  for(var i = 0 ; i < OrggTasks.length ; i++){
+    if (OrggTasks[i].Name.toLowerCase() == name.toLowerCase()) {
+        return OrggTasks[i];
+    }
+  }
+
+  return null;
+};
+
+export const getMediumOrggTasks = () => {
+  var medium = 0;
+  const OrggTasks = getAllOrggTasks();
+
+  for(var i = 0 ; i < OrggTasks.length ; i++) {
+      medium += OrggTasks[i].EstimatedTime;
+  }
+
+  medium /= OrggTasks.length;
+
+  return Math.ceil(medium);
+};
+
+export const getEstimatedTimeOrggTask = (name) => {
+  const OrggTask = getOrggTask(name);
+  
+  if (OrggTask != null) {
+      return OrggTask.EstimatedTime;
+  } else {
+      return getMediumOrggTasks();
+  }
+};
+
+// User database functions
+export const getAllUserTasks = () => {
+  return UserDatabase;
+};
+
+export const getUserTask = (name, tasks) => {
+  var UserTasks = getAllUserTasks();
+  
+  for(var i = 0 ; i < UserTasks.length ; i++){
+    if (UserTasks[i].Name.toLowerCase() == name.toLowerCase()) {
+        return UserTasks[i];
+    }
+  }
+
+  return null;
+};
+
+export const isExistsUserTask = (name) => {
+  if (getUserTask(name) != null) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const getIndexUserTask = (name) => {
+  var UserTasks = getAllUserTasks();
+  
+  for(var i = 0 ; i < UserTasks.length ; i++){
+    if (UserTasks[i].Name.toLowerCase() == name.toLowerCase()) {
+        return i;
+    }
+  }
+
+  return null;
+};
+
+export const organizeUserTasks = () => {
+  var arr = UserDatabase;
+  const n = arr.length;
+  
+  for (let i = n-1; i > 0 ; i--) {
+    for (let j = 0; j < i ; j++) {
+      if (arr[j].Priority < arr[j+1].Priority) {
+        let aux = arr[j];
+        arr[j] = arr[j+1];
+        arr[j+1] = aux;
+      }
+      if (arr[j].Priority == arr[j+1].Priority) {
+        if (arr[j].Name.toLowerCase() > arr[j+1].Name.toLowerCase()) {
+          let aux = arr[j];
+          arr[j] = arr[j+1];
+          arr[j+1] = aux;
+        }
+      }
+    }
+  }
+  
+  UserDatabase = arr;
+}
 
 // Types
 export const Types = {
   ADD: 'tasks/ADD',
   UPDATE: 'tasks/UPDATE',
   REMOVE: 'tasks/REMOVE',
-  ORGANIZE: 'tasks/ORGANIZE',
-  MOCK: 'tasks/MOCK', // NEXT_SPRINT: Remove
+  ORGANIZE: 'tasks/ORGANIZE'
+  //MOCK: 'tasks/MOCK', // NEXT_SPRINT: Remove
 };
 
 // Action Creators
-export const add = (name, priority) => ({
+export const insertUserTask = (Name, Priority) => ({
   type: Types.ADD,
   payload: {
-    name,
-    priority,
-    estimate: estimateTime(priority), // This should be handled on organize
+    Name,
+    EstimatedTime: getEstimatedTimeOrggTask(Name),
+    Priority,
+    TimeUsed: 0
   },
 });
 
-// Function to estimate task time
-function estimateTime(priority) {
-  switch (priority) {
-    case 0: return 0 +  Math.floor(Math.random()*30);
-    case 1: return 30 + Math.floor(Math.random()*30);
-    case 2: return 60 + Math.floor(Math.random()*30);
-    case 3: return 90 + Math.floor(Math.random()*30);
-    default: return 60;
-  }
-}
-
-export const update = (index, name, priority, estimate) => ({
+export const updateUserTask = (index, Name, Priority, EstimatedTime) => ({
   type: Types.UPDATE,
   payload: {
     index,
-    name,
-    priority,
-    estimate,
+    Name,
+    EstimatedTime,
+    Priority
   },
 });
 
 // NEXT_SPRINT: Remove
-export const mock = () => ({
-  type: Types.MOCK,
+export const removeUserTask = () => ({
+  type: Types.REMOVE
 });
 
 export const organize = () => ({
-  type: Types.ORGANIZE,
+  type: Types.ORGANIZE
 });
 
 // Reducer
@@ -85,42 +154,38 @@ const TasksProvider = ({ children }) => {
   const [state, dispatch] = useReducer((currentState, action) => {
     switch (action.type) {
       case Types.ADD:
-        return [...currentState, action.payload];
-      case Types.UPDATE: {
-        const newState = [...currentState];
-        newState[action.payload.index] = {
-          name: action.payload.name,
-          priority: action.payload.priority,
-          estimate: action.payload.estimate,
-        };
-        return newState;
-      }
-      case Types.MOCK:
-        return mockedState;
-      case Types.ORGANIZE:
-        const arr = currentState;
-        const n = arr.length;
-        
-        for (let i = n-1; i > 0 ; i--) {
-          for (let j = 0; j < i ; j++) {
-            if (arr[j].priority < arr[j+1].priority) {
-              let aux = arr[j];
-              arr[j] = arr[j+1];
-              arr[j+1] = aux;
-            }
-            if (arr[j].priority == arr[j+1].priority) {
-              if (arr[j].name.toLowerCase() > arr[j+1].name.toLowerCase()) {
-                let aux = arr[j];
-                arr[j] = arr[j+1];
-                arr[j+1] = aux;
-              }
-            }
-          }
+        if (!isExistsUserTask(action.payload.Name)) {
+          UserDatabase = [...UserDatabase, action.payload]
+          
+          organizeUserTasks();
+          
+          return UserDatabase;
+        } else {
+          return UserDatabase;
         }
+      case Types.UPDATE: {
+        var newState = [...currentState];
         
-        currentState = arr;
-        
-        return currentState;
+        if (!isExistsUserTask(action.payload.Name) || action.payload.index.toLowerCase() == action.payload.Name.toLowerCase()) {
+          currentState[getIndexUserTask(action.payload.index)] = {
+            Name: action.payload.Name,
+            Priority: action.payload.Priority,
+            EstimatedTime: action.payload.EstimatedTime
+          };
+          
+          UserDatabase = newState;
+
+          organizeUserTasks();
+        }
+
+        return UserDatabase;
+      }
+      case Types.REMOVE:
+        return UserDatabase;
+      case Types.ORGANIZE:
+        organizeUserTasks();  
+
+        return UserDatabase;
       default:
         return currentState;
     }

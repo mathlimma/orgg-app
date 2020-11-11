@@ -5,16 +5,16 @@ import OrggTextInput from '../OrggTextInput';
 import OrggPicker from '../OrggPicker';
 import OrggButton from '../OrggButton';
 import { Container, TitleText } from './styles';
-import { update, tasksContext } from '../../state/tasks';
+import { updateUserTask, tasksContext } from '../../state/tasks';
 
 const OrggEditTask = ({ task, onFinish }) => {
-  const [taskName, setTaskName] = useState(task.name);
-  const [priority, setPriority] = useState(task.priority);
-  const [estimatedTime, setEstimatedTime] = useState(task.estimate);
+  const [taskName, setTaskName] = useState(task.Name);
+  const [priority, setPriority] = useState(task.Priority);
+  const [estimatedTime, setEstimatedTime] = useState(task.EstimatedTime);
 
   const { dispatch } = useContext(tasksContext);
   const updateTask = () => {
-    dispatch(update(0, taskName, priority, Number(estimatedTime)));
+    dispatch(updateUserTask(task.Name, taskName, priority, Number(estimatedTime)));
     onFinish();
   };
 
@@ -46,9 +46,9 @@ const OrggEditTask = ({ task, onFinish }) => {
 
 OrggEditTask.propTypes = {
   task: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    priority: PropTypes.number.isRequired,
-    estimate: PropTypes.number.isRequired,
+    Name: PropTypes.string.isRequired,
+    Priority: PropTypes.number.isRequired,
+    EstimatedTime: PropTypes.number.isRequired,
   }).isRequired,
   onFinish: PropTypes.func,
 };

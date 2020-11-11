@@ -5,7 +5,7 @@ import OrggTextInput from '../OrggTextInput';
 import OrggPicker from '../OrggPicker';
 import OrggButton from '../OrggButton';
 import { Container, TitleText } from './styles';
-import { add, tasksContext } from '../../state/tasks';
+import { insertUserTask, tasksContext } from '../../state/tasks';
 
 const OrggAddTask = ({ onFinish }) => {
   const [task, setTask] = useState('');
@@ -13,7 +13,7 @@ const OrggAddTask = ({ onFinish }) => {
 
   const { dispatch } = useContext(tasksContext);
   const createTask = () => {
-    dispatch(add(task, priority));
+    dispatch(insertUserTask(task, priority));
     onFinish();
   };
 

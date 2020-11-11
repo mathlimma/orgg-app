@@ -23,7 +23,7 @@ const TaskListScreen = () => {
       <List
         data={tasks}
         renderItem={TaskListItem}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.Name}
         showsVerticalScrollIndicator={false}
       />
       <ButtonRow>

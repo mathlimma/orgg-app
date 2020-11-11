@@ -12,15 +12,15 @@ import VeryHighPriorityIcon from '../../../../../assets/VeryHighPriorityIcon';
 
 const TaskListItem = ({ item }) => {
   let Icon;
-  if (item.priority === 0) Icon = LowPriorityIcon;
-  else if (item.priority === 1) Icon = MediumPriorityIcon;
-  else if (item.priority === 2) Icon = HighPriorityIcon;
-  else if (item.priority === 3) Icon = VeryHighPriorityIcon;
+  if (item.Priority === 0) Icon = LowPriorityIcon;
+  else if (item.Priority === 1) Icon = MediumPriorityIcon;
+  else if (item.Priority === 2) Icon = HighPriorityIcon;
+  else if (item.Priority === 3) Icon = VeryHighPriorityIcon;
 
   return (
     <TouchableOpacity>
       <Container>
-        <TaskTitle>{item.name}</TaskTitle>
+        <TaskTitle>{item.Name}</TaskTitle>
         <Icon />
       </Container>
     </TouchableOpacity>
@@ -28,8 +28,8 @@ const TaskListItem = ({ item }) => {
 };
 TaskListItem.propTypes = {
   item: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    priority: PropTypes.number.isRequired,
+    Name: PropTypes.string.isRequired,
+    Priority: PropTypes.number.isRequired,
   }).isRequired,
 };
 
