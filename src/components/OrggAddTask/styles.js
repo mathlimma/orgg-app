@@ -6,7 +6,7 @@ export const Container = styled.View`
 `;
 
 export const TitleText = styled.Text`
-    color: ${Colors.text.screenTitle};
+    color: ${Colors.primary};
     font-family: Rubik_400Regular;
     font-size: 25px;
     margin-bottom: 26px;

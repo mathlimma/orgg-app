@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native';
 
 import {
-  Container, SubtitleText, TitleText,
+  Container, SubtitleText, TitleText, BoldTitleText,
 } from './styles';
 import Colors from '../../utils/colors';
 
@@ -19,8 +19,13 @@ const OrganizingScreen = () => {
     <Container>
       {/* TODO: Chance ActivityIndicator to a better one, which can work on iOS */}
       <ActivityIndicator color={Colors.text.screenSubtitle} size={100} />
-      <TitleText>Orgganizando sua vida</TitleText>
-      <SubtitleText>Aguarde um momento</SubtitleText>
+      <TitleText>
+        {' '}
+        <BoldTitleText>Orgganizando</BoldTitleText>
+        {' '}
+        sua vida
+      </TitleText>
+      <SubtitleText>Aguarde um momento :)</SubtitleText>
     </Container>
   );
 };

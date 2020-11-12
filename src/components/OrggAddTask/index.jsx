@@ -6,6 +6,7 @@ import OrggPicker from '../OrggPicker';
 import OrggButton from '../OrggButton';
 import { Container, TitleText } from './styles';
 import { insertUserTask, tasksContext } from '../../state/tasks';
+import colors from '../../utils/colors';
 
 const OrggAddTask = ({ onFinish }) => {
   const [task, setTask] = useState('');
@@ -20,7 +21,7 @@ const OrggAddTask = ({ onFinish }) => {
   return (
     <Container>
       <TitleText>Nova tarefa</TitleText>
-      <OrggTextInput label="Sua tarefa" onChangeText={(text) => setTask(text)} />
+      <OrggTextInput label="Sua tarefa" onChangeText={(text) => setTask(text)} placeholder="ex: estudar matemática" />
       <OrggPicker
         label="Prioridade"
         onValueChange={(value) => setPriority(value)}
@@ -31,7 +32,7 @@ const OrggAddTask = ({ onFinish }) => {
         <Picker.Item label="Alta" value={2} />
         <Picker.Item label="Muito alta" value={3} />
       </OrggPicker>
-      <OrggButton label="Próximo" onPress={createTask} />
+      <OrggButton label="Próximo" onPress={createTask} color={colors.primary} />
     </Container>
   );
 };

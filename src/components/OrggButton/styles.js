@@ -6,13 +6,13 @@ export const Button = styled(TouchableOpacity)`
   width: 100%;
   justify-content: center;
   align-items: center;
-  background-color: ${Colors.buttonBackground};
+  background-color: ${(props) => props.color};
   border-radius: 8px;
   margin-bottom: ${(props) => (props.marginBottom ? 18 : 0)}px;
 `;
 
 export const Label = styled.Text`
-  color: ${Colors.text.button};
+  color: ${(props) => props.labelColor};
   font-family: Poppins_700Bold;
   margin: 11.5px;
 `;

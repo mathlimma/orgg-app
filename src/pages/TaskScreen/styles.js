@@ -12,6 +12,9 @@ export const Container = styled.View`
 
 export const Content = styled.View`
     width: 100%;
+    background-color: ${Colors.secondary}
+    padding: 30px;
+    border-radius: 10px;
 
 `;
 
@@ -48,6 +51,7 @@ export const TaskNameText = styled.Text`
     font-size: 28px;
     text-align: left;
     margin-bottom: 20px;
+    font-weight: bold;
 `;
 
 export const TimeText = styled.Text`
