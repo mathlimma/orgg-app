@@ -12,23 +12,36 @@ export const Container = styled.View`
 
 export const Content = styled.View`
     width: 100%;
-    background-color: ${Colors.secondary}
+    background-color: ${Colors.secondary};
     padding: 30px;
     border-radius: 10px;
+    justify-content: flex-start;
+    align-items: flex-start;
+`;
 
+export const DayContainer = styled.View`
+    align-self: flex-start;
 `;
 
 export const ButtonsContainer = styled.View`
     width: 100%;
 `;
 
+export const NextTaskButtonContainer = styled.View`
+    align-self: flex-end;
+    width: 50%;
+`;
+
 export const TitleText = styled.Text`
     color: ${Colors.text.screenTitle};
     font-family: Rubik_400Regular;
-    font-size: 25px;
+    font-size: 20px;
     text-align: left;
     align-self: flex-start;
-    margin-bottom: 26px;
+`;
+
+export const TitleTextBold = styled(TitleText)`
+    font-weight: bold;
 `;
 
 export const List = styled.FlatList`
@@ -57,8 +70,12 @@ export const TaskNameText = styled.Text`
 export const TimeText = styled.Text`
     color: ${Colors.text.screenTitle};
     font-family: Rubik_400Regular;
-    font-size: 20px;
+    font-size: 16px;
     text-align: left;
     align-self: flex-start;
-    margin-bottom: 26px;
+    margin-bottom: 5px;
+`;
+
+export const PriorityText = styled(TimeText)`
+    margin-bottom: 20px;
 `;
