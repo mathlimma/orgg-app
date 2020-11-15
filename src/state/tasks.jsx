@@ -1,10 +1,71 @@
 import React, { createContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import * as db from '../db/orgg-database.json';
+import { AsyncStorage } from 'react-native';
 
 var OrggDatabase = db.OrggDB;
 var UserDatabase = db.UserDB;
 var UserHistoryDatabase = db.UserHistoryDB;
+
+// Store and Read database
+storeDatabase = async (key, data) => {
+  try {
+    await AsyncStorage.setItem(key, JSON.stringify(data));
+  } catch (error) { }
+};
+/*
+readDatabase = async (key) => {
+  try {
+    const db = await AsyncStorage.getItem(key);
+    if (db !== null) {
+      return JSON.parse(db);
+    }
+  } catch (error) { }
+};
+*/
+getKeys = async () => {
+  try {
+    await AsyncStorage.getAllKeys().then((result) => {
+      return result;
+    });
+  } catch (error) { }
+};
+
+initialize = async () => {
+  const databases = ['OrggDB', 'UserDB', 'UserHistoryDB'];
+
+  const log = {
+    "OrggDB": false,
+    "UserDB": false,
+    "UserHistoryDB": false
+  };
+
+  const keys = getKeys();
+
+  for (key in keys) {
+    log[keys[key]] = true;
+  }
+
+  for (i in databases) {
+    //if (!log[databases[i]]) {
+    switch (databases[i]) {
+      case 'OrggDB': storeDatabase(key, db.OrggDB); OrggDatabase = db.OrggDB; break;
+      case 'UserDB': storeDatabase(key, db.UserDB); UserDatabase = db.UserDB; break;
+      case 'UserHistoryDB': storeDatabase(key, db.UserHistoryDB); UserHistoryDatabase = db.UserHistoryDB; break;
+      default: break;
+    }
+    /*} else {
+      switch (databases[i]) {
+        case 'OrggDB': OrggDatabase = readDatabase('OrggDB'); break;
+        case 'UserDB': UserDatabase = readDatabase('UserDB'); break;
+        case 'UserHistoryDB': UserHistoryDatabase = readDatabase('UserHistoryDB'); break;
+        default: break;
+      }
+    }*/
+  }
+};
+
+initialize();
 
 const initialState = db.UserDB;
 const tasksContext = createContext(initialState);
@@ -51,6 +112,10 @@ export const getEstimatedTimeOrggTask = (name) => {
 };
 
 // User database functions
+export const updateUserDB = () => {
+  storeDatabase('UserDB', UserDatabase);
+};
+
 export const getAllUserTasks = () => {
   return UserDatabase;
 };
@@ -90,10 +155,15 @@ export const getIndexUserTask = (name) => {
 // Diff in minutes
 export const getUserTaskTime = (name) => {
   const UserTask = getUserTask(name);
+
   return Math.floor(Math.abs(UserTask.ElapsedTime - UserTask.StartingTime) / (1000 * 60));
 };
 
 // User history database functions
+export const updateUserHistoryDB = () => {
+  storeDatabase('UserHistoryDB', UserHistoryDatabase);
+};
+
 export const getAllUserHistoryTasks = () => {
   return UserHistoryDatabase;
 };
@@ -128,6 +198,11 @@ export const getIndexUserHistoryTask = (name) => {
   }
 
   return null;
+};
+
+// new AverageCompletionTime
+export const getUpdateAverageCompletionTime = (AverageCompletionTime, TimesCompleted, Name) => {
+  return ((AverageCompletionTime * TimesCompleted) + getUserTaskTime(Name)) / (TimesCompleted + 1);
 };
 
 // Priority * EstimatedTime
@@ -177,7 +252,7 @@ export const insertUserHistoryTask = (Name) => ({
   payload: {
     Name,
     AverageCompletionTime: getUserTaskTime(Name),
-    TimesCompleted: 0
+    TimesCompleted: 1
   },
 });
 
@@ -230,6 +305,8 @@ const TasksProvider = ({ children }) => {
         if (!isExistsUserTask(action.payload.Name)) {
           UserDatabase = [action.payload, ...UserDatabase];
 
+          updateUserDB();
+
           return UserDatabase;
         } else {
           return UserDatabase;
@@ -248,7 +325,9 @@ const TasksProvider = ({ children }) => {
           };
 
           UserDatabase = newState;
+
           organizeUserTasks();
+          updateUserDB();
         }
 
         return UserDatabase;
@@ -259,6 +338,8 @@ const TasksProvider = ({ children }) => {
         if (isExistsUserTask(action.payload.index)) {
           newState = [...newState.slice(0, getIndexUserTask(action.payload.index)), ...newState.slice(getIndexUserTask(action.payload.index) + 1, UserDatabase.length)];
           UserDatabase = newState;
+
+          updateUserDB();
         }
 
         return UserDatabase;
