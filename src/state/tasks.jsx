@@ -235,25 +235,25 @@ export const Types = {
 };
 
 // Action Creators
-export const insertUserTask = (Name, Priority) => ({
+export const insertUserTask = (Name, Priority, StartingTime, isTaskFixed, EstimatedTime, ElapsedTime) => ({
   type: Types.ADDUSER,
   payload: {
-    Name,
+    Name: Name,
     EstimatedTime: getEstimatedTimeOrggTask(Name),
-    Priority,
-    StartingTime: 0,
+    Priority: Priority,
+    StartingTime: (StartingTime == undefined) ? 0 : StartingTime,
     ElapsedTime: 0,
-    isTaskFixed: false
-  },
+    isTaskFixed: (isTaskFixed == undefined) ? false : isTaskFixed
+  }
 });
 
-export const insertUserHistoryTask = (Name) => ({
+export const insertUserHistoryTask = (Name, AverageCompletionTime, TimesCompleted) => ({
   type: Types.ADDHISTORY,
   payload: {
     Name,
     AverageCompletionTime: getUserTaskTime(Name),
     TimesCompleted: 1
-  },
+  }
 });
 
 export const updateUserTask = (index, Name, Priority, EstimatedTime, StartingTime, ElapsedTime, isTaskFixed) => ({
@@ -266,7 +266,7 @@ export const updateUserTask = (index, Name, Priority, EstimatedTime, StartingTim
     StartingTime,
     ElapsedTime,
     isTaskFixed
-  },
+  }
 });
 
 export const updateUserHistoryTask = (index, Name, AverageCompletionTime, TimesCompleted) => ({
@@ -276,25 +276,25 @@ export const updateUserHistoryTask = (index, Name, AverageCompletionTime, TimesC
     Name,
     AverageCompletionTime,
     TimesCompleted
-  },
+  }
 });
 
 export const removeUserTask = (index) => ({
   type: Types.REMOVEUSER,
   payload: {
     index
-  },
+  }
 });
 
 export const removeUserHistoryTask = (index) => ({
   type: Types.REMOVEHISTORY,
   payload: {
     index
-  },
+  }
 });
 
 export const organize = () => ({
-  type: Types.ORGANIZE,
+  type: Types.ORGANIZE
 });
 
 // Reducer
@@ -304,7 +304,6 @@ const TasksProvider = ({ children }) => {
       case Types.ADDUSER:
         if (!isExistsUserTask(action.payload.Name)) {
           UserDatabase = [action.payload, ...UserDatabase];
-
           updateUserDB();
 
           return UserDatabase;
@@ -319,13 +318,12 @@ const TasksProvider = ({ children }) => {
             Name: action.payload.Name,
             Priority: action.payload.Priority,
             EstimatedTime: action.payload.EstimatedTime,
-            StartingTime: UserDatabase[getIndexUserTask(action.payload.index)].StartingTime,
-            ElapsedTime: action.payload.ElapsedTime,
-            isTaskFixed: action.payload.isTaskFixed
+            StartingTime: (action.payload.StartingTime == undefined) ? getUserTask(action.payload.index).StartingTime : action.payload.StartingTime,
+            ElapsedTime: (action.payload.ElapsedTime == undefined) ? getUserTask(action.payload.index).ElapsedTime : action.payload.ElapsedTime,
+            isTaskFixed: (action.payload.isTaskFixed == undefined) ? getUserTask(action.payload.index).isTaskFixed : action.payload.isTaskFixed
           };
 
           UserDatabase = newState;
-
           organizeUserTasks();
           updateUserDB();
         }
@@ -338,7 +336,6 @@ const TasksProvider = ({ children }) => {
         if (isExistsUserTask(action.payload.index)) {
           newState = [...newState.slice(0, getIndexUserTask(action.payload.index)), ...newState.slice(getIndexUserTask(action.payload.index) + 1, UserDatabase.length)];
           UserDatabase = newState;
-
           updateUserDB();
         }
 
@@ -349,19 +346,38 @@ const TasksProvider = ({ children }) => {
         return [...UserDatabase];
       case Types.ADDHISTORY:
         if (!isExistsUserHistoryTask(action.payload.Name)) {
-
           UserHistoryDatabase = [action.payload, ...UserHistoryDatabase];
+          updateUserHistoryDB();
 
           return UserHistoryDatabase;
         } else {
           return UserHistoryDatabase;
         }
       case Types.UPDATEHISTORY:
+        var newState = [...UserHistoryDatabase];
 
-        return UserDatabase;
+        if (!isExistsUserHistoryTask(action.payload.Name) || action.payload.index.toLowerCase() == action.payload.Name.toLowerCase()) {
+          newState[getIndexUserHistoryTask(action.payload.index)] = {
+            Name: action.payload.Name,
+            AverageCompletionTime: (action.payload.AverageCompletionTime == undefined) ? getUserHistoryTask(action.payload.index).AverageCompletionTime : action.payload.AverageCompletionTime,
+            TimesCompleted: (action.payload.TimesCompleted == undefined) ? getUserHistoryTask(action.payload.index).TimesCompleted : action.payload.TimesCompleted
+          };
+
+          UserHistoryDatabase = newState;
+          updateUserHistoryDB();
+        }
+
+        return UserHistoryDatabase;
       case Types.REMOVEHISTORY:
+        var newState = [...UserHistoryDatabase];
 
-        return UserDatabase;
+        if (isExistsUserHistoryTask(action.payload.index)) {
+          newState = [...newState.slice(0, getIndexUserHistoryTask(action.payload.index)), ...newState.slice(getIndexUserHistoryTask(action.payload.index) + 1, UserHistoryDatabase.length)];
+          UserHistoryDatabase = newState;
+          updateUserHistoryDB();
+        }
+
+        return UserHistoryDatabase;
       default:
         return currentState;
     }
