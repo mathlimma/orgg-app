@@ -36,6 +36,7 @@ const OrggAddTask = ({ onFinish }) => {
         onPress={setPriority}
         defaultIndex={priority}
         options={options}
+        titles={['Baixa', 'Média', 'Alta', 'Muito alta']}
       />
       <OrggButton label="Próximo" onPress={createTask} color={colors.primary} />
     </Container>
