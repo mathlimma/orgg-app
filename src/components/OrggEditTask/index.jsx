@@ -22,7 +22,7 @@ const OrggEditTask = ({ task, onFinish }) => {
     <Container>
       <TitleText>Editar tarefa</TitleText>
 
-      <OrggTextInput label="Sua tarefa" onChangeText={(text) => setTaskName(text)} defaultValue={taskName} />
+      <OrggTextInput label="Minha tarefa" onChangeText={(text) => setTaskName(text)} defaultValue={taskName} />
       <OrggPicker
         label="Prioridade"
         onValueChange={(value) => setPriority(value)}

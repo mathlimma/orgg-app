@@ -21,7 +21,7 @@ const OrggAddTask = ({ onFinish }) => {
   return (
     <Container>
       <TitleText>Nova tarefa</TitleText>
-      <OrggTextInput label="Sua tarefa" onChangeText={(text) => setTask(text)} placeholder="ex: estudar matemática" />
+      <OrggTextInput label="Minha tarefa" onChangeText={(text) => setTask(text)} placeholder="ex: estudar matemática" />
       <OrggPicker
         label="Prioridade"
         onValueChange={(value) => setPriority(value)}
