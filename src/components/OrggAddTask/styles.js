@@ -11,3 +11,9 @@ export const TitleText = styled.Text`
     font-size: 25px;
     margin-bottom: 26px;
 `;
+
+export const TimeInput = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+`;

@@ -43,7 +43,10 @@ OrggOptionGroup.propTypes = {
   label: PropTypes.string,
   defaultIndex: PropTypes.number,
   onPress: PropTypes.func,
-  options: PropTypes.arrayOf(PropTypes.object).isRequired,
+  options: PropTypes.arrayOf(PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+  ])).isRequired,
   titles: PropTypes.arrayOf(PropTypes.string),
 };
 

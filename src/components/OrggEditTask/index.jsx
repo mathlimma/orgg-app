@@ -38,7 +38,6 @@ const OrggEditTask = ({ task, onFinish }) => {
         onChangeText={(text) => setEstimatedTime(text)}
         defaultValue={String(estimatedTime)}
       />
-
       <OrggButton label="Editar" onPress={updateTask} />
     </Container>
   );
