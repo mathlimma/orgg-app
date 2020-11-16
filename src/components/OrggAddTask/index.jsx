@@ -1,12 +1,14 @@
 import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 import OrggTextInput from '../OrggTextInput';
 import OrggOptionGroup from '../OrggOptionGroup';
 import OrggButton from '../OrggButton';
 import OrggCheckBox from '../OrggCheckBox';
 
-import { Container, TimeInput, TitleText } from './styles';
+import {
+  Container, FixedTimeContainer, OptionText, TitleText,
+} from './styles';
 import { insertUserTask, tasksContext } from '../../state/tasks';
 import colors from '../../utils/colors';
 
@@ -20,22 +22,124 @@ const OrggAddTask = ({ onFinish }) => {
   const [difficulty, setDifficulty] = useState(2);
   const [priority, setPriority] = useState(1);
   const [estimatedTime, setEstimatedTime] = useState('90');
-  const [fixedTime, setFixedTime] = useState(false);
+  const [isTimeFixed, setIsTimeFixed] = useState(false);
+  const [startingTime, setStartingTime] = useState('12h');
   const [canPause, setCanPause] = useState(true);
 
   const { dispatch } = useContext(tasksContext);
   const createTask = () => {
-    dispatch(insertUserTask(task, priority));
+    dispatch(insertUserTask(
+      task, priority, startingTime, isTimeFixed, estimatedTime,
+    ));
     onFinish();
   };
 
-  const difficultyOptions = ['😧', '🙁', '😐', '☺️', '😀'];
+  const difficultyOptions = [{
+    element: () => (
+      <View style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      >
+        <Text style={{ fontSize: 25 }}>😧</Text>
+        <OptionText>Muito</OptionText>
+      </View>
+    ),
+  }, {
+    element: () => (
+      <View style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      >
+        <Text style={{ fontSize: 25 }}>🙁</Text>
+        <OptionText>Bastante</OptionText>
+      </View>
+    ),
+  }, {
+    element: () => (
+      <View style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      >
+        <Text style={{ fontSize: 25 }}>😐</Text>
+        <OptionText>Moderado</OptionText>
+      </View>
+    ),
+  }, {
+    element: () => (
+      <View style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      >
+        <Text style={{ fontSize: 25 }}>☺️</Text>
+        <OptionText>Pouco</OptionText>
+      </View>
+    ),
+  }, {
+    element: () => (
+      <View style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      >
+        <Text style={{ fontSize: 25 }}>😀</Text>
+        <OptionText>Nada</OptionText>
+      </View>
+    ),
+  }];
 
   const priorityOptions = [
-    { element: () => <LowPriorityIcon height={25} width={25} /> },
-    { element: () => <MediumPriorityIcon height={25} width={25} /> },
-    { element: () => <HighPriorityIcon height={25} width={25} /> },
-    { element: () => <VeryHighPriorityIcon height={25} width={25} /> }];
+    {
+      element: () => (
+        <View style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        >
+          <LowPriorityIcon height={25} width={25} />
+          <OptionText>Baixa</OptionText>
+        </View>
+      ),
+    },
+    {
+      element: () => (
+        <View style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        >
+          <MediumPriorityIcon height={25} width={25} />
+          <OptionText>Média</OptionText>
+        </View>
+      ),
+    },
+    {
+      element: () => (
+        <View style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        >
+          <HighPriorityIcon height={25} width={25} />
+          <OptionText>Alta</OptionText>
+        </View>
+      ),
+    },
+    {
+      element: () => (
+        <View style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        >
+          <VeryHighPriorityIcon height={25} width={25} />
+          <OptionText>Muito Alta</OptionText>
+        </View>
+      ),
+    }];
 
   return (
     <Container>
@@ -45,59 +149,53 @@ const OrggAddTask = ({ onFinish }) => {
         onChangeText={(text) => setTask(text)}
         placeholder="ex: Estudar matemática"
       />
-      <TimeInput fixedTime={fixedTime}>
-        <OrggCheckBox
-          checked={fixedTime}
-          title="Tempo fixo"
-          onPress={() => setFixedTime(!fixedTime)}
-        />
+      <View>
         <OrggCheckBox
           checked={canPause}
-          title="Pausas"
+          title="Posso ser interrompido?"
           onPress={() => setCanPause(!canPause)}
         />
-      </TimeInput>
+        <OrggCheckBox
+          checked={isTimeFixed}
+          title="Tenho hora pra começar e terminar?"
+          onPress={() => setIsTimeFixed(!isTimeFixed)}
+        />
+      </View>
       <View>
-        {!fixedTime ? (
+        {!isTimeFixed ? (
           <OrggTextInput
-            label="Tempo Estimado"
+            label="Quanto tempo devo usar?"
             onChangeText={(text) => setEstimatedTime(text)}
             defaultValue={String(estimatedTime)}
           />
         ) : (
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <FixedTimeContainer>
             <OrggTextInput
-              label="Hora de começo"
-              onChangeText={(text) => setEstimatedTime(text)}
-              defaultValue={String(estimatedTime)}
+              label="Início"
+              onChangeText={(text) => setStartingTime(text)}
+              defaultValue={String(startingTime)}
+              containerStyle={{ width: '48%' }}
             />
             <OrggTextInput
-              label="Hora de termino"
+              label="Fim"
               onChangeText={(text) => setEstimatedTime(text)}
               defaultValue={String(estimatedTime)}
+              containerStyle={{ width: '48%' }}
             />
-          </View>
+          </FixedTimeContainer>
         )}
       </View>
       <OrggOptionGroup
-        label="Desgaste"
-        onPress={setPriority}
-        defaultIndex={difficulty}
-        options={difficultyOptions}
-        titles={[
-          'Muito desgastante',
-          'Um pouco desgastante',
-          'desgastante',
-          'Pouco desgastante',
-          'Nada desgastante',
-        ]}
-      />
-      <OrggOptionGroup
-        label="Prioridade"
+        label="O quanto isso me cansa?"
         onPress={setDifficulty}
         defaultIndex={difficulty}
+        options={difficultyOptions}
+      />
+      <OrggOptionGroup
+        label="Qual a prioridade disto?"
+        onPress={setPriority}
+        defaultIndex={priority}
         options={priorityOptions}
-        titles={['Baixa', 'Média', 'Alta', 'Muito alta']}
       />
       <OrggButton label="Próximo" onPress={createTask} color={colors.primary} />
     </Container>

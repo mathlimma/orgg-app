@@ -12,7 +12,9 @@ const OrggCheckBox = ({ checked, onPress, title }) => (
     containerStyle={{
       backgroundColor: Colors.background,
       borderWidth: 0,
+      // Vai entender porque eu preciso dos dois...
       paddingLeft: 0,
+      padding: 0,
       marginLeft: 0,
     }}
     titleProps={{
