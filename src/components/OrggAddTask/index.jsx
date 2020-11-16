@@ -13,6 +13,7 @@ import VeryHighPriorityIcon from '../../../assets/VeryHighPriorityIcon';
 
 const OrggAddTask = ({ onFinish }) => {
   const [task, setTask] = useState('');
+  const [difficulty, setDifficulty] = useState(2);
   const [priority, setPriority] = useState(1);
 
   const { dispatch } = useContext(tasksContext);
@@ -21,7 +22,15 @@ const OrggAddTask = ({ onFinish }) => {
     onFinish();
   };
 
-  const options = [
+  const difficultyOptions = [
+    '😧',
+    '🙁',
+    '😐',
+    '☺️',
+    '😀',
+  ];
+
+  const priorityOptions = [
     { element: () => <LowPriorityIcon height={25} width={25} /> },
     { element: () => <MediumPriorityIcon height={25} width={25} /> },
     { element: () => <HighPriorityIcon height={25} width={25} /> },
@@ -30,12 +39,29 @@ const OrggAddTask = ({ onFinish }) => {
   return (
     <Container>
       <TitleText>Nova tarefa</TitleText>
-      <OrggTextInput label="Minha tarefa" onChangeText={(text) => setTask(text)} placeholder="ex: Estudar matemática" />
+      <OrggTextInput
+        label="Minha tarefa"
+        onChangeText={(text) => setTask(text)}
+        placeholder="ex: Estudar matemática"
+      />
+      <OrggOptionGroup
+        label="Desgaste"
+        onPress={setPriority}
+        defaultIndex={difficulty}
+        options={difficultyOptions}
+        titles={[
+          'Muito desgastante',
+          'Um pouco desgastante',
+          'desgastante',
+          'Pouco desgastante',
+          'Nada desgastante',
+        ]}
+      />
       <OrggOptionGroup
         label="Prioridade"
-        onPress={setPriority}
-        defaultIndex={priority}
-        options={options}
+        onPress={setDifficulty}
+        defaultIndex={difficulty}
+        options={priorityOptions}
         titles={['Baixa', 'Média', 'Alta', 'Muito alta']}
       />
       <OrggButton label="Próximo" onPress={createTask} color={colors.primary} />

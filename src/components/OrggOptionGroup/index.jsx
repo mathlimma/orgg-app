@@ -33,6 +33,7 @@ const OrggOptionGroup = ({
           borderRadius: 30,
         }}
         buttonStyle={{ opacity: 0.35 }}
+        textStyle={{ fontSize: 25 }}
       />
     </>
   );
