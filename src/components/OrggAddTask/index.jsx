@@ -20,7 +20,7 @@ import VeryHighPriorityIcon from '../../../assets/VeryHighPriorityIcon';
 const OrggAddTask = ({ task, onFinish, isEditing }) => {
   const [taskExists, setTaskExists] = useState(!!task);
   const [displayEditForm, setDisplayEditForm] = useState(isEditing);
-  const [confirmDisabled, setConfirmDisabled] = useState(true);
+  const [confirmDisabled, setConfirmDisabled] = useState(!isEditing);
 
   const [taskName, setTaskName] = useState(task ? task.Name : '');
   const [difficulty, setDifficulty] = useState(2);
