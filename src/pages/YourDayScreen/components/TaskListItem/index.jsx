@@ -9,7 +9,7 @@ import LowPriorityIcon from '../../../../../assets/LowPriorityIcon';
 import MediumPriorityIcon from '../../../../../assets/MediumPriorityIcon';
 import HighPriorityIcon from '../../../../../assets/HighPriorityIcon';
 import VeryHighPriorityIcon from '../../../../../assets/VeryHighPriorityIcon';
-import OrggEditTask from '../../../../components/OrggEditTask';
+import OrggCreateTask from '../../../../components/OrggAddTask';
 import OrggBottomSheet from '../../../../components/OrggBottomSheet';
 
 const TaskListItem = ({ item, handleNavigation }) => {
@@ -29,7 +29,7 @@ const TaskListItem = ({ item, handleNavigation }) => {
     <>
       {showEditTask && (
       <OrggBottomSheet onPressOpacity={toggleEdit}>
-        <OrggEditTask task={item} onFinish={toggleEdit} />
+        <OrggCreateTask task={item} onFinish={toggleEdit} isEditing />
       </OrggBottomSheet>
       )}
       <TouchableOpacity onPress={() => handleNavigation(item)}>
