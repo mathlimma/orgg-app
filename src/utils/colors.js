@@ -14,6 +14,7 @@ const Colors = {
     inputLabel: '#718096',
     inputLabelDarker: '#515767',
     inputBorder: '#E2E8F0',
+    header: '#808080',
   },
 };
 

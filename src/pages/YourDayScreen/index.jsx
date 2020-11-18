@@ -7,15 +7,12 @@ import {
   Container, List, TitleText,
 } from './styles';
 
-// TODO: Implement onPress in "Organizar" OrggButton
-// TODO: User cam add more tasks
-
 const YourDayScreen = () => {
   const { state: tasks } = useContext(tasksContext);
   const navigation = useNavigation();
 
-  function handleNavigation(item) {
-    navigation.push('Task', { item });
+  function handleNavigation(index) {
+    navigation.push('Task', { index });
   }
 
   return (
@@ -23,7 +20,7 @@ const YourDayScreen = () => {
       <TitleText>Seu dia</TitleText>
       <List
         data={tasks}
-        renderItem={(item) => <TaskListItem handleNavigation={handleNavigation} item={item.item} />}
+        renderItem={({ item, index }) => <TaskListItem handleNavigation={() => handleNavigation(index)} item={item} />}
         keyExtractor={(item) => item.Name}
         showsVerticalScrollIndicator={false}
       />

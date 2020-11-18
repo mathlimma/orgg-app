@@ -10,13 +10,18 @@ export const Container = styled.View`
     height: 100%;
 `;
 
-export const Content = styled.View`
+export const TaskContainer = styled.View`
     width: 100%;
     background-color: ${Colors.secondary};
     padding: 30px;
     border-radius: 10px;
     justify-content: flex-start;
     align-items: flex-start;
+    margin-top: 20px;
+`;
+
+export const Content = styled.View`
+    width: 100%;
 `;
 
 export const DayContainer = styled.View`
@@ -51,7 +56,7 @@ export const List = styled.FlatList`
 `;
 
 export const OrdinaryText = styled.Text`
-    color: ${Colors.text.screenTitle};
+    color: ${Colors.text.header};
     font-family: Rubik_400Regular;
     font-size: 16px;
     text-align: left;
@@ -78,4 +83,8 @@ export const TimeText = styled.Text`
 
 export const PriorityText = styled(TimeText)`
     margin-bottom: 20px;
+`;
+
+export const PriorityTextBold = styled(TimeText)`
+    font-weight: bold;
 `;
