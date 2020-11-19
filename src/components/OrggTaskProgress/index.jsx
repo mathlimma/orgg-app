@@ -15,10 +15,11 @@ const OrggTaskProgress = () => {
 
   return (
     <Container>
-      {tasks && tasks.map((task) => <RoundSquare color={getColor(task)} />)}
+      {tasks && tasks.map((task) => <RoundSquare color={getColor(task)} key={task.Name} />)}
     </Container>
   );
 };
+
 OrggTaskProgress.propTypes = {
 };
 
