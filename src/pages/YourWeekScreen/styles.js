@@ -1,4 +1,3 @@
-import { TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import Colors from '../../utils/colors';
 
@@ -12,9 +11,8 @@ export const Container = styled.View`
     height: 100%;
 `;
 
-export const AddButtonContainer = styled(TouchableOpacity)`
-    padding-top: 50px;
-    align-items: center;
+export const CalendarContainer = styled.View`
+    margin: 0px;
 `;
 
 export const TitleText = styled.Text`
@@ -22,11 +20,6 @@ export const TitleText = styled.Text`
     font-family: Rubik_400Regular;
     font-size: 25px;
     text-align: center;
-`;
-
-export const BodyText = styled.Text`
-    color: ${Colors.text.screenSubtitle};
-    font-family: Rubik_400Regular;
-    margin-top: 16px;
-    font-size: 20px;
+    position: absolute;
+    top: 50px;
 `;

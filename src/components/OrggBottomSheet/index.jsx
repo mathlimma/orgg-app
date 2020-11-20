@@ -1,5 +1,4 @@
 import React from 'react';
-
 import PropTypes from 'prop-types';
 import { Modal, TouchableWithoutFeedback } from 'react-native';
 import { OpacityOverlay, ContentContainer } from './styles';
@@ -7,7 +6,7 @@ import { OpacityOverlay, ContentContainer } from './styles';
 // TODO: Animate Content going up and Overlay transparency
 
 const OrggBottomSheet = ({ children, onPressOpacity }) => (
-  <Modal transparent>
+  <Modal transparent onRequestClose={onPressOpacity}>
     <TouchableWithoutFeedback onPress={onPressOpacity}>
       <OpacityOverlay />
     </TouchableWithoutFeedback>

@@ -25,8 +25,6 @@ const TaskScreen = ({ route }) => {
     navigation.replace('Task', { index: index + 1 });
   }
 
-  console.log(tasks.length);
-
   return (
     <Container>
       <DayContainer>
