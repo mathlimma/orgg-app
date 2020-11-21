@@ -25,6 +25,8 @@ const TaskScreen = ({ route }) => {
     navigation.replace('Task', { index: index + 1 });
   }
 
+  const disableNextTask = index === tasks.length - 1;
+
   return (
     <Container>
       <DayContainer>
@@ -61,11 +63,12 @@ const TaskScreen = ({ route }) => {
       </Content>
 
       <NextTaskButtonContainer>
-        <OrggButton label="Próxima tarefa" onPress={nextTask} marginBottom />
+
+        <OrggButton label="Próxima tarefa" disabled={disableNextTask} onPress={nextTask} marginBottom />
       </NextTaskButtonContainer>
 
       <ButtonsContainer>
-        <OrggButton color={Colors.tertiary} labelColor={Colors.background} label="Ver listagem" onPress={() => null} />
+        <OrggButton color={Colors.tertiary} labelColor={Colors.background} label="Ver listagem" onPress={() => navigation.goBack()} />
       </ButtonsContainer>
 
     </Container>
