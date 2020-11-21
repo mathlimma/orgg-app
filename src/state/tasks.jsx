@@ -225,6 +225,14 @@ export const updateElapsedTime = (Name, EndTime) => {
   updateUserDB();
 };
 
+export const updateEstimatedTime = (Name, CurrentTime) => {
+  var newUserDatabase = UserDatabase;
+  newUserDatabase[getIndexUserTask(Name)].EstimatedTime = newUserDatabase[getIndexUserTask(Name)].EstimatedTime - Math.floor(Math.abs(CurrentTime - newUserDatabase[getIndexUserTask(Name)].StartingTime) / (1000 * 60));
+  UserDatabase = newUserDatabase;
+
+  updateUserDB();
+};
+
 // --------
 function ADDUSER(payload) {
   if (!isExistsUserTask(payload.Name)) {
@@ -353,6 +361,23 @@ function REMOVEHISTORY(payload) {
   return UserHistoryDatabase;
 };
 
+function STARTTASK(payload) {
+  var newUserDatabase = getAllUserTasks();
+  newUserDatabase[getIndexUserTask(payload.index)].StartingTime = payload.CurrentTime;
+  UserDatabase = newUserDatabase;
+  updateUserDB();
+
+  return UserDatabase;
+};
+
+function PAUSETASK(payload) {
+  updateElapsedTime(payload.index, payload.CurrentTime);
+  updateEstimatedTime(payload.index, payload.CurrentTime)
+  updateUserDB();
+
+  return UserDatabase;
+};
+
 function ENDTASK(payload) {
   if (isExistsUserTask(payload.index)) {
     // Update ElapsedTime
@@ -386,12 +411,6 @@ function ENDTASK(payload) {
   return UserDatabase;
 };
 
-function PAUSETASK(payload) {
-  updateElapsedTime(payload.index, payload.EndTime);
-
-  return UserDatabase;
-};
-
 // Types
 export const Types = {
   ADDUSER: 'tasks/ADDUSER',
@@ -402,7 +421,8 @@ export const Types = {
   UPDATEHISTORY: 'tasks/UPDATEHISTORY',
   REMOVEHISTORY: 'tasks/REMOVEHISTORY',
   ENDTASK: 'tasks/ENDTASK',
-  PAUSETASK: 'tasks/PAUSETASK'
+  PAUSETASK: 'tasks/PAUSETASK',
+  STARTTASK: 'tasks/STARTTASK'
 };
 
 // Action Creators
@@ -488,6 +508,14 @@ export const pauseTask = (index, CurrentTime) => ({
   }
 });
 
+export const startTask = (index, CurrentTime) => ({
+  type: Types.STARTTASK,
+  payload: {
+    index,
+    CurrentTime
+  }
+});
+
 // Reducer
 const TasksProvider = ({ children }) => {
   const [state, dispatch] = useReducer((currentState, action) => {
@@ -511,6 +539,8 @@ const TasksProvider = ({ children }) => {
         return [...ENDTASK(action.payload)];
       case Types.PAUSETASK:
         return [...PAUSETASK(action.payload)];
+      case Types.STARTTASK:
+        return [...STARTTASK(action.payload)];
       default:
         return currentState;
     }
