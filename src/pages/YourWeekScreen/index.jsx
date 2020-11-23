@@ -1,9 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import CalendarPicker from 'react-native-calendar-picker';
 import startOfWeek from 'date-fns/startOfWeek';
 import endOfWeek from 'date-fns/endOfWeek';
-import { tasksContext } from '../../state/tasks';
 import Colors from '../../utils/colors';
 import { daysShortHand, months } from '../../utils/utils';
 
@@ -12,11 +11,7 @@ import {
 } from './styles';
 
 const YourWeekScreen = () => {
-  const { state: tasks } = useContext(tasksContext);
   const navigation = useNavigation();
-  useEffect(() => {
-    if (tasks.length > 0) navigation.replace('TaskList');
-  }, [tasks]);
 
   const date = new Date();
   const minDate = startOfWeek(date);
