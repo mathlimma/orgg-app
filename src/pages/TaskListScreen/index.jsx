@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useNavigation, useNavigationState, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { tasksContext } from '../../state/tasks';
 import TaskListItem from './components/TaskListItem';
 import {

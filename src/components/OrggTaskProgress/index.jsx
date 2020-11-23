@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import { tasksContext } from '../../state/tasks';
 import { Container, RoundSquare } from './styles';
 
@@ -18,13 +17,6 @@ const OrggTaskProgress = () => {
       {tasks && tasks.map((task) => <RoundSquare color={getColor(task)} key={task.Name} />)}
     </Container>
   );
-};
-
-OrggTaskProgress.propTypes = {
-};
-
-OrggTaskProgress.defaultProps = {
-
 };
 
 export default OrggTaskProgress;

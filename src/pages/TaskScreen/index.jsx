@@ -1,23 +1,27 @@
-import React, { useContext, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useContext } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { format } from 'date-fns';
 import { tasksContext } from '../../state/tasks';
 import OrggButton from '../../components/OrggButton';
 import {
-  Container, TitleText, Content, OrdinaryText, TaskNameText, TimeText, PriorityTextBold, TaskContainer, ButtonsContainer, NextTaskButtonContainer, TitleTextBold, PriorityText, DayContainer,
+  Container, TitleText, Content, OrdinaryText, TaskNameText, TimeText,
+  PriorityTextBold, TaskContainer, ButtonsContainer, NextTaskButtonContainer,
+  TitleTextBold, PriorityText, DayContainer,
 } from './styles';
 import { days, months, priorities } from '../../utils/utils';
 import TaskProgress from '../../components/OrggTaskProgress';
 
-const TaskScreen = ({ route }) => {
+const TaskScreen = () => {
   const { state: tasks } = useContext(tasksContext);
-  const [today, setToday] = useState(new Date());
+
   const navigation = useNavigation();
+  const route = useRoute();
 
   const { index } = route.params;
   const item = tasks[index];
 
+  const today = new Date();
   const dayName = days[today.getDay()];
   const monthName = months[today.getMonth()];
 

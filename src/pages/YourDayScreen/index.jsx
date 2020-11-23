@@ -20,7 +20,12 @@ const YourDayScreen = () => {
       <TitleText>Seu dia</TitleText>
       <List
         data={tasks}
-        renderItem={({ item, index }) => <TaskListItem handleNavigation={() => handleNavigation(index)} item={item} />}
+        renderItem={({ item, index }) => (
+          <TaskListItem
+            handleNavigation={() => handleNavigation(index)}
+            item={item}
+          />
+        )}
         keyExtractor={(item) => item.Name}
         showsVerticalScrollIndicator={false}
       />

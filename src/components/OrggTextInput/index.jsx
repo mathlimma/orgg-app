@@ -21,7 +21,10 @@ OrggTextInput.propTypes = {
   placeholder: PropTypes.string,
   onChangeText: PropTypes.func,
   defaultValue: PropTypes.string,
-  containerStyle: PropTypes.object,
+  containerStyle: PropTypes.objectOf(PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ])),
 };
 
 OrggTextInput.defaultProps = {
