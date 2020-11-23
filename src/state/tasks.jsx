@@ -1,11 +1,11 @@
 import React, { createContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
+import { AsyncStorage } from '@react-native-community/async-storage';
 import * as db from '../db/orgg-database.json';
-import { AsyncStorage } from 'react-native';
 
-var OrggDatabase = db.OrggDB;
-var UserDatabase = db.UserDB;
-var UserHistoryDatabase = db.UserHistoryDB;
+let OrggDatabase = db.OrggDB;
+let UserDatabase = db.UserDB;
+let UserHistoryDatabase = db.UserHistoryDB;
 
 // Store and Read database
 storeDatabase = async (key, data) => {
@@ -25,9 +25,7 @@ readDatabase = async (key) => {
 */
 getKeys = async () => {
   try {
-    await AsyncStorage.getAllKeys().then((result) => {
-      return result;
-    });
+    await AsyncStorage.getAllKeys().then((result) => result);
   } catch (error) { }
 };
 
@@ -35,9 +33,9 @@ initialize = async () => {
   const databases = ['OrggDB', 'UserDB', 'UserHistoryDB'];
 
   const log = {
-    "OrggDB": false,
-    "UserDB": false,
-    "UserHistoryDB": false
+    OrggDB: false,
+    UserDB: false,
+    UserHistoryDB: false,
   };
 
   const keys = getKeys();
@@ -47,21 +45,21 @@ initialize = async () => {
   }
 
   for (i in databases) {
-    //if (!log[databases[i]]) {
+    // if (!log[databases[i]]) {
     switch (databases[i]) {
       case 'OrggDB': storeDatabase(key, db.OrggDB); OrggDatabase = db.OrggDB; break;
       case 'UserDB': storeDatabase(key, db.UserDB); UserDatabase = db.UserDB; break;
       case 'UserHistoryDB': storeDatabase(key, db.UserHistoryDB); UserHistoryDatabase = db.UserHistoryDB; break;
       default: break;
     }
-    /*} else {
+    /* } else {
       switch (databases[i]) {
         case 'OrggDB': OrggDatabase = readDatabase('OrggDB'); break;
         case 'UserDB': UserDatabase = readDatabase('UserDB'); break;
         case 'UserHistoryDB': UserHistoryDatabase = readDatabase('UserHistoryDB'); break;
         default: break;
       }
-    }*/
+    } */
   }
 };
 
@@ -72,14 +70,12 @@ const tasksContext = createContext(initialState);
 const { Provider } = tasksContext;
 
 // Orgg database functions
-export const getAllOrggTasks = () => {
-  return OrggDatabase;
-};
+export const getAllOrggTasks = () => OrggDatabase;
 
 export const getOrggTask = (name) => {
   const OrggTasks = getAllOrggTasks();
 
-  for (var i = 0; i < OrggTasks.length; i++) {
+  for (let i = 0; i < OrggTasks.length; i++) {
     if (OrggTasks[i].Name.toLowerCase() == name.toLowerCase()) {
       return OrggTasks[i];
     }
@@ -89,10 +85,10 @@ export const getOrggTask = (name) => {
 };
 
 export const getMediumOrggTasks = () => {
-  var medium = 0;
+  let medium = 0;
   const OrggTasks = getAllOrggTasks();
 
-  for (var i = 0; i < OrggTasks.length; i++) {
+  for (let i = 0; i < OrggTasks.length; i++) {
     medium += OrggTasks[i].EstimatedTime;
   }
 
@@ -106,15 +102,13 @@ export const getEstimatedTimeOrggTask = (name) => {
 
   if (HistoryTask != null) {
     return HistoryTask.AverageCompletionTime;
-  } else {
-    const OrggTask = getOrggTask(name);
-
-    if (OrggTask != null) {
-      return OrggTask.EstimatedTime;
-    } else {
-      return getMediumOrggTasks();
-    }
   }
+  const OrggTask = getOrggTask(name);
+
+  if (OrggTask != null) {
+    return OrggTask.EstimatedTime;
+  }
+  return getMediumOrggTasks();
 };
 
 // User database functions
@@ -122,14 +116,12 @@ export const updateUserDB = () => {
   storeDatabase('UserDB', UserDatabase);
 };
 
-export const getAllUserTasks = () => {
-  return UserDatabase;
-};
+export const getAllUserTasks = () => UserDatabase;
 
 export const getUserTask = (name) => {
-  var UserTasks = getAllUserTasks();
+  const UserTasks = getAllUserTasks();
 
-  for (var i = 0; i < UserTasks.length; i++) {
+  for (let i = 0; i < UserTasks.length; i++) {
     if (UserTasks[i].Name.toLowerCase() == name.toLowerCase()) {
       return UserTasks[i];
     }
@@ -141,15 +133,14 @@ export const getUserTask = (name) => {
 export const isExistsUserTask = (name) => {
   if (getUserTask(name) != null) {
     return true;
-  } else {
-    return false;
   }
+  return false;
 };
 
 export const getIndexUserTask = (name) => {
-  var UserTasks = getAllUserTasks();
+  const UserTasks = getAllUserTasks();
 
-  for (var i = 0; i < UserTasks.length; i++) {
+  for (let i = 0; i < UserTasks.length; i++) {
     if (UserTasks[i].Name.toLowerCase() == name.toLowerCase()) {
       return i;
     }
@@ -163,14 +154,12 @@ export const updateUserHistoryDB = () => {
   storeDatabase('UserHistoryDB', UserHistoryDatabase);
 };
 
-export const getAllUserHistoryTasks = () => {
-  return UserHistoryDatabase;
-};
+export const getAllUserHistoryTasks = () => UserHistoryDatabase;
 
 export const getUserHistoryTask = (name) => {
-  var UserHistoryTasks = getAllUserHistoryTasks();
+  const UserHistoryTasks = getAllUserHistoryTasks();
 
-  for (var i = 0; i < UserHistoryTasks.length; i++) {
+  for (let i = 0; i < UserHistoryTasks.length; i++) {
     if (UserHistoryTasks[i].Name.toLowerCase() == name.toLowerCase()) {
       return UserHistoryTasks[i];
     }
@@ -182,15 +171,14 @@ export const getUserHistoryTask = (name) => {
 export const isExistsUserHistoryTask = (name) => {
   if (getUserHistoryTask(name) != null) {
     return true;
-  } else {
-    return false;
   }
+  return false;
 };
 
 export const getIndexUserHistoryTask = (name) => {
-  var UserHistoryTasks = getAllUserHistoryTasks();
+  const UserHistoryTasks = getAllUserHistoryTasks();
 
-  for (var i = 0; i < UserHistoryTasks.length; i++) {
+  for (let i = 0; i < UserHistoryTasks.length; i++) {
     if (UserHistoryTasks[i].Name.toLowerCase() == name.toLowerCase()) {
       return i;
     }
@@ -200,10 +188,10 @@ export const getIndexUserHistoryTask = (name) => {
 };
 
 export const getAllUserTasksByPriority = (priority) => {
-  var databaseByPriority = [];
+  const databaseByPriority = [];
   const database = getAllUserTasks();
 
-  for (var i = 0; i < database.length; i++) {
+  for (let i = 0; i < database.length; i++) {
     if (database[i].Priority == priority) {
       databaseByPriority.push(database[i]);
     }
@@ -211,14 +199,13 @@ export const getAllUserTasksByPriority = (priority) => {
 
   if (databaseByPriority.length != 0) {
     return databaseByPriority;
-  } else {
-    return null;
   }
+  return null;
 };
 
 // Diff in minutes
 export const updateElapsedTime = (Name, EndTime) => {
-  var newUserDatabase = UserDatabase;
+  const newUserDatabase = UserDatabase;
   newUserDatabase[getIndexUserTask(Name)].ElapsedTime = newUserDatabase[getIndexUserTask(Name)].ElapsedTime + Math.floor(Math.abs(EndTime - newUserDatabase[getIndexUserTask(Name)].StartingTime) / (1000 * 60));
   UserDatabase = newUserDatabase;
 
@@ -226,7 +213,7 @@ export const updateElapsedTime = (Name, EndTime) => {
 };
 
 export const updateEstimatedTime = (Name, CurrentTime) => {
-  var newUserDatabase = UserDatabase;
+  const newUserDatabase = UserDatabase;
   newUserDatabase[getIndexUserTask(Name)].EstimatedTime = newUserDatabase[getIndexUserTask(Name)].EstimatedTime - Math.floor(Math.abs(CurrentTime - newUserDatabase[getIndexUserTask(Name)].StartingTime) / (1000 * 60));
   UserDatabase = newUserDatabase;
 
@@ -236,15 +223,15 @@ export const updateEstimatedTime = (Name, CurrentTime) => {
 // --------
 function ADDUSER(payload) {
   if (!isExistsUserTask(payload.Name)) {
-    let task = {
-      "Name": payload.Name,
-      "Priority": payload.Priority,
-      "Difficulty": (payload.Difficulty == undefined) ? 2 : payload.Difficulty,
-      "EstimatedTime": (payload.EstimatedTime == undefined || payload.EstimatedTime == "") ? getEstimatedTimeOrggTask(payload.Name) : (payload.isTaskFixed != true) ? payload.EstimatedTime : Math.floor(Math.abs(payload.EstimatedTime - payload.StartingTime) / (1000 * 60)),
-      "StartingTime": (payload.StartingTime == undefined || payload.isTaskFixed != true) ? 0 : payload.StartingTime,
-      "ElapsedTime": 0,
-      "isTaskFixed": (payload.isTaskFixed == undefined) ? false : payload.isTaskFixed,
-      "canBeInterrupted": (payload.canBeInterrupted == undefined) ? false : payload.canBeInterrupted
+    const task = {
+      Name: payload.Name,
+      Priority: payload.Priority,
+      Difficulty: (payload.Difficulty == undefined) ? 2 : payload.Difficulty,
+      EstimatedTime: (payload.EstimatedTime == undefined || payload.EstimatedTime == '') ? getEstimatedTimeOrggTask(payload.Name) : (payload.isTaskFixed != true) ? payload.EstimatedTime : Math.floor(Math.abs(payload.EstimatedTime - payload.StartingTime) / (1000 * 60)),
+      StartingTime: (payload.StartingTime == undefined || payload.isTaskFixed != true) ? 0 : payload.StartingTime,
+      ElapsedTime: 0,
+      isTaskFixed: (payload.isTaskFixed == undefined) ? false : payload.isTaskFixed,
+      canBeInterrupted: (payload.canBeInterrupted == undefined) ? false : payload.canBeInterrupted,
     };
 
     UserDatabase.push(task);
@@ -252,11 +239,11 @@ function ADDUSER(payload) {
   }
 
   return UserDatabase;
-};
+}
 
 function UPDATEUSER(payload) {
   if (!isExistsUserTask(payload.Name) || payload.index.toLowerCase() == payload.Name.toLowerCase()) {
-    var newUserDatabase = UserDatabase;
+    const newUserDatabase = UserDatabase;
 
     newUserDatabase[getIndexUserTask(payload.index)] = {
       Name: (payload.Name == undefined) ? getUserTask(payload.index).Name : payload.Name,
@@ -275,11 +262,11 @@ function UPDATEUSER(payload) {
   }
 
   return UserDatabase;
-};
+}
 
 function REMOVEUSER(payload) {
   if (isExistsUserTask(payload.index)) {
-    var newUserDatabase = UserDatabase;
+    let newUserDatabase = UserDatabase;
 
     newUserDatabase = [...newUserDatabase.slice(0, getIndexUserTask(payload.index)), ...newUserDatabase.slice(getIndexUserTask(payload.index) + 1, UserDatabase.length)];
     UserDatabase = newUserDatabase;
@@ -287,21 +274,21 @@ function REMOVEUSER(payload) {
   }
 
   return UserDatabase;
-};
+}
 
 // Priority => Difficulty * EstimatedTime
 function ORGANIZE() {
-  var newUserDatabase = [];
+  const newUserDatabase = [];
 
-  for (var i = 3; i >= 0; i--) {
-    var arr = getAllUserTasksByPriority(i);
+  for (let i = 3; i >= 0; i--) {
+    const arr = getAllUserTasksByPriority(i);
     if (arr != null) {
       const n = arr.length;
 
       for (let i = n - 1; i > 0; i--) {
         for (let j = 0; j < i; j++) {
           if ((arr[j].Difficulty * arr[j].EstimatedTime) < (arr[j + 1].Difficulty * arr[j + 1].EstimatedTime)) {
-            let aux = arr[j];
+            const aux = arr[j];
             arr[j] = arr[j + 1];
             arr[j + 1] = aux;
           }
@@ -315,14 +302,14 @@ function ORGANIZE() {
   }
 
   UserDatabase = newUserDatabase;
-};
+}
 
 function ADDHISTORY(payload) {
   if (!isExistsUserHistoryTask(payload.Name)) {
-    let task = {
-      "Name": payload.Name,
-      "AverageCompletionTime": getUserTask(payload.Name).ElapsedTime,
-      "TimesCompleted": 1
+    const task = {
+      Name: payload.Name,
+      AverageCompletionTime: getUserTask(payload.Name).ElapsedTime,
+      TimesCompleted: 1,
     };
 
     UserHistoryDatabase.push(task);
@@ -330,16 +317,20 @@ function ADDHISTORY(payload) {
   }
 
   return UserHistoryDatabase;
-};
+}
 
 function UPDATEHISTORY(payload) {
-  if (!isExistsUserHistoryTask(payload.Name) || payload.index.toLowerCase() == payload.Name.toLowerCase()) {
-    var newUserHistoryDatabase = UserHistoryDatabase;
+  if (!isExistsUserHistoryTask(payload.Name) || payload.index.toLowerCase() === payload.Name.toLowerCase()) {
+    const newUserHistoryDatabase = UserHistoryDatabase;
 
     newUserHistoryDatabase[getIndexUserHistoryTask(payload.index)] = {
       Name: payload.Name,
-      AverageCompletionTime: (payload.AverageCompletionTime == undefined) ? getUserHistoryTask(payload.index).AverageCompletionTime : (((getUserHistoryTask(payload.index).TimesCompleted * getUserHistoryTask(payload.index).AverageCompletionTime) + payload.AverageCompletionTime) / (getUserHistoryTask(payload.index).TimesCompleted + 1)),
-      TimesCompleted: (payload.TimesCompleted == undefined) ? (getUserHistoryTask(payload.index).TimesCompleted + 1) : payload.TimesCompleted
+      AverageCompletionTime: (payload.AverageCompletionTime === undefined)
+        ? getUserHistoryTask(payload.index).AverageCompletionTime
+        : (((getUserHistoryTask(payload.index).TimesCompleted * getUserHistoryTask(payload.index).AverageCompletionTime) + payload.AverageCompletionTime) / (getUserHistoryTask(payload.index).TimesCompleted + 1)),
+      TimesCompleted: (payload.TimesCompleted === undefined)
+        ? (getUserHistoryTask(payload.index).TimesCompleted + 1)
+        : payload.TimesCompleted,
     };
 
     UserHistoryDatabase = newUserHistoryDatabase;
@@ -347,36 +338,42 @@ function UPDATEHISTORY(payload) {
   }
 
   return UserHistoryDatabase;
-};
+}
 
 function REMOVEHISTORY(payload) {
   if (isExistsUserHistoryTask(payload.index)) {
-    var newUserHistoryDatabase = UserHistoryDatabase;
+    let newUserHistoryDatabase = UserHistoryDatabase;
 
-    newUserHistoryDatabase = [...newUserHistoryDatabase.slice(0, getIndexUserHistoryTask(payload.index)), ...newUserHistoryDatabase.slice(getIndexUserHistoryTask(payload.index) + 1, UserHistoryDatabase.length)];
+    newUserHistoryDatabase = [
+      ...newUserHistoryDatabase.slice(0, getIndexUserHistoryTask(payload.index)),
+      ...newUserHistoryDatabase.slice(
+        getIndexUserHistoryTask(payload.index) + 1,
+        UserHistoryDatabase.length,
+      ),
+    ];
     UserHistoryDatabase = newUserHistoryDatabase;
     updateUserHistoryDB();
   }
 
   return UserHistoryDatabase;
-};
+}
 
 function STARTTASK(payload) {
-  var newUserDatabase = getAllUserTasks();
+  const newUserDatabase = getAllUserTasks();
   newUserDatabase[getIndexUserTask(payload.index)].StartingTime = payload.CurrentTime;
   UserDatabase = newUserDatabase;
   updateUserDB();
 
   return UserDatabase;
-};
+}
 
 function PAUSETASK(payload) {
   updateElapsedTime(payload.index, payload.CurrentTime);
-  updateEstimatedTime(payload.index, payload.CurrentTime)
+  updateEstimatedTime(payload.index, payload.CurrentTime);
   updateUserDB();
 
   return UserDatabase;
-};
+}
 
 function ENDTASK(payload) {
   if (isExistsUserTask(payload.index)) {
@@ -386,22 +383,22 @@ function ENDTASK(payload) {
     // Insert UserHistoryTask
     // Update UserHistoryTask
     if (!isExistsUserHistoryTask(payload.index)) {
-      let newPayload = {
-        "Name": payload.index
+      const newPayload = {
+        Name: payload.index,
       };
 
       ADDHISTORY(newPayload);
     } else {
-      let newPayload = {
-        "index": payload.index,
-        "Name": payload.index,
-        "AverageCompletionTime": getUserTask(payload.index).ElapsedTime
+      const newPayload = {
+        index: payload.index,
+        Name: payload.index,
+        AverageCompletionTime: getUserTask(payload.index).ElapsedTime,
       };
 
       UPDATEHISTORY(newPayload);
     }
 
-    //Remove UserTask
+    // Remove UserTask
     REMOVEUSER(payload);
   }
 
@@ -409,7 +406,7 @@ function ENDTASK(payload) {
   updateUserHistoryDB();
 
   return UserDatabase;
-};
+}
 
 // Types
 export const Types = {
@@ -422,7 +419,7 @@ export const Types = {
   REMOVEHISTORY: 'tasks/REMOVEHISTORY',
   ENDTASK: 'tasks/ENDTASK',
   PAUSETASK: 'tasks/PAUSETASK',
-  STARTTASK: 'tasks/STARTTASK'
+  STARTTASK: 'tasks/STARTTASK',
 };
 
 // Action Creators
@@ -437,7 +434,7 @@ export const insertUserTask = (Name, Priority, StartingTime, isTaskFixed, Estima
     isTaskFixed,
     Difficulty,
     canBeInterrupted,
-  }
+  },
 });
 
 export const insertUserHistoryTask = (Name, AverageCompletionTime, TimesCompleted) => ({
@@ -445,8 +442,8 @@ export const insertUserHistoryTask = (Name, AverageCompletionTime, TimesComplete
   payload: {
     Name,
     AverageCompletionTime,
-    TimesCompleted
-  }
+    TimesCompleted,
+  },
 });
 
 export const updateUserTask = (index, Name, Priority, EstimatedTime, StartingTime, ElapsedTime, isTaskFixed, Difficulty, canBeInterrupted) => ({
@@ -460,8 +457,8 @@ export const updateUserTask = (index, Name, Priority, EstimatedTime, StartingTim
     ElapsedTime,
     isTaskFixed,
     Difficulty,
-    canBeInterrupted
-  }
+    canBeInterrupted,
+  },
 });
 
 export const updateUserHistoryTask = (index, Name, AverageCompletionTime, TimesCompleted) => ({
@@ -470,50 +467,50 @@ export const updateUserHistoryTask = (index, Name, AverageCompletionTime, TimesC
     index,
     Name,
     AverageCompletionTime,
-    TimesCompleted
-  }
+    TimesCompleted,
+  },
 });
 
 export const removeUserTask = (index) => ({
   type: Types.REMOVEUSER,
   payload: {
-    index
-  }
+    index,
+  },
 });
 
 export const removeUserHistoryTask = (index) => ({
   type: Types.REMOVEHISTORY,
   payload: {
-    index
-  }
+    index,
+  },
 });
 
 export const organize = () => ({
-  type: Types.ORGANIZE
+  type: Types.ORGANIZE,
 });
 
 export const endTask = (index, EndTime) => ({
   type: Types.ENDTASK,
   payload: {
     index,
-    EndTime
-  }
+    EndTime,
+  },
 });
 
 export const pauseTask = (index, CurrentTime) => ({
   type: Types.PAUSETASK,
   payload: {
     index,
-    CurrentTime
-  }
+    CurrentTime,
+  },
 });
 
 export const startTask = (index, CurrentTime) => ({
   type: Types.STARTTASK,
   payload: {
     index,
-    CurrentTime
-  }
+    CurrentTime,
+  },
 });
 
 // Reducer
