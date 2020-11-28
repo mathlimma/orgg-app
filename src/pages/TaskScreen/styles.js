@@ -32,6 +32,15 @@ export const ButtonsContainer = styled.View`
     width: 100%;
 `;
 
+export const ButtonsContainerRow = styled.View`
+    width: 100%
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+export const ButtonSize = styled.View`
+    width: 45%;
+`;
 export const NextTaskButtonContainer = styled.View`
     align-self: flex-end;
     width: 50%;

@@ -7,7 +7,7 @@ import { tasksContext } from '../../state/tasks';
 import OrggButton from '../../components/OrggButton';
 import {
   Container, TitleText, Content, OrdinaryText, TaskNameText, TimeText,
-  PriorityTextBold, TaskContainer, ButtonsContainer, NextTaskButtonContainer,
+  PriorityTextBold, TaskContainer, ButtonsContainer, ButtonSize, ButtonsContainerRow, NextTaskButtonContainer,
   TitleTextBold, PriorityText, DayContainer,
 } from './styles';
 import { days, months, priorities } from '../../utils/utils';
@@ -71,7 +71,16 @@ const TaskScreen = () => {
               {priorities[item?.Priority]}
             </PriorityTextBold>
           </PriorityText>
-          <OrggButton label="Iniciar tarefa" onPress={startTask} />
+          {true ? (
+            <ButtonsContainerRow>
+              <ButtonSize>
+                <OrggButton label="Pausar" onPress={startTask} />
+              </ButtonSize>
+              <ButtonSize>
+                <OrggButton label="Finalizar" onPress={startTask} />
+              </ButtonSize>
+            </ButtonsContainerRow>
+          ) : <OrggButton label="Iniciar" onPress={startTask} />}
         </TaskContainer>
       </Content>
 

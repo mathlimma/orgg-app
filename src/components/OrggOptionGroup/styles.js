@@ -1,6 +1,10 @@
 import styled from 'styled-components/native';
 import Colors from '../../utils/colors';
 
+export const Container = styled.View`
+  margin-bottom: 10px;
+`;
+
 export const LabelContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;

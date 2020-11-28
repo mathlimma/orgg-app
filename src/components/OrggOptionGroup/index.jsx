@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ButtonGroup } from 'react-native-elements';
-import { Label, LabelContainer, OptionTitle } from './styles';
+import {
+  Label, LabelContainer, OptionTitle, Container,
+} from './styles';
 import Colors from '../../utils/colors';
 
 const OrggOptionGroup = ({
@@ -15,7 +17,7 @@ const OrggOptionGroup = ({
   };
 
   return (
-    <>
+    <Container>
       <LabelContainer>
         {label && <Label>{label}</Label>}
         {titles && <OptionTitle>{titles[index]}</OptionTitle>}
@@ -35,7 +37,7 @@ const OrggOptionGroup = ({
         buttonStyle={{ opacity: 0.35 }}
         textStyle={{ fontSize: 25 }}
       />
-    </>
+    </Container>
   );
 };
 

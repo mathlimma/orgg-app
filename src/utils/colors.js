@@ -1,6 +1,6 @@
 const Colors = {
   primary: '#EB5B5D',
-  primaryDark: '#973F3E',
+  primaryDark: '#bb5b59',
   primaryDarker: '#4B2322',
   secondary: '#F1F6F6',
   tertiary: '#FFE7E7',
@@ -12,7 +12,7 @@ const Colors = {
     screenTitle: '#000000',
     screenSubtitle: '#95ABAB',
     inputLabel: '#718096',
-    inputLabelDarker: '#515767',
+    inputLabelDarker: '#d0d3da',
     inputBorder: '#E2E8F0',
     header: '#808080',
   },
