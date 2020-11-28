@@ -21,7 +21,8 @@ const Routes = () => (
           backgroundColor: Colors.background,
           elevation: 0,
         },
-        title: <OrggHeaderTitle />,
+        headerRight: true,
+        header: () => <OrggHeaderTitle />,
       }}
       headerMode="float"
     >

@@ -3,8 +3,9 @@ import Colors from '../../utils/colors';
 
 export const Container = styled.View`
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
+  margin-right: 26px;
 `;
 
 export const LogoContainer = styled.View` 
