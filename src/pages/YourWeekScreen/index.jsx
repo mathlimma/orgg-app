@@ -26,7 +26,6 @@ const YourWeekScreen = () => {
       <TitleText>Que dia vou planejar?</TitleText>
       <CalendarContainer>
         <CalendarPicker
-          width={300}
           restrictMonthNavigation
           minDate={minDate}
           maxDate={maxDate}

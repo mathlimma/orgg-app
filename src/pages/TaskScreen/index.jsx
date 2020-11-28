@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { BackHandler } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { format } from 'date-fns';
@@ -11,6 +12,7 @@ import {
 } from './styles';
 import { days, months, priorities } from '../../utils/utils';
 import TaskProgress from '../../components/OrggTaskProgress';
+import dispatchNotification from '../../utils/notification';
 
 const TaskScreen = () => {
   const { state: tasks } = useContext(tasksContext);
@@ -28,6 +30,13 @@ const TaskScreen = () => {
   function nextTask() {
     navigation.replace('Task', { index: index + 1 });
   }
+
+  function startTask() {
+    dispatchNotification(item.Name);
+    BackHandler.exitApp();
+  }
+
+  console.log(item);
 
   const disableNextTask = index === tasks.length - 1;
 
@@ -62,14 +71,15 @@ const TaskScreen = () => {
               {priorities[item?.Priority]}
             </PriorityTextBold>
           </PriorityText>
-          <OrggButton label="Iniciar tarefa" onPress={() => null} />
+          <OrggButton label="Iniciar tarefa" onPress={startTask} />
         </TaskContainer>
       </Content>
 
+      { !disableNextTask && (
       <NextTaskButtonContainer>
-
-        <OrggButton label="Próxima tarefa" disabled={disableNextTask} onPress={nextTask} marginBottom />
+        <OrggButton label="Próxima tarefa" onPress={nextTask} marginBottom />
       </NextTaskButtonContainer>
+      )}
 
       <ButtonsContainer>
         <OrggButton color={Colors.tertiary} labelColor={Colors.background} label="Ver listagem" onPress={() => navigation.goBack()} />

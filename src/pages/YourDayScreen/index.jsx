@@ -6,10 +6,15 @@ import OrggButton from '../../components/OrggButton';
 import {
   Container, List, TitleText,
 } from './styles';
+import { daysFull } from '../../utils/utils';
 
 const YourDayScreen = () => {
   const { state: tasks } = useContext(tasksContext);
   const navigation = useNavigation();
+
+  const today = new Date().getDay();
+  const dayName = daysFull[today].toLowerCase();
+  const your = today === 6 || today === 7 ? 'Seu' : 'Sua';
 
   function handleNavigation(index) {
     navigation.push('Task', { index });
@@ -17,7 +22,11 @@ const YourDayScreen = () => {
 
   return (
     <Container>
-      <TitleText>Seu dia</TitleText>
+      <TitleText>
+        {your}
+        {' '}
+        {dayName}
+      </TitleText>
       <List
         data={tasks}
         renderItem={({ item, index }) => (
