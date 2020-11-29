@@ -7,6 +7,7 @@ import LowPriorityIcon from '../../../../../assets/LowPriorityIcon';
 import MediumPriorityIcon from '../../../../../assets/MediumPriorityIcon';
 import HighPriorityIcon from '../../../../../assets/HighPriorityIcon';
 import VeryHighPriorityIcon from '../../../../../assets/VeryHighPriorityIcon';
+import ClockIcon from '../../../../../assets/ClockIcon';
 
 // TODO: User can delete tasks
 
@@ -21,7 +22,7 @@ const TaskListItem = ({ item }) => {
     <TouchableOpacity>
       <Container>
         <TaskTitle>{item.Name}</TaskTitle>
-        <Icon />
+        {item?.isTaskFixed ? <ClockIcon /> : <Icon />}
       </Container>
     </TouchableOpacity>
   );

@@ -6,13 +6,16 @@ import {
   Container, TaskTitle, TopContent, BottomContent, TimeText, EditButtonText,
 } from './styles';
 import LowPriorityIcon from '../../../../../assets/LowPriorityIcon';
+import ClockIcon from '../../../../../assets/ClockIcon';
 import MediumPriorityIcon from '../../../../../assets/MediumPriorityIcon';
 import HighPriorityIcon from '../../../../../assets/HighPriorityIcon';
 import VeryHighPriorityIcon from '../../../../../assets/VeryHighPriorityIcon';
 import OrggCreateTask from '../../../../components/OrggAddTask';
 import OrggBottomSheet from '../../../../components/OrggBottomSheet';
 
-const TaskListItem = ({ item, handleNavigation }) => {
+const TaskListItem = ({
+  item, handleNavigation, drag, isActive,
+}) => {
   const [showEditTask, setShowEditTask] = useState(false);
 
   let Icon;
@@ -25,6 +28,8 @@ const TaskListItem = ({ item, handleNavigation }) => {
     setShowEditTask(!showEditTask);
   }
 
+  console.log(item);
+
   return (
     <>
       {showEditTask && (
@@ -32,15 +37,22 @@ const TaskListItem = ({ item, handleNavigation }) => {
         <OrggCreateTask task={item} onFinish={toggleEdit} isEditing />
       </OrggBottomSheet>
       )}
-      <TouchableOpacity onPress={() => handleNavigation(item)}>
+      <TouchableOpacity onPress={() => handleNavigation(item)} onLongPress={drag}>
         <Container>
           <TopContent>
             <TaskTitle>{item?.Name}</TaskTitle>
-            <Icon />
+            {item?.isTaskFixed ? <ClockIcon /> : <Icon />}
           </TopContent>
 
           <BottomContent>
-            <TimeText>{`${item.EstimatedTime} minutos`}</TimeText>
+            {item?.isTaskFixed ? (
+              <TimeText>
+                Iniciar:
+                {` ${item.StartingTime} `}
+                Finalizar:
+                {` ${item.StartingTime}`}
+              </TimeText>
+            ) : <TimeText>{`Tempo utilizado: ${item.EstimatedTime} minutos`}</TimeText>}
             <TouchableOpacity onPress={toggleEdit}>
               <EditButtonText>
                 Editar

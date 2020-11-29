@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native';
+import LottieView from 'lottie-react-native';
 
 import {
   Container, SubtitleText, TitleText, BoldTitleText,
@@ -19,6 +20,7 @@ const OrganizingScreen = () => {
     <Container>
       {/* TODO: Chance ActivityIndicator to a better one, which can work on iOS */}
       <ActivityIndicator color={Colors.text.screenSubtitle} size={100} />
+      {/* <LottieView source={require('../../../assets/lottie-clock.json')} autoPlay loop /> */}
       <TitleText>
         {' '}
         <BoldTitleText>Orgganizando</BoldTitleText>

@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import Colors from '../../utils/colors';
 
 export const Container = styled.View`
@@ -19,8 +20,7 @@ export const TitleText = styled.Text`
     margin-bottom: 26px;
 `;
 
-export const List = styled.FlatList`
-    width: 100%;
+export const List = styled(DraggableFlatList)`
     margin-bottom: 16px;
     flex-grow: 0;
 `;

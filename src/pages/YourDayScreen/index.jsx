@@ -29,14 +29,19 @@ const YourDayScreen = () => {
       </TitleText>
       <List
         data={tasks}
-        renderItem={({ item, index }) => (
+        renderItem={({
+          item, index, drag, isActive,
+        }) => (
           <TaskListItem
             handleNavigation={() => handleNavigation(index)}
             item={item}
+            drag={drag}
+            isActive={isActive}
           />
         )}
         keyExtractor={(item) => item.Name}
         showsVerticalScrollIndicator={false}
+        onDragEnd={({ data }) => console.log(data)}
       />
       <OrggButton label="Começar" onPress={() => handleNavigation(0)} />
     </Container>
