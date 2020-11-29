@@ -221,6 +221,87 @@ export const updateEstimatedTime = (Name, CurrentTime) => {
 };
 
 // --------
+function SimilarityCheck(tokenDB, tokenUser) {
+  let lengthDB = tokenDB.length;
+  let lengthUser = tokenUser.length;
+  const check = [(lengthDB + 1) * (lengthUser + 1)];
+
+  for (let i = 0; i < check.length; i++) {
+    check[i] = 0;
+  }
+
+  if (lengthDB == 0) {
+    return lengthUser;
+  }
+
+  if (lengthUser == 0) {
+    return lengthDB;
+  }
+
+  let x = 0;
+  while (x <= lengthDB) {
+    check[(x * (lengthDB + 1))] = x++;
+  }
+
+  x = 0;
+  while (x <= lengthUser) {
+    check[x] = x++;
+  }
+
+  for (let i = 1; i <= lengthDB; i++) {
+    for (let j = 1; j <= lengthUser; j++) {
+      let custo = (tokenUser[j - 1] == tokenDB[i - 1]) ? 0 : 1;
+
+      check[(i * (lengthDB + 1)) + j] = Math.min(Math.min(check[((i - 1) * (lengthDB + 1)) + j] + 1, check[(i * (lengthDB + 1)) + (j - 1)] + 1), check[((i - 1) * (lengthDB + 1)) + (j - 1)] + custo);
+    }
+  }
+
+  return check[(lengthDB * (lengthDB + 1)) + lengthUser];
+};
+
+function getTaskByTokenDB(Name, DBTasks) {
+  const TaskTokens = Name.toLowerCase().split(' ');
+
+  let min = 1000;
+  let index = 0;
+  nTokens = 100;
+
+  for (let i = 0; i < DBTasks.length; i++) {
+    let auxNTokens = 0;
+    let sum = 0;
+    const DBTokens = DBTasks[i].Name.toLowerCase().split(' ');
+
+    for (let j = 0; j < TaskTokens.length; j++) {
+      let auxK = [];
+      for (let k = 0; k < DBTokens.length; k++) {
+        if (DBTokens[k].length > 2) {
+          auxNTokens++;
+          auxK.push(SimilarityCheck(DBTokens[k], TaskTokens[j]));
+        }
+      }
+      sum += Math.min.apply(1000, auxK);
+    }
+    if (sum < min) {
+      min = sum;
+      index = i;
+      nTokens = auxNTokens;
+    } else if (sum == min && auxNTokens < nTokens) {
+      min = sum;
+      index = i;
+      nTokens = auxNTokens;
+    }
+  }
+
+  let data = {
+    "min": min,
+    "nTokens": nTokens,
+    "Task": DBTasks[index]
+  };
+
+  return data;
+};
+
+// --------
 function ADDUSER(payload) {
   if (!isExistsUserTask(payload.Name)) {
     const task = {
@@ -232,6 +313,8 @@ function ADDUSER(payload) {
       ElapsedTime: 0,
       isTaskFixed: (payload.isTaskFixed == undefined) ? false : payload.isTaskFixed,
       canBeInterrupted: (payload.canBeInterrupted == undefined) ? false : payload.canBeInterrupted,
+      Day: (payload.Day == undefined) ? new Date() : payload.Day,
+      Status: (payload.Status == undefined) ? 'To Do' : payload.Status,
     };
 
     UserDatabase.push(task);
@@ -254,6 +337,8 @@ function UPDATEUSER(payload) {
       isTaskFixed: (payload.isTaskFixed == undefined) ? getUserTask(payload.index).isTaskFixed : payload.isTaskFixed,
       Difficulty: (payload.Difficulty == undefined) ? getUserTask(payload.index).Difficulty : payload.Difficulty,
       canBeInterrupted: (payload.canBeInterrupted == undefined) ? getUserTask(payload.index).canBeInterrupted : payload.canBeInterrupted,
+      Day: (payload.Day == undefined) ? getUserTask(payload.index).Day : payload.Day,
+      Status: (payload.Status == undefined) ? getUserTask(payload.index).Status : payload.Status,
     };
 
     UserDatabase = newUserDatabase;
@@ -408,6 +493,29 @@ function ENDTASK(payload) {
   return UserDatabase;
 }
 
+function TASKBYTOKENS(Name) {
+  const Tasks = [];
+  Tasks.push(getTaskByTokenDB(Name, getAllUserHistoryTasks()));
+  Tasks.push(getTaskByTokenDB(Name, getAllUserTasks()));
+  Tasks.push(getTaskByTokenDB(Name, getAllOrggTasks()));
+
+  if (Tasks[0].min < Tasks[1].min) {
+    if (Tasks[0].min < Tasks[2].min || (Tasks[0].min == Tasks[2].min && Tasks[0].nTokens <= Tasks[2].nTokens)) {
+      return Tasks[0].Task;
+    }
+    return Tasks[2].Task;
+  } else if (Tasks[0].min == Tasks[1].min && Tasks[0].min != 1000) {
+    if (Tasks[0].nTokens <= Tasks[1].nTokens) {
+      return Tasks[0].Task;
+    }
+    return Tasks[1].Task;
+  }
+  if (Tasks[1].min < Tasks[2].min || (Tasks[1].min == Tasks[2].min && Tasks[1].nTokens <= Tasks[2].nTokens)) {
+    return Tasks[1].Task;
+  }
+  return Tasks[2].Task;
+}
+
 // Types
 export const Types = {
   ADDUSER: 'tasks/ADDUSER',
@@ -420,10 +528,12 @@ export const Types = {
   ENDTASK: 'tasks/ENDTASK',
   PAUSETASK: 'tasks/PAUSETASK',
   STARTTASK: 'tasks/STARTTASK',
+  TASKBYTOKENS: 'tasks/TASKBYTOKENS',
+  POMODORO: 'tasks/POMODORO',
 };
 
 // Action Creators
-export const insertUserTask = (Name, Priority, StartingTime, isTaskFixed, EstimatedTime, Difficulty, canBeInterrupted, ElapsedTime) => ({
+export const insertUserTask = (Name, Priority, StartingTime, isTaskFixed, EstimatedTime, Difficulty, canBeInterrupted, ElapsedTime, Day, Status) => ({
   type: Types.ADDUSER,
   payload: {
     Name,
@@ -434,6 +544,8 @@ export const insertUserTask = (Name, Priority, StartingTime, isTaskFixed, Estima
     isTaskFixed,
     Difficulty,
     canBeInterrupted,
+    Day,
+    Status,
   },
 });
 
@@ -446,7 +558,7 @@ export const insertUserHistoryTask = (Name, AverageCompletionTime, TimesComplete
   },
 });
 
-export const updateUserTask = (index, Name, Priority, EstimatedTime, StartingTime, ElapsedTime, isTaskFixed, Difficulty, canBeInterrupted) => ({
+export const updateUserTask = (index, Name, Priority, EstimatedTime, StartingTime, ElapsedTime, isTaskFixed, Difficulty, canBeInterrupted, Day, Status) => ({
   type: Types.UPDATEUSER,
   payload: {
     index,
@@ -458,6 +570,8 @@ export const updateUserTask = (index, Name, Priority, EstimatedTime, StartingTim
     isTaskFixed,
     Difficulty,
     canBeInterrupted,
+    Day,
+    Status,
   },
 });
 
@@ -513,6 +627,13 @@ export const startTask = (index, CurrentTime) => ({
   },
 });
 
+export const getTaskByTokens = (Name) => ({
+  type: Types.TASKBYTOKENS,
+  payload: {
+    Name,
+  }
+});
+
 // Reducer
 const TasksProvider = ({ children }) => {
   const [state, dispatch] = useReducer((currentState, action) => {
@@ -538,6 +659,8 @@ const TasksProvider = ({ children }) => {
         return [...PAUSETASK(action.payload)];
       case Types.STARTTASK:
         return [...STARTTASK(action.payload)];
+      case Types.TASKBYTOKENS:
+        return [...TASKBYTOKENS(action.payload)];
       default:
         return currentState;
     }
