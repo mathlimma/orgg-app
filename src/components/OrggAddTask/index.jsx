@@ -19,7 +19,9 @@ import HighPriorityIcon from '../../../assets/HighPriorityIcon';
 import VeryHighPriorityIcon from '../../../assets/VeryHighPriorityIcon';
 import OrggAutoComplete from '../OrggAutoComplete';
 
-const OrggAddTask = ({ task, onFinish, isEditing }) => {
+const OrggAddTask = ({
+  task, onFinish, isEditing, day,
+}) => {
   const [displayEditButton, setDisplayEditButton] = useState(false);
   const [displayEditForm, setDisplayEditForm] = useState(isEditing);
   const [confirmDisabled, setConfirmDisabled] = useState(!isEditing);
@@ -56,7 +58,7 @@ const OrggAddTask = ({ task, onFinish, isEditing }) => {
         isTimeFixed, difficulty, canPause,
       ) : insertUserTask(
         taskName, priority, Number(startingTime), isTimeFixed, Number(estimatedTime), difficulty,
-        canPause,
+        canPause, undefined, day,
       ));
     onFinish();
   };
@@ -198,6 +200,10 @@ OrggAddTask.propTypes = {
   }),
   onFinish: PropTypes.func,
   isEditing: PropTypes.bool,
+  day: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.object,
+  ]).isRequired,
 };
 
 OrggAddTask.defaultProps = {
