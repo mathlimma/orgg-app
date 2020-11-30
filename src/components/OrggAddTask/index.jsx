@@ -1,26 +1,30 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
-import OrggTextInput from '../OrggTextInput';
+import { View, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import OrggOptionGroup from '../OrggOptionGroup';
 import OrggButton from '../OrggButton';
 import EditForm from './components/EditForm';
 import colors from '../../utils/colors';
 
 import {
-  Container, DifficultyOption, OptionText, TitleText,
+  Container, DifficultyOption, OptionText, TaskButtonContainer, TaskContainer, TitleText,
 } from './styles';
-import { insertUserTask, tasksContext, updateUserTask } from '../../state/tasks';
+import {
+  getAllOrggTasks, insertUserTask, tasksContext, updateUserTask,
+} from '../../state/tasks';
 
 import LowPriorityIcon from '../../../assets/LowPriorityIcon';
 import MediumPriorityIcon from '../../../assets/MediumPriorityIcon';
 import HighPriorityIcon from '../../../assets/HighPriorityIcon';
 import VeryHighPriorityIcon from '../../../assets/VeryHighPriorityIcon';
+import OrggAutoComplete from '../OrggAutoComplete';
 
 const OrggAddTask = ({ task, onFinish, isEditing }) => {
   const [taskExists, setTaskExists] = useState(!!task);
   const [displayEditForm, setDisplayEditForm] = useState(isEditing);
   const [confirmDisabled, setConfirmDisabled] = useState(!isEditing);
+  const [filteredTasks, setFilteredTasks] = useState([]);
 
   const [taskName, setTaskName] = useState(task ? task.Name : '');
   const [difficulty, setDifficulty] = useState(2);
@@ -31,6 +35,13 @@ const OrggAddTask = ({ task, onFinish, isEditing }) => {
   const [canPause, setCanPause] = useState(true);
 
   const { dispatch } = useContext(tasksContext);
+
+  useEffect(() => {
+    setFilteredTasks(taskName
+      ? getAllOrggTasks().filter((item) => item.Name.startsWith(taskName))
+      : []);
+  }, [taskName]);
+
   const createTask = () => {
     dispatch(isEditing
       ? updateUserTask(
@@ -86,27 +97,31 @@ const OrggAddTask = ({ task, onFinish, isEditing }) => {
   return (
     <Container>
       <TitleText>Nova tarefa</TitleText>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <OrggTextInput
+      <TaskContainer>
+        <OrggAutoComplete
           label="Minha tarefa"
-          onChangeText={(text) => handleTaskName(text)}
-          placeholder="ex: Estudar matemática"
+          data={filteredTasks}
+          onChangeText={handleTaskName}
+          keyExtractor={(item) => item.Name}
+          placeholder="Estudar matemática"
           defaultValue={taskName}
           containerStyle={{ width: displayEditForm || !taskExists ? '100%' : '70%' }}
+          renderItem={({ item }) => (
+            <TouchableOpacity>
+              <Text>{item.Name}</Text>
+            </TouchableOpacity>
+          )}
         />
         {!displayEditForm && taskExists && (
-        <View style={{
-          width: '25%', alignSelf: 'flex-end', height: 50,
-        }}
-        >
+        <TaskButtonContainer>
           <OrggButton
             label="⚙️"
             marginBottom
             onPress={() => setDisplayEditForm(true)}
           />
-        </View>
+        </TaskButtonContainer>
         )}
-      </View>
+      </TaskContainer>
       {displayEditForm && (
       <EditForm
         difficultyState={[difficulty, setDifficulty]}

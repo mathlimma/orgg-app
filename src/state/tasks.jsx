@@ -222,8 +222,8 @@ export const updateEstimatedTime = (Name, CurrentTime) => {
 
 // --------
 function SimilarityCheck(tokenDB, tokenUser) {
-  let lengthDB = tokenDB.length;
-  let lengthUser = tokenUser.length;
+  const lengthDB = tokenDB.length;
+  const lengthUser = tokenUser.length;
   const check = [(lengthDB + 1) * (lengthUser + 1)];
 
   for (let i = 0; i < check.length; i++) {
@@ -250,14 +250,14 @@ function SimilarityCheck(tokenDB, tokenUser) {
 
   for (let i = 1; i <= lengthDB; i++) {
     for (let j = 1; j <= lengthUser; j++) {
-      let custo = (tokenUser[j - 1] == tokenDB[i - 1]) ? 0 : 1;
+      const custo = (tokenUser[j - 1] == tokenDB[i - 1]) ? 0 : 1;
 
       check[(i * (lengthDB + 1)) + j] = Math.min(Math.min(check[((i - 1) * (lengthDB + 1)) + j] + 1, check[(i * (lengthDB + 1)) + (j - 1)] + 1), check[((i - 1) * (lengthDB + 1)) + (j - 1)] + custo);
     }
   }
 
   return check[(lengthDB * (lengthDB + 1)) + lengthUser];
-};
+}
 
 function getTaskByTokenDB(Name, DBTasks) {
   const TaskTokens = Name.toLowerCase().split(' ');
@@ -272,7 +272,7 @@ function getTaskByTokenDB(Name, DBTasks) {
     const DBTokens = DBTasks[i].Name.toLowerCase().split(' ');
 
     for (let j = 0; j < TaskTokens.length; j++) {
-      let auxK = [];
+      const auxK = [];
       for (let k = 0; k < DBTokens.length; k++) {
         if (DBTokens[k].length > 2) {
           auxNTokens++;
@@ -292,14 +292,14 @@ function getTaskByTokenDB(Name, DBTasks) {
     }
   }
 
-  let data = {
-    "min": min,
-    "nTokens": nTokens,
-    "Task": DBTasks[index]
+  const data = {
+    min,
+    nTokens,
+    Task: DBTasks[index],
   };
 
   return data;
-};
+}
 
 // --------
 function ADDUSER(payload) {
@@ -493,7 +493,7 @@ function ENDTASK(payload) {
   return UserDatabase;
 }
 
-function TASKBYTOKENS(Name) {
+export function TASKBYTOKENS(Name) {
   const Tasks = [];
   Tasks.push(getTaskByTokenDB(Name, getAllUserHistoryTasks()));
   Tasks.push(getTaskByTokenDB(Name, getAllUserTasks()));
@@ -504,7 +504,7 @@ function TASKBYTOKENS(Name) {
       return Tasks[0].Task;
     }
     return Tasks[2].Task;
-  } else if (Tasks[0].min == Tasks[1].min && Tasks[0].min != 1000) {
+  } if (Tasks[0].min == Tasks[1].min && Tasks[0].min != 1000) {
     if (Tasks[0].nTokens <= Tasks[1].nTokens) {
       return Tasks[0].Task;
     }
@@ -631,7 +631,7 @@ export const getTaskByTokens = (Name) => ({
   type: Types.TASKBYTOKENS,
   payload: {
     Name,
-  }
+  },
 });
 
 // Reducer

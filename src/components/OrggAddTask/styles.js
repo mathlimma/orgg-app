@@ -5,6 +5,17 @@ export const Container = styled.View`
     margin: 26px;
 `;
 
+export const TaskContainer = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+export const TaskButtonContainer = styled.View`
+    width: 25%;
+    align-self: flex-end;
+    height: 50px;
+`;
+
 export const TitleText = styled.Text`
     color: ${Colors.primary};
     font-family: Rubik_400Regular;
