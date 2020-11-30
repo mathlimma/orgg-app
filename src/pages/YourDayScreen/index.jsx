@@ -14,7 +14,7 @@ const YourDayScreen = () => {
 
   const today = new Date().getDay();
   const dayName = daysFull[today].toLowerCase();
-  const your = today === 6 || today === 7 ? 'Seu' : 'Sua';
+  const your = today === 0 || today === 6 ? 'Seu' : 'Sua';
 
   function handleNavigation(index) {
     navigation.push('Task', { index });

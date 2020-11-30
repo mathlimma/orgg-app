@@ -18,7 +18,7 @@ const OrganizingScreen = () => {
 
   return (
     <Container>
-      {/* TODO: Chance ActivityIndicator to a better one, which can work on iOS */}
+      {/* TODO: Lottie makes app crache on expo client */}
       <ActivityIndicator color={Colors.text.screenSubtitle} size={100} />
       {/* <LottieView source={require('../../../assets/lottie-clock.json')} autoPlay loop /> */}
       <TitleText>
