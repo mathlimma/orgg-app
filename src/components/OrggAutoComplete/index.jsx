@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TouchableOpacity, Text } from 'react-native';
 import {
   Container, InputContainer, Input, Label,
 } from './styles';
 import Colors from '../../utils/colors';
 
 const OrggAutoComplete = ({
-  label, data, placeholder, onChangeText, defaultValue, containerStyle,
+  label, data, placeholder, onChangeText, defaultValue, containerStyle, renderItem, hideResults,
+  onFocus, onEndEditing,
 }) => (
   <Container style={containerStyle}>
     {label && <Label>{label}</Label>}
@@ -19,6 +19,9 @@ const OrggAutoComplete = ({
         placeholder={placeholder}
         defaultValue={defaultValue}
         inputContainerStyle={{ borderWidth: 0 }}
+        hideResults={hideResults}
+        onFocus={onFocus}
+        onEndEditing={onEndEditing}
         listStyle={{
           borderColor: Colors.text.inputBorder,
           borderRadius: 8,
@@ -26,11 +29,7 @@ const OrggAutoComplete = ({
           width: '100%',
           margin: 0,
         }}
-        renderItem={({ item }) => (
-          <TouchableOpacity>
-            <Text>{item.Name}</Text>
-          </TouchableOpacity>
-        )}
+        renderItem={renderItem}
       />
     </InputContainer>
   </Container>
@@ -46,6 +45,10 @@ OrggAutoComplete.propTypes = {
     PropTypes.number,
   ])),
   data: PropTypes.arrayOf(PropTypes.any),
+  renderItem: PropTypes.func,
+  hideResults: PropTypes.bool,
+  onFocus: PropTypes.func,
+  onEndEditing: PropTypes.func,
 };
 
 OrggAutoComplete.defaultProps = {
@@ -55,6 +58,10 @@ OrggAutoComplete.defaultProps = {
   defaultValue: '',
   containerStyle: null,
   data: [],
+  renderItem: null,
+  hideResults: false,
+  onFocus: null,
+  onEndEditing: null,
 };
 
 export default OrggAutoComplete;

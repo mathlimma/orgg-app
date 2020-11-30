@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { Input, Label } from './styles';
 
 const OrggTextInput = ({
-  label, placeholder, onChangeText, defaultValue, containerStyle,
+  label, value, placeholder, onChangeText, defaultValue, containerStyle,
 }) => (
   <View style={containerStyle}>
     {label && <Label>{label}</Label>}
@@ -12,12 +12,14 @@ const OrggTextInput = ({
       placeholder={placeholder}
       onChangeText={onChangeText}
       defaultValue={defaultValue}
+      value={value}
     />
   </View>
 );
 
 OrggTextInput.propTypes = {
   label: PropTypes.string,
+  value: PropTypes.string,
   placeholder: PropTypes.string,
   onChangeText: PropTypes.func,
   defaultValue: PropTypes.string,
@@ -29,6 +31,7 @@ OrggTextInput.propTypes = {
 
 OrggTextInput.defaultProps = {
   label: null,
+  value: '',
   placeholder: null,
   onChangeText: null,
   defaultValue: '',

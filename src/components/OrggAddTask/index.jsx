@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, Text, Keyboard } from 'react-native';
 import OrggOptionGroup from '../OrggOptionGroup';
 import OrggButton from '../OrggButton';
 import EditForm from './components/EditForm';
@@ -11,7 +10,7 @@ import {
   Container, DifficultyOption, OptionText, TaskButtonContainer, TaskContainer, TitleText,
 } from './styles';
 import {
-  getAllOrggTasks, insertUserTask, tasksContext, updateUserTask,
+  getAllOrggTasks, getAllUserTasks, getUserTask, insertUserTask, tasksContext, updateUserTask,
 } from '../../state/tasks';
 
 import LowPriorityIcon from '../../../assets/LowPriorityIcon';
@@ -21,42 +20,79 @@ import VeryHighPriorityIcon from '../../../assets/VeryHighPriorityIcon';
 import OrggAutoComplete from '../OrggAutoComplete';
 
 const OrggAddTask = ({ task, onFinish, isEditing }) => {
-  const [taskExists, setTaskExists] = useState(!!task);
+  const [displayEditButton, setDisplayEditButton] = useState(false);
   const [displayEditForm, setDisplayEditForm] = useState(isEditing);
   const [confirmDisabled, setConfirmDisabled] = useState(!isEditing);
   const [filteredTasks, setFilteredTasks] = useState([]);
+  const [hideAutocompleteList, setHideAutocompleteList] = useState(true);
 
   const [taskName, setTaskName] = useState(task ? task.Name : '');
-  const [difficulty, setDifficulty] = useState(2);
-  const [priority, setPriority] = useState(1);
-  const [estimatedTime, setEstimatedTime] = useState(task ? String(task.EstimatedTime) : '');
-  const [isTimeFixed, setIsTimeFixed] = useState(false);
-  const [startingTime, setStartingTime] = useState('12h');
-  const [canPause, setCanPause] = useState(true);
+  const [difficulty, setDifficulty] = useState(task ? task.Difficulty : 2);
+  const [priority, setPriority] = useState(task ? task.Priority : 1);
+  const [estimatedTime, setEstimatedTime] = useState(task ? String(task.EstimatedTime) : '60');
+  const [isTimeFixed, setIsTimeFixed] = useState(task ? task.isTaskFixed : false);
+  const [startingTime, setStartingTime] = useState(task ? String(task.StartingTime) : '12');
+  const [canPause, setCanPause] = useState(task ? task.canBeInterrupted : true);
 
   const { dispatch } = useContext(tasksContext);
 
+  const removeDuplicatedTasks = (orggDB, userDB) => {
+    const userTaskNames = userDB.map((element) => element.Name);
+    const filteredOrggDB = orggDB.filter((element) => !userTaskNames.includes(element.Name));
+    return [...userDB, ...filteredOrggDB];
+  };
+
   useEffect(() => {
     setFilteredTasks(taskName
-      ? getAllOrggTasks().filter((item) => item.Name.startsWith(taskName))
+      ? removeDuplicatedTasks(getAllOrggTasks(), getAllUserTasks())
+        .filter((item) => item.Name.startsWith(taskName))
       : []);
   }, [taskName]);
 
   const createTask = () => {
     dispatch(isEditing
       ? updateUserTask(
-        task.Name, taskName, priority, Number(estimatedTime),
+        task.Name, taskName, priority, Number(estimatedTime), Number(startingTime), undefined,
+        isTimeFixed, difficulty, canPause,
       ) : insertUserTask(
-        taskName, priority, startingTime, isTimeFixed, estimatedTime,
+        taskName, priority, Number(startingTime), isTimeFixed, Number(estimatedTime), difficulty,
+        canPause,
       ));
     onFinish();
   };
 
   const handleTaskName = (input) => {
     setTaskName(input);
-    // Search for task, if it exists update component state from database
-    // Placeholders:
-    setTaskExists(true);
+  };
+
+  const handleTaskListItemPress = (item) => {
+    setHideAutocompleteList(true);
+    Keyboard.dismiss();
+
+    setTaskName(item.Name);
+    setDifficulty(item.Difficulty || 2);
+    setPriority(item.Priority || 1);
+    setEstimatedTime(String(item.EstimatedTime));
+    setIsTimeFixed(item.isTaskFixed || false);
+    setStartingTime(String(12));
+    setCanPause(item.canBeInterrupted || true);
+
+    if (item.Difficulty === undefined || item.Priority === undefined
+      || item.isTaskFixed === undefined || item.canBeInterrupted === undefined
+      || (item.isTaskFixed && item.startingTime === undefined)) {
+      setDisplayEditForm(true);
+    }
+
+    setConfirmDisabled(false);
+  };
+
+  const handleEndEditingTaskName = () => {
+    setHideAutocompleteList(true);
+    const shouldDisplayEditForm = !getUserTask(taskName);
+
+    setDisplayEditButton(!shouldDisplayEditForm);
+    setDisplayEditForm(shouldDisplayEditForm);
+
     setConfirmDisabled(false);
   };
 
@@ -105,14 +141,17 @@ const OrggAddTask = ({ task, onFinish, isEditing }) => {
           keyExtractor={(item) => item.Name}
           placeholder="Estudar matemática"
           defaultValue={taskName}
-          containerStyle={{ width: displayEditForm || !taskExists ? '100%' : '70%' }}
+          containerStyle={{ width: displayEditButton ? '70%' : '100%' }}
+          hideResults={hideAutocompleteList}
+          onFocus={() => setHideAutocompleteList(false)}
+          onEndEditing={handleEndEditingTaskName}
           renderItem={({ item }) => (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => handleTaskListItemPress(item)}>
               <Text>{item.Name}</Text>
             </TouchableOpacity>
           )}
         />
-        {!displayEditForm && taskExists && (
+        {displayEditButton && (
         <TaskButtonContainer>
           <OrggButton
             label="⚙️"
@@ -151,7 +190,11 @@ OrggAddTask.propTypes = {
   task: PropTypes.shape({
     Name: PropTypes.string.isRequired,
     Priority: PropTypes.number.isRequired,
+    Difficulty: PropTypes.number.isRequired,
     EstimatedTime: PropTypes.number.isRequired,
+    StartingTime: PropTypes.number.isRequired,
+    isTaskFixed: PropTypes.bool.isRequired,
+    canBeInterrupted: PropTypes.bool.isRequired,
   }),
   onFinish: PropTypes.func,
   isEditing: PropTypes.bool,

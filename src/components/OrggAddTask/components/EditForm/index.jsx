@@ -75,6 +75,7 @@ const EditForm = ({
             label="Quanto tempo devo usar?"
             onChangeText={(text) => setEstimatedTime(text)}
             defaultValue={String(estimatedTime)}
+            value={String(estimatedTime)}
           />
         ) : (
           <FixedTimeContainer>
@@ -83,12 +84,14 @@ const EditForm = ({
               onChangeText={(text) => setStartingTime(text)}
               defaultValue={String(startingTime)}
               containerStyle={{ width: '48%' }}
+              value={String(startingTime)}
             />
             <OrggTextInput
               label="Fim"
               onChangeText={(text) => setEstimatedTime(text)}
               defaultValue={String(estimatedTime)}
               containerStyle={{ width: '48%' }}
+              value={String(estimatedTime)}
             />
           </FixedTimeContainer>
         )}
