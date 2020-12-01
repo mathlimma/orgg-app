@@ -532,6 +532,13 @@ export const Types = {
   POMODORO: 'tasks/POMODORO',
 };
 
+// Status
+export const TaskStatus = {
+  DOING: 'DOING',
+  DONE: 'DONE',
+  TODO: 'TODO',
+};
+
 // Action Creators
 export const insertUserTask = (Name, Priority, StartingTime, isTaskFixed, EstimatedTime, Difficulty, canBeInterrupted, ElapsedTime, Day, Status) => ({
   type: Types.ADDUSER,
@@ -659,8 +666,6 @@ const TasksProvider = ({ children }) => {
         return [...PAUSETASK(action.payload)];
       case Types.STARTTASK:
         return [...STARTTASK(action.payload)];
-      case Types.TASKBYTOKENS:
-        return [...TASKBYTOKENS(action.payload)];
       default:
         return currentState;
     }
