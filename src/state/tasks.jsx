@@ -131,7 +131,6 @@ export const getEstimatedTimeOrggTask = (name, difficulty) => {
 
 // User database functions
 export const updateUserDB = () => {
-  console.log(UserDatabase);
   storeDatabase('UserDB', UserDatabase);
 };
 
