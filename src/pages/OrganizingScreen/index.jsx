@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { ActivityIndicator } from 'react-native';
 import LottieView from 'lottie-react-native';
@@ -7,13 +7,19 @@ import {
   Container, SubtitleText, TitleText, BoldTitleText,
 } from './styles';
 import Colors from '../../utils/colors';
+import { dayContext, organize } from '../../state/day';
 
 const OrganizingScreen = () => {
   const navigation = useNavigation();
 
+  const { dispatch } = useContext(dayContext);
+
   // NEXT_SPRINT: Remove this timeout in favor of a real organization
   useEffect(() => {
-    setTimeout(() => navigation.replace('YourDay'), 2500);
+    setTimeout(() => {
+      dispatch(organize());
+      navigation.replace('YourDay');
+    }, 2500);
   }, []);
 
   return (

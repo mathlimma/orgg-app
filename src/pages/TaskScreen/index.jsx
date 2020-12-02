@@ -7,15 +7,17 @@ import { tasksContext } from '../../state/tasks';
 import OrggButton from '../../components/OrggButton';
 import {
   Container, TitleText, Content, OrdinaryText, TaskNameText, TimeText,
-  PriorityTextBold, TaskContainer, ButtonsContainer, ButtonSize, ButtonsContainerRow, NextTaskButtonContainer,
+  PriorityTextBold, TaskContainer, ButtonsContainer, ButtonSize, ButtonsContainerRow,
+  NextTaskButtonContainer,
   TitleTextBold, PriorityText, DayContainer,
 } from './styles';
 import { days, months, priorities } from '../../utils/utils';
 import TaskProgress from '../../components/OrggTaskProgress';
 import dispatchNotification from '../../utils/notification';
+import { dayContext } from '../../state/day';
 
 const TaskScreen = () => {
-  const { state: tasks } = useContext(tasksContext);
+  const { state: tasks } = useContext(dayContext);
 
   const navigation = useNavigation();
   const route = useRoute();

@@ -1,15 +1,16 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { tasksContext, TaskStatus } from '../../state/tasks';
+import { TaskStatus } from '../../state/tasks';
 import TaskListItem from './components/TaskListItem';
 import OrggButton from '../../components/OrggButton';
 import {
   Container, List, TitleText, SubTitleText,
 } from './styles';
 import { daysFull } from '../../utils/utils';
+import { dayContext } from '../../state/day';
 
 const YourDayScreen = () => {
-  const { state: tasks } = useContext(tasksContext);
+  const { state: tasks } = useContext(dayContext);
   const navigation = useNavigation();
 
   const [doingTasks, setDoingTasks] = useState([]);

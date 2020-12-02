@@ -13,6 +13,7 @@ import { Inter_600SemiBold } from '@expo-google-fonts/inter';
 import { AppLoading } from 'expo';
 import Routes from './src/routes';
 import { TasksProvider } from './src/state/tasks';
+import { DayProvider } from './src/state/day';
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -25,9 +26,11 @@ const App = () => {
 
   return fontsLoaded ? (
     <TasksProvider>
-      <NavigationContainer>
-        <Routes />
-      </NavigationContainer>
+      <DayProvider>
+        <NavigationContainer>
+          <Routes />
+        </NavigationContainer>
+      </DayProvider>
     </TasksProvider>
   ) : (
     <AppLoading />

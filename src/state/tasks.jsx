@@ -6,6 +6,24 @@ import * as db from '../db/orgg-database.json';
 let OrggDatabase = db.OrggDB;
 let UserDatabase = db.UserDB;
 
+// Types
+export const Types = {
+  ADDUSER: 'tasks/ADDUSER',
+  UPDATEUSER: 'tasks/UPDATEUSER',
+  REMOVEUSER: 'tasks/REMOVEUSER',
+  ENDTASK: 'tasks/ENDTASK',
+  PAUSETASK: 'tasks/PAUSETASK',
+  STARTTASK: 'tasks/STARTTASK',
+  POMODORO: 'tasks/POMODORO',
+};
+
+// Status
+export const TaskStatus = {
+  DOING: 'DOING',
+  DONE: 'DONE',
+  TODO: 'TODO',
+};
+
 // Store and Read database
 storeDatabase = async (key, data) => {
   try {
@@ -167,7 +185,6 @@ export const updateEstimatedTime = (Name, CurrentTime) => {
 
 // --------
 function ADDUSER(payload) {
-  ORGANIZE();
   if (!isExistsUserTask(payload.Name)) {
     const task = {
       Name: payload.Name,
@@ -205,7 +222,6 @@ function ADDUSER(payload) {
 }
 
 function UPDATEUSER(payload) {
-  ORGANIZE();
   if (
     !isExistsUserTask(payload.Name)
     || payload.index.toLowerCase() == payload.Name.toLowerCase()
@@ -259,7 +275,6 @@ function UPDATEUSER(payload) {
     };
 
     UserDatabase = newUserDatabase;
-    ORGANIZE();
     updateUserDB();
   }
 
@@ -282,50 +297,6 @@ function REMOVEUSER(payload) {
   }
 
   return UserDatabase;
-}
-
-// Priority => Difficulty * EstimatedTime
-// TODO: ByDays, WithFixedTime
-function ORGANIZE() {
-  const newUserDatabase = [];
-
-  for (let i = 3; i >= 0; i--) {
-    const arr = getAllUserTasksByPriorityByStatus(i);
-    if (arr.length !== 0) {
-      const n = arr.length;
-
-      for (let i = n - 1; i > 0; i--) {
-        for (let j = 0; j < i; j++) {
-          if (
-            arr[j].Difficulty * arr[j].EstimatedTime
-            < arr[j + 1].Difficulty * arr[j + 1].EstimatedTime
-          ) {
-            const aux = arr[j];
-            arr[j] = arr[j + 1];
-            arr[j + 1] = aux;
-          }
-        }
-      }
-
-      for (let i = 0; i < n; i++) {
-        newUserDatabase.push(arr[i]);
-      }
-    }
-  }
-
-  const arrDOING = getAllUserTasks().filter(
-    (item) => item.Status === TaskStatus.DOING,
-  );
-
-  if (arrDOING.length !== 0) newUserDatabase.push(arrDOING);
-
-  const arrDONE = getAllUserTasks().filter(
-    (item) => item.Status === TaskStatus.DONE,
-  );
-
-  if (arrDONE.length !== 0) newUserDatabase.push(arrDONE);
-
-  UserDatabase = newUserDatabase;
 }
 
 function STARTTASK(payload) {
@@ -383,25 +354,6 @@ function ENDTASK() {
 
   return UserDatabase;
 }
-
-// Types
-export const Types = {
-  ADDUSER: 'tasks/ADDUSER',
-  UPDATEUSER: 'tasks/UPDATEUSER',
-  REMOVEUSER: 'tasks/REMOVEUSER',
-  ORGANIZE: 'tasks/ORGANIZE',
-  ENDTASK: 'tasks/ENDTASK',
-  PAUSETASK: 'tasks/PAUSETASK',
-  STARTTASK: 'tasks/STARTTASK',
-  POMODORO: 'tasks/POMODORO',
-};
-
-// Status
-export const TaskStatus = {
-  DOING: 'DOING',
-  DONE: 'DONE',
-  TODO: 'TODO',
-};
 
 // Action Creators
 export const insertUserTask = (
@@ -467,10 +419,6 @@ export const removeUserTask = (index) => ({
   },
 });
 
-export const organize = () => ({
-  type: Types.ORGANIZE,
-});
-
 export const endTask = () => ({
   type: Types.ENDTASK,
 });
@@ -497,9 +445,6 @@ const TasksProvider = ({ children }) => {
         return [...UPDATEUSER(action.payload)];
       case Types.REMOVEUSER:
         return [...REMOVEUSER(action.payload)];
-      case Types.ORGANIZE:
-        ORGANIZE();
-        return [...UserDatabase];
       case Types.ENDTASK:
         return [...ENDTASK()];
       case Types.PAUSETASK:
