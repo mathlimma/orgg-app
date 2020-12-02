@@ -34,6 +34,8 @@ const YourWeekScreen = () => {
           selectedDayColor={Colors.primary}
           weekdays={daysShortHand}
           months={months}
+          previousTitle="Anterior"
+          nextTitle="Próximo"
           monthYearHeaderWrapperStyle={{ display: 'none' }}
           dayLabelsWrapper={{ borderTopColor: 'transparent' }}
         />

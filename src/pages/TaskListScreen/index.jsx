@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { isSameDay } from 'date-fns';
 import { tasksContext } from '../../state/tasks';
 import TaskListItem from './components/TaskListItem';
 import {
@@ -11,7 +12,7 @@ import OrggButton from '../../components/OrggButton';
 import { daysFull } from '../../utils/utils';
 
 const TaskListScreen = () => {
-  const { state: tasks } = useContext(tasksContext);
+  let { state: tasks } = useContext(tasksContext);
 
   const [showAddTask, setShowAddTask] = useState(false);
 
@@ -20,6 +21,9 @@ const TaskListScreen = () => {
 
   const today = new Date().getDay();
   const weekDay = new Date(route.params.selectedDate).getDay();
+
+  tasks = tasks.filter((task) => (
+    isSameDay(new Date(task.Day), new Date(route.params.selectedDate))));
 
   return (
     <Container>
@@ -43,7 +47,10 @@ const TaskListScreen = () => {
       </ButtonRow>
       {showAddTask && (
         <OrggBottomSheet onPressOpacity={() => setShowAddTask(!showAddTask)}>
-          <OrggAddTask onFinish={() => setShowAddTask(!showAddTask)} />
+          <OrggAddTask
+            onFinish={() => setShowAddTask(!showAddTask)}
+            day={route.params.selectedDate}
+          />
         </OrggBottomSheet>
       )}
     </Container>

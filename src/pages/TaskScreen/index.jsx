@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { BackHandler } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -7,15 +7,17 @@ import { tasksContext } from '../../state/tasks';
 import OrggButton from '../../components/OrggButton';
 import {
   Container, TitleText, Content, OrdinaryText, TaskNameText, TimeText,
-  PriorityTextBold, TaskContainer, ButtonsContainer, ButtonSize, ButtonsContainerRow, NextTaskButtonContainer,
+  PriorityTextBold, TaskContainer, ButtonsContainer, ButtonSize, ButtonsContainerRow,
+  NextTaskButtonContainer,
   TitleTextBold, PriorityText, DayContainer,
 } from './styles';
 import { days, months, priorities } from '../../utils/utils';
 import TaskProgress from '../../components/OrggTaskProgress';
 import dispatchNotification from '../../utils/notification';
+import { dayContext } from '../../state/day';
 
 const TaskScreen = () => {
-  const { state: tasks } = useContext(tasksContext);
+  const { state: tasks } = useContext(dayContext);
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -26,17 +28,17 @@ const TaskScreen = () => {
   const today = new Date();
   const dayName = days[today.getDay()];
   const monthName = months[today.getMonth()];
+  const [startedTask, setStartedTask] = useState(false);
 
   function nextTask() {
     navigation.replace('Task', { index: index + 1 });
   }
 
   function startTask() {
+    setStartedTask(true);
     dispatchNotification(item.Name);
     BackHandler.exitApp();
   }
-
-  console.log(item);
 
   const disableNextTask = index === tasks.length - 1;
 
@@ -71,7 +73,7 @@ const TaskScreen = () => {
               {priorities[item?.Priority]}
             </PriorityTextBold>
           </PriorityText>
-          {true ? (
+          {startedTask ? (
             <ButtonsContainerRow>
               <ButtonSize>
                 <OrggButton label="Pausar" onPress={startTask} />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
+import addMinutes from 'date-fns/addMinutes';
 
 import {
   Container, TaskTitle, TopContent, BottomContent, TimeText, EditButtonText,
@@ -47,10 +48,11 @@ const TaskListItem = ({
           <BottomContent>
             {item?.isTaskFixed ? (
               <TimeText>
+                {/* TODO(mathlimma): Better formatting of beginning and end times */}
                 Iniciar:
-                {` ${item.StartingTime} `}
+                {` ${new Date(item.StartingTime).getHours()} h ${new Date(item.StartingTime).getMinutes()} m `}
                 Finalizar:
-                {` ${item.StartingTime}`}
+                {` ${new Date(addMinutes(item.StartingTime, item.EstimatedTime)).getHours()} h ${new Date(addMinutes(item.StartingTime, item.EstimatedTime)).getMinutes()} m`}
               </TimeText>
             ) : <TimeText>{`Tempo utilizado: ${item.EstimatedTime} minutos`}</TimeText>}
             <TouchableOpacity onPress={toggleEdit}>
