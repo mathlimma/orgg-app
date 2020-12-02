@@ -1,251 +1,255 @@
 {
- "OrggDB": [
-  {
-    "Id": 1,
-    "Name": "Passear com o cachorro",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 2,
-    "Name": "Corrigir os trabalhos dos alunos do terceiro ano",
-    "EstimatedTime": 180
-  },
-  {
-    "Id": 3,
-    "Name": "Ler o meu livro",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 4,
-    "Name": "Organizar as roupas das crianças",
-    "EstimatedTime": 120
-  },
-  { 
-    "Id": 5,
-    "Name": "Lavar minhas roupas",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 6,
-    "Name": "Ajudar as crianças com os deveres de casa e trabalhos",
-    "EstimatedTime": 180
-  },
-  {
-    "Id": 7,
-    "Name": "Lavar roupa das crianças",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 8,
-    "Name": "Regar e cuidar das plantas",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 9,
-    "Name": "Separar as contas semanais a pagar",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 10,
-    "Name": "Acompanhar os investimentos",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 11,
-    "Name": "Organizar a cozinha",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 13,
-    "Name": "Elaboração de prova dos alunos do primeiro ano",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 14,
-    "Name": "Fazer as compras do supermercado",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 15,
-    "Name": "Jantar em família",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 16,
-    "Name": "Assistir vídeos no Youtube",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 17,
-    "Name": "Varrer a casa",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 18,
-    "Name": "Preparar o almoço de amanhã",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 19,
-    "Name": "Aula para o terceiro ano",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 20,
-    "Name": "Tirar o pó dos móveis",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 21,
-    "Name": "Brincar com as crianças",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 22,
-    "Name": "Lavar as máscaras",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 23,
-    "Name": "Preparar slides para a aula do primeiro e segundo ano",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 24,
-    "Name": "Dar banho nas crianças",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 25,
-    "Name": "Assistir filmes com as crianças",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 26,
-    "Name": "Consulta médica",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 27,
-    "Name": "Arrumar a cama",
-    "EstimatedTime": 30
-  },
-  {
-    "Id": 28,
-    "Name": "Passar pano na casa",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 29,
-    "Name": "Lavar o enxoval das camas",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 30,
-    "Name": "Lavar o banheiro",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 31,
-    "Name": "Trocar o enxoval das camas",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 32,
-    "Name": "Aula para o primeiro ano",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 33,
-    "Name": "Larvar os pratos e limpar a pia da cozinha",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 34,
-    "Name": "Limpar espelhos e janelas",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 35,
-    "Name": "Recolher o lixo",
-    "EstimatedTime": 30
-  },
-  {
-    "Id": 36,
-    "Name": "Corrigir os trabalhos dos alunos do segundo ano",
-    "EstimatedTime": 180
-  },
-  {
-    "Id": 37,
-    "Name": "Aula para os segundo ano",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 38,
-    "Name": "Organizar os armários da cozinha",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 39,
-    "Name": "Organizar minhas roupas",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 40,
-    "Name": "Comprar pão",
-    "EstimatedTime": 30
-  },
-  {
-    "Id": 41,
-    "Name": "Recolher objetos que estão fora do lugar",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 42,
-    "Name": "Escovar os dentes com as crianças",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 43,
-    "Name": "Elaboração de prova dos alunos do terceiro ano",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 44,
-    "Name": "Varrer o quintal",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 45,
-    "Name": "Jogar Fifa",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 46,
-    "Name": "Almoço com a família",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 47,
-    "Name": "Corrigir os trabalhos dos alunos do primeiro ano",
-    "EstimatedTime": 180
-  },
-  {
-    "Id": 48,
-    "Name": "Ler com os meninos",
-    "EstimatedTime": 60
-  },
-  {
-    "Id": 49,
-    "Name": "Elaboração de prova dos alunos do segundo ano",
-    "EstimatedTime": 120
-  },
-  {
-    "Id": 50,
-    "Name": "Fazer o café da manhã e tomar com a familia",
-    "EstimatedTime": 60
-  }
- ],
- "UserDB": [],
- "UserHistoryDB": []
-}
+    "OrggDB":[
+       {
+          "Id":1,
+          "Name":"Passear com o cachorro",
+          "EstimatedTime":60
+       },
+       {
+          "Id":2,
+          "Name":"Corrigir os trabalhos dos alunos do terceiro ano",
+          "EstimatedTime":180
+       },
+       {
+          "Id":3,
+          "Name":"Ler o meu livro",
+          "EstimatedTime":60
+       },
+       {
+          "Id":4,
+          "Name":"Organizar as roupas das crianças",
+          "EstimatedTime":120
+       },
+       {
+          "Id":5,
+          "Name":"Lavar minhas roupas",
+          "EstimatedTime":60
+       },
+       {
+          "Id":6,
+          "Name":"Ajudar as crianças com os deveres de casa e trabalhos",
+          "EstimatedTime":180
+       },
+       {
+          "Id":7,
+          "Name":"Lavar roupa das crianças",
+          "EstimatedTime":120
+       },
+       {
+          "Id":8,
+          "Name":"Regar e cuidar das plantas",
+          "EstimatedTime":60
+       },
+       {
+          "Id":9,
+          "Name":"Separar as contas semanais a pagar",
+          "EstimatedTime":60
+       },
+       {
+          "Id":10,
+          "Name":"Acompanhar os investimentos",
+          "EstimatedTime":60
+       },
+       {
+          "Id":11,
+          "Name":"Organizar a cozinha",
+          "EstimatedTime":120
+       },
+       {
+          "Id":13,
+          "Name":"Elaboração de prova dos alunos do primeiro ano",
+          "EstimatedTime":60
+       },
+       {
+          "Id":14,
+          "Name":"Fazer as compras do supermercado",
+          "EstimatedTime":60
+       },
+       {
+          "Id":15,
+          "Name":"Jantar em família",
+          "EstimatedTime":60
+       },
+       {
+          "Id":16,
+          "Name":"Assistir vídeos no Youtube",
+          "EstimatedTime":120
+       },
+       {
+          "Id":17,
+          "Name":"Varrer a casa",
+          "EstimatedTime":120
+       },
+       {
+          "Id":18,
+          "Name":"Preparar o almoço de amanhã",
+          "EstimatedTime":120
+       },
+       {
+          "Id":19,
+          "Name":"Aula para o terceiro ano",
+          "EstimatedTime":120
+       },
+       {
+          "Id":20,
+          "Name":"Tirar o pó dos móveis",
+          "EstimatedTime":60
+       },
+       {
+          "Id":21,
+          "Name":"Brincar com as crianças",
+          "EstimatedTime":60
+       },
+       {
+          "Id":22,
+          "Name":"Lavar as máscaras",
+          "EstimatedTime":60
+       },
+       {
+          "Id":23,
+          "Name":"Preparar slides para a aula do primeiro e segundo ano",
+          "EstimatedTime":60
+       },
+       {
+          "Id":24,
+          "Name":"Dar banho nas crianças",
+          "EstimatedTime":120
+       },
+       {
+          "Id":25,
+          "Name":"Assistir filmes com as crianças",
+          "EstimatedTime":120
+       },
+       {
+          "Id":26,
+          "Name":"Consulta médica",
+          "EstimatedTime":120
+       },
+       {
+          "Id":27,
+          "Name":"Arrumar a cama",
+          "EstimatedTime":30
+       },
+       {
+          "Id":28,
+          "Name":"Passar pano na casa",
+          "EstimatedTime":120
+       },
+       {
+          "Id":29,
+          "Name":"Lavar o enxoval das camas",
+          "EstimatedTime":120
+       },
+       {
+          "Id":30,
+          "Name":"Lavar o banheiro",
+          "EstimatedTime":60
+       },
+       {
+          "Id":31,
+          "Name":"Trocar o enxoval das camas",
+          "EstimatedTime":60
+       },
+       {
+          "Id":32,
+          "Name":"Aula para o primeiro ano",
+          "EstimatedTime":120
+       },
+       {
+          "Id":33,
+          "Name":"Larvar os pratos e limpar a pia da cozinha",
+          "EstimatedTime":60
+       },
+       {
+          "Id":34,
+          "Name":"Limpar espelhos e janelas",
+          "EstimatedTime":120
+       },
+       {
+          "Id":35,
+          "Name":"Recolher o lixo",
+          "EstimatedTime":30
+       },
+       {
+          "Id":36,
+          "Name":"Corrigir os trabalhos dos alunos do segundo ano",
+          "EstimatedTime":180
+       },
+       {
+          "Id":37,
+          "Name":"Aula para os segundo ano",
+          "EstimatedTime":120
+       },
+       {
+          "Id":38,
+          "Name":"Organizar os armários da cozinha",
+          "EstimatedTime":60
+       },
+       {
+          "Id":39,
+          "Name":"Organizar minhas roupas",
+          "EstimatedTime":60
+       },
+       {
+          "Id":40,
+          "Name":"Comprar pão",
+          "EstimatedTime":30
+       },
+       {
+          "Id":41,
+          "Name":"Recolher objetos que estão fora do lugar",
+          "EstimatedTime":60
+       },
+       {
+          "Id":42,
+          "Name":"Escovar os dentes com as crianças",
+          "EstimatedTime":60
+       },
+       {
+          "Id":43,
+          "Name":"Elaboração de prova dos alunos do terceiro ano",
+          "EstimatedTime":60
+       },
+       {
+          "Id":44,
+          "Name":"Varrer o quintal",
+          "EstimatedTime":60
+       },
+       {
+          "Id":45,
+          "Name":"Jogar Fifa",
+          "EstimatedTime":120
+       },
+       {
+          "Id":46,
+          "Name":"Almoço com a família",
+          "EstimatedTime":60
+       },
+       {
+          "Id":47,
+          "Name":"Corrigir os trabalhos dos alunos do primeiro ano",
+          "EstimatedTime":180
+       },
+       {
+          "Id":48,
+          "Name":"Ler com os meninos",
+          "EstimatedTime":60
+       },
+       {
+          "Id":49,
+          "Name":"Elaboração de prova dos alunos do segundo ano",
+          "EstimatedTime":120
+       },
+       {
+          "Id":50,
+          "Name":"Fazer o café da manhã e tomar com a familia",
+          "EstimatedTime":60
+       }
+    ],
+    "UserDB":[
+       
+    ],
+    "UserHistoryDB":[
+       
+    ]
+ }
