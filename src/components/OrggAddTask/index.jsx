@@ -58,10 +58,10 @@ const OrggAddTask = ({
 
     dispatch(isEditing
       ? updateUserTask(
-        task.Name, taskName, priority, estimatedMinutes, startingTime, undefined,
+        task.ID, taskName, priority, estimatedMinutes, startingTime, undefined,
         isTimeFixed, difficulty, canPause,
       ) : insertUserTask(
-        taskName, priority, startingTime, isTimeFixed, estimatedMinutes, difficulty,
+        Date.now(), taskName, priority, startingTime, isTimeFixed, estimatedMinutes, difficulty,
         canPause, undefined, day,
       ));
     onFinish();
@@ -158,23 +158,23 @@ const OrggAddTask = ({
           )}
         />
         {displayEditButton && (
-        <TaskButtonContainer>
-          <OrggButton
-            label="⚙️"
-            marginBottom
-            onPress={() => setDisplayEditForm(true)}
-          />
-        </TaskButtonContainer>
+          <TaskButtonContainer>
+            <OrggButton
+              label="⚙️"
+              marginBottom
+              onPress={() => setDisplayEditForm(true)}
+            />
+          </TaskButtonContainer>
         )}
       </TaskContainer>
       {displayEditForm && (
-      <EditForm
-        difficultyState={[difficulty, setDifficulty]}
-        estimatedTimeState={[estimatedTime, setEstimatedTime]}
-        isTimeFixedState={[isTimeFixed, setIsTimeFixed]}
-        startingTimeState={[startingTime, setStartingTime]}
-        canPauseState={[canPause, setCanPause]}
-      />
+        <EditForm
+          difficultyState={[difficulty, setDifficulty]}
+          estimatedTimeState={[estimatedTime, setEstimatedTime]}
+          isTimeFixedState={[isTimeFixed, setIsTimeFixed]}
+          startingTimeState={[startingTime, setStartingTime]}
+          canPauseState={[canPause, setCanPause]}
+        />
       )}
       <OrggOptionGroup
         label="Qual a prioridade disto?"

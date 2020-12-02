@@ -28,7 +28,7 @@ export const TaskStatus = {
 storeDatabase = async (key, data) => {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(data));
-  } catch (error) {}
+  } catch (error) { }
 };
 /*
 readDatabase = async (key) => {
@@ -43,7 +43,7 @@ readDatabase = async (key) => {
 getKeys = async () => {
   try {
     await AsyncStorage.getAllKeys().then((result) => result);
-  } catch (error) {}
+  } catch (error) { }
 };
 
 initialize = async () => {
@@ -93,45 +93,70 @@ const { Provider } = tasksContext;
 // Orgg database functions
 export const getAllOrggTasks = () => OrggDatabase;
 
-export const getEstimatedTimeOrggTask = (name) => {
+export const getEstimatedTimeOrggTask = (name, difficulty) => {
+  const UserTask = getAllUserTasks()
+    .filter((UserTask) => UserTask.Status === TaskStatus.DONE)
+    .filter((UserTask) => UserTask.Name.toLowerCase() === name.toLowerCase());
+
+  if (UserTask.length !== 0) {
+    if (UserTask.length === 1) return UserTask.ElapsedTime;
+
+    const average = 0;
+    for (let i = 0; i < UserTask.length; i++) {
+      average += UserTask.ElapsedTime;
+    }
+
+    return Math.floor(average / UserTask.length);
+  }
+
   const OrggTask = getAllOrggTasks().filter(
     (OrggTask) => OrggTask.Name.toLowerCase() === name.toLowerCase()
   );
 
-  if (OrggTask !== 0) return OrggTask.EstimatedTime;
+  if (OrggTask.length !== 0) return OrggTask.EstimatedTime;
 
-  return 90;
+  switch (difficulty) {
+    case 4:
+      return 30;
+    case 3:
+      return 45;
+    case 1:
+      return 90;
+    case 0:
+      return 120;
+    default:
+      return 60;
+  }
 };
 
 // User database functions
 export const updateUserDB = () => {
+  console.log(UserDatabase);
   storeDatabase('UserDB', UserDatabase);
 };
 
 export const getAllUserTasks = () => UserDatabase;
 
-export const getUserTask = (name) => {
-  const UserTask = getAllUserTasks().filter(
-    (UserTask) => UserTask.Name.toLowerCase() === name.toLowerCase()
-  );
+export const getUserTask = (ID) => {
+  const UserTask = getAllUserTasks().filter((UserTask) => UserTask.ID === ID);
 
   if (UserTask !== 0) return UserTask[0];
 
   return null;
 };
 
-export const isExistsUserTask = (name) => {
-  if (getUserTask(name) != null) {
+export const isExistsUserTask = (ID) => {
+  if (getUserTask(ID) != null) {
     return true;
   }
   return false;
 };
 
-export const getIndexUserTask = (name) => {
+export const getIndexUserTask = (ID) => {
   const UserTasks = getAllUserTasks();
 
   for (let i = 0; i < UserTasks.length; i++) {
-    if (UserTasks[i].Name.toLowerCase() == name.toLowerCase()) {
+    if (UserTasks[i].ID == ID) {
       return i;
     }
   }
@@ -155,30 +180,30 @@ export const getAllUserTasksByPriorityByStatus = (priority) => {
 };
 
 // Diff in minutes
-export const updateElapsedTime = (Name, CurrentTime) => {
+export const updateElapsedTime = (ID, CurrentTime) => {
   const newUserDatabase = UserDatabase;
-  newUserDatabase[getIndexUserTask(Name)].ElapsedTime =
-    newUserDatabase[getIndexUserTask(Name)].ElapsedTime +
+  newUserDatabase[getIndexUserTask(ID)].ElapsedTime =
+    newUserDatabase[getIndexUserTask(ID)].ElapsedTime +
     Math.floor(
       Math.abs(
-        CurrentTime - newUserDatabase[getIndexUserTask(Name)].StartingTime
+        CurrentTime - newUserDatabase[getIndexUserTask(ID)].StartingTime
       ) /
-        (1000 * 60)
+      (1000 * 60)
     );
   UserDatabase = newUserDatabase;
 
   updateUserDB();
 };
 
-export const updateEstimatedTime = (Name, CurrentTime) => {
+export const updateEstimatedTime = (ID, CurrentTime) => {
   const newUserDatabase = UserDatabase;
-  newUserDatabase[getIndexUserTask(Name)].EstimatedTime =
-    newUserDatabase[getIndexUserTask(Name)].EstimatedTime -
+  newUserDatabase[getIndexUserTask(ID)].EstimatedTime =
+    newUserDatabase[getIndexUserTask(ID)].EstimatedTime -
     Math.floor(
       Math.abs(
-        CurrentTime - newUserDatabase[getIndexUserTask(Name)].StartingTime
+        CurrentTime - newUserDatabase[getIndexUserTask(ID)].StartingTime
       ) /
-        (1000 * 60)
+      (1000 * 60)
     );
   UserDatabase = newUserDatabase;
 
@@ -187,20 +212,20 @@ export const updateEstimatedTime = (Name, CurrentTime) => {
 
 // --------
 function ADDUSER(payload) {
-  if (!isExistsUserTask(payload.Name)) {
+  if (!isExistsUserTask(payload.ID)) {
     const task = {
-      ID: Date.now(),
+      ID: payload.ID,
       Name: payload.Name,
       Priority: payload.Priority,
       Difficulty: payload.Difficulty == undefined ? 2 : payload.Difficulty,
       EstimatedTime:
         payload.EstimatedTime == undefined || payload.EstimatedTime == ''
-          ? getEstimatedTimeOrggTask(payload.Name)
+          ? getEstimatedTimeOrggTask(payload.Name, payload.Difficulty)
           : payload.isTaskFixed != true
-          ? payload.EstimatedTime
-          : Math.floor(
+            ? payload.EstimatedTime
+            : Math.floor(
               Math.abs(payload.EstimatedTime - payload.StartingTime) /
-                (1000 * 60)
+              (1000 * 60)
             ),
       StartingTime:
         payload.StartingTime == undefined || payload.isTaskFixed != true
@@ -225,55 +250,50 @@ function ADDUSER(payload) {
 }
 
 function UPDATEUSER(payload) {
-  if (
-    !isExistsUserTask(payload.Name) ||
-    payload.index.toLowerCase() == payload.Name.toLowerCase()
-  ) {
+  if (isExistsUserTask(payload.ID)) {
     const newUserDatabase = UserDatabase;
 
-    newUserDatabase[getIndexUserTask(payload.index)] = {
+    newUserDatabase[getIndexUserTask(payload.ID)] = {
+      ID: getUserTask(payload.ID).ID,
       Name:
-        payload.Name == undefined
-          ? getUserTask(payload.index).Name
-          : payload.Name,
+        payload.Name == undefined ? getUserTask(payload.ID).Name : payload.Name,
       Priority:
         payload.Priority == undefined
-          ? getUserTask(payload.index).Priority
+          ? getUserTask(payload.ID).Priority
           : payload.Priority,
       EstimatedTime:
         payload.EstimatedTime == undefined
-          ? getUserTask(payload.index).EstimatedTime
+          ? getUserTask(payload.ID).EstimatedTime
           : payload.isTaskFixed != true
-          ? payload.EstimatedTime
-          : Math.floor(
+            ? payload.EstimatedTime
+            : Math.floor(
               Math.abs(payload.EstimatedTime - payload.StartingTime) /
-                (1000 * 60)
+              (1000 * 60)
             ),
       StartingTime:
         payload.StartingTime == undefined
-          ? getUserTask(payload.index).StartingTime
+          ? getUserTask(payload.ID).StartingTime
           : payload.StartingTime,
       ElapsedTime:
         payload.ElapsedTime == undefined
-          ? getUserTask(payload.index).ElapsedTime
+          ? getUserTask(payload.ID).ElapsedTime
           : payload.ElapsedTime,
       isTaskFixed:
         payload.isTaskFixed == undefined
-          ? getUserTask(payload.index).isTaskFixed
+          ? getUserTask(payload.ID).isTaskFixed
           : payload.isTaskFixed,
       Difficulty:
         payload.Difficulty == undefined
-          ? getUserTask(payload.index).Difficulty
+          ? getUserTask(payload.ID).Difficulty
           : payload.Difficulty,
       canBeInterrupted:
         payload.canBeInterrupted == undefined
-          ? getUserTask(payload.index).canBeInterrupted
+          ? getUserTask(payload.ID).canBeInterrupted
           : payload.canBeInterrupted,
-      Day:
-        payload.Day == undefined ? getUserTask(payload.index).Day : payload.Day,
+      Day: payload.Day == undefined ? getUserTask(payload.ID).Day : payload.Day,
       Status:
         payload.Status == undefined
-          ? getUserTask(payload.index).Status
+          ? getUserTask(payload.ID).Status
           : payload.Status,
     };
 
@@ -285,13 +305,13 @@ function UPDATEUSER(payload) {
 }
 
 function REMOVEUSER(payload) {
-  if (isExistsUserTask(payload.index)) {
+  if (isExistsUserTask(payload.ID)) {
     let newUserDatabase = UserDatabase;
 
     newUserDatabase = [
-      ...newUserDatabase.slice(0, getIndexUserTask(payload.index)),
+      ...newUserDatabase.slice(0, getIndexUserTask(payload.ID)),
       ...newUserDatabase.slice(
-        getIndexUserTask(payload.index) + 1,
+        getIndexUserTask(payload.ID) + 1,
         UserDatabase.length
       ),
     ];
@@ -308,8 +328,8 @@ function STARTTASK(payload) {
       .length === 0
   ) {
     const newUserDatabase = getAllUserTasks();
-    newUserDatabase[getIndexUserTask(payload.index)].StartingTime = new Date();
-    newUserDatabase[getIndexUserTask(payload.index)].Status = TaskStatus.DOING;
+    newUserDatabase[getIndexUserTask(payload.ID)].StartingTime = new Date();
+    newUserDatabase[getIndexUserTask(payload.ID)].Status = TaskStatus.DOING;
     UserDatabase = newUserDatabase;
     updateUserDB();
   }
@@ -322,14 +342,14 @@ function PAUSETASK() {
     getAllUserTasks().filter((UserTask) => UserTask.Status === TaskStatus.DOING)
       .length !== 0
   ) {
-    const index = getAllUserTasks(
+    const ID = getAllUserTasks(
       (UserTask) => UserTask.Status === TaskStatus.DOING
-    )[0].Name;
-    updateElapsedTime(index, new Date());
-    updateEstimatedTime(index, new Date());
+    )[0].ID;
+    updateElapsedTime(ID, new Date());
+    updateEstimatedTime(ID, new Date());
 
     const newUserDatabase = getAllUserTasks();
-    newUserDatabase[getIndexUserTask(index)].Status = TaskStatus.TODO;
+    newUserDatabase[getIndexUserTask(ID)].Status = TaskStatus.TODO;
     UserDatabase = newUserDatabase;
     updateUserDB();
   }
@@ -343,14 +363,14 @@ function ENDTASK() {
       .length !== 0
   ) {
     // Update ElapsedTime
-    const index = getAllUserTasks(
+    const ID = getAllUserTasks(
       (UserTask) => UserTask.Status === TaskStatus.DOING
-    )[0].Name;
-    updateElapsedTime(index, new Date());
+    )[0].ID;
+    updateElapsedTime(ID, new Date());
 
     // Update Status
     const newUserDatabase = getAllUserTasks();
-    newUserDatabase[getIndexUserTask(index)].Status = TaskStatus.DONE;
+    newUserDatabase[getIndexUserTask(ID)].Status = TaskStatus.DONE;
     UserDatabase = newUserDatabase;
     updateUserDB();
   }
@@ -360,6 +380,7 @@ function ENDTASK() {
 
 // Action Creators
 export const insertUserTask = (
+  ID,
   Name,
   Priority,
   StartingTime,
@@ -373,6 +394,7 @@ export const insertUserTask = (
 ) => ({
   type: Types.ADDUSER,
   payload: {
+    ID,
     Name,
     EstimatedTime,
     Priority,
@@ -387,7 +409,7 @@ export const insertUserTask = (
 });
 
 export const updateUserTask = (
-  index,
+  ID,
   Name,
   Priority,
   EstimatedTime,
@@ -401,7 +423,7 @@ export const updateUserTask = (
 ) => ({
   type: Types.UPDATEUSER,
   payload: {
-    index,
+    ID,
     Name,
     EstimatedTime,
     Priority,
@@ -415,10 +437,10 @@ export const updateUserTask = (
   },
 });
 
-export const removeUserTask = (index) => ({
+export const removeUserTask = (ID) => ({
   type: Types.REMOVEUSER,
   payload: {
-    index,
+    ID,
   },
 });
 
@@ -430,10 +452,10 @@ export const pauseTask = () => ({
   type: Types.PAUSETASK,
 });
 
-export const startTask = (index, CurrentTime) => ({
+export const startTask = (ID, CurrentTime) => ({
   type: Types.STARTTASK,
   payload: {
-    index,
+    ID,
     CurrentTime,
   },
 });
