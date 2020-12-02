@@ -2,12 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, View } from 'react-native';
-import OrggTextInput from '../../../OrggTextInput';
+import addMinutes from 'date-fns/addMinutes';
 import OrggOptionGroup from '../../../OrggOptionGroup';
 import OrggCheckBox from '../../../OrggCheckBox';
 
 import { FixedTimeContainer, OptionText } from './styles';
 import { DifficultyOption } from '../../styles';
+import OrggDateTimePicker from '../../../OrggDateTimePicker';
 
 const EditForm = ({
   difficultyState, estimatedTimeState, isTimeFixedState, startingTimeState, canPauseState,
@@ -71,27 +72,26 @@ const EditForm = ({
       </View>
       <View>
         {!isTimeFixed ? (
-          <OrggTextInput
-            label="Quanto tempo devo usar?"
-            onChangeText={(text) => setEstimatedTime(text)}
-            defaultValue={String(estimatedTime)}
-            value={String(estimatedTime)}
+          <OrggDateTimePicker
+            label="Quantas horas devo usar?"
+            value={estimatedTime}
+            onChange={(date) => setEstimatedTime(date)}
           />
         ) : (
           <FixedTimeContainer>
-            <OrggTextInput
+            <OrggDateTimePicker
               label="Início"
-              onChangeText={(text) => setStartingTime(text)}
-              defaultValue={String(startingTime)}
+              value={startingTime}
+              onChange={(date) => setStartingTime(date)}
               containerStyle={{ width: '48%' }}
-              value={String(startingTime)}
+              mode="time"
             />
-            <OrggTextInput
+            <OrggDateTimePicker
               label="Fim"
-              onChangeText={(text) => setEstimatedTime(text)}
-              defaultValue={String(estimatedTime)}
+              value={addMinutes(startingTime, estimatedTime.getMinutes())}
+              onChange={(date) => setEstimatedTime(date)}
               containerStyle={{ width: '48%' }}
-              value={String(estimatedTime)}
+              mode="time"
             />
           </FixedTimeContainer>
         )}
@@ -112,7 +112,7 @@ EditForm.propTypes = {
     PropTypes.func,
   ])).isRequired,
   estimatedTimeState: PropTypes.arrayOf(PropTypes.oneOfType([
-    PropTypes.string,
+    PropTypes.instanceOf(Date),
     PropTypes.func,
   ])).isRequired,
   isTimeFixedState: PropTypes.arrayOf(PropTypes.oneOfType([
@@ -120,7 +120,7 @@ EditForm.propTypes = {
     PropTypes.func,
   ])).isRequired,
   startingTimeState: PropTypes.arrayOf(PropTypes.oneOfType([
-    PropTypes.string,
+    PropTypes.instanceOf(Date),
     PropTypes.func,
   ])).isRequired,
   canPauseState: PropTypes.arrayOf(PropTypes.oneOfType([

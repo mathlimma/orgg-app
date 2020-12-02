@@ -47,10 +47,11 @@ const TaskListItem = ({
           <BottomContent>
             {item?.isTaskFixed ? (
               <TimeText>
+                {/* TODO(mathlimma): Better formatting of beginning and end times */}
                 Iniciar:
-                {` ${item.StartingTime} `}
+                {` ${new Date(item.StartingTime).getHours()} h ${new Date(item.StartingTime).getMinutes()} m `}
                 Finalizar:
-                {` ${item.StartingTime}`}
+                {` ${new Date(item.StartingTime + item.EstimatedTime).getHours()} h ${new Date(item.StartingTime + item.EstimatedTime * 60000).getMinutes()} m`}
               </TimeText>
             ) : <TimeText>{`Tempo utilizado: ${item.EstimatedTime} minutos`}</TimeText>}
             <TouchableOpacity onPress={toggleEdit}>

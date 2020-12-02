@@ -31,9 +31,11 @@ const OrggAddTask = ({
   const [taskName, setTaskName] = useState(task ? task.Name : '');
   const [difficulty, setDifficulty] = useState(task ? task.Difficulty : 2);
   const [priority, setPriority] = useState(task ? task.Priority : 1);
-  const [estimatedTime, setEstimatedTime] = useState(task ? String(task.EstimatedTime) : '60');
+  const [estimatedTime, setEstimatedTime] = useState(
+    new Date(task ? task.EstimatedTime : 30 * 60 * 1000),
+  );
   const [isTimeFixed, setIsTimeFixed] = useState(task ? task.isTaskFixed : false);
-  const [startingTime, setStartingTime] = useState(task ? String(task.StartingTime) : '12');
+  const [startingTime, setStartingTime] = useState(new Date(task ? task.StartingTime : 0));
   const [canPause, setCanPause] = useState(task ? task.canBeInterrupted : true);
 
   const { dispatch } = useContext(tasksContext);
@@ -74,9 +76,9 @@ const OrggAddTask = ({
     setTaskName(item.Name);
     setDifficulty(item.Difficulty || 2);
     setPriority(item.Priority || 1);
-    setEstimatedTime(String(item.EstimatedTime));
+    setEstimatedTime(new Date(item.EstimatedTime * 60 * 1000));
     setIsTimeFixed(item.isTaskFixed || false);
-    setStartingTime(String(12));
+    setStartingTime(new Date(item.StartingTime * 60 * 1000 || 0));
     setCanPause(item.canBeInterrupted || true);
 
     if (item.Difficulty === undefined || item.Priority === undefined
