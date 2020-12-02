@@ -54,12 +54,14 @@ const OrggAddTask = ({
   }, [taskName]);
 
   const createTask = () => {
+    const estimatedMinutes = estimatedTime.getUTCHours() * 60 + estimatedTime.getUTCMinutes();
+
     dispatch(isEditing
       ? updateUserTask(
-        task.Name, taskName, priority, Number(estimatedTime), Number(startingTime), undefined,
+        task.Name, taskName, priority, estimatedMinutes, startingTime, undefined,
         isTimeFixed, difficulty, canPause,
       ) : insertUserTask(
-        taskName, priority, Number(startingTime), isTimeFixed, Number(estimatedTime), difficulty,
+        taskName, priority, startingTime, isTimeFixed, estimatedMinutes, difficulty,
         canPause, undefined, day,
       ));
     onFinish();
