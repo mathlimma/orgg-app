@@ -3,7 +3,7 @@ import { BackHandler } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { format } from 'date-fns';
-import { tasksContext } from '../../state/tasks';
+import { getUserTask } from '../../state/tasks';
 import OrggButton from '../../components/OrggButton';
 import {
   Container, TitleText, Content, OrdinaryText, TaskNameText, TimeText,
@@ -17,7 +17,9 @@ import dispatchNotification from '../../utils/notification';
 import { dayContext } from '../../state/day';
 
 const TaskScreen = () => {
-  const { state: tasks } = useContext(dayContext);
+  const { state: taskIDList } = useContext(dayContext);
+
+  const tasks = taskIDList.map((id) => getUserTask(id));
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -40,7 +42,7 @@ const TaskScreen = () => {
     BackHandler.exitApp();
   }
 
-  const disableNextTask = index === tasks.length - 1;
+  const disableNextTask = index === taskIDList.length - 1;
 
   return (
     <Container>

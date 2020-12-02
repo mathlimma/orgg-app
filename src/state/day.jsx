@@ -48,20 +48,20 @@ function ORGANIZE() {
       }
 
       for (let i = 0; i < n; i++) {
-        newUserDatabase.push(arr[i]);
+        newUserDatabase.push(arr[i].ID);
       }
     }
   }
 
   const arrDOING = getAllUserTasks().filter(
     (item) => item.Status === TaskStatus.DOING,
-  );
+  ).map((item) => item.ID);
 
   if (arrDOING.length !== 0) newUserDatabase.push(arrDOING);
 
   const arrDONE = getAllUserTasks().filter(
     (item) => item.Status === TaskStatus.DONE,
-  );
+  ).map((item) => item.ID);
 
   if (arrDONE.length !== 0) newUserDatabase.push(arrDONE);
 

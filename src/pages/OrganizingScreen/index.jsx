@@ -14,7 +14,6 @@ const OrganizingScreen = () => {
 
   const { dispatch } = useContext(dayContext);
 
-  // NEXT_SPRINT: Remove this timeout in favor of a real organization
   useEffect(() => {
     setTimeout(() => {
       dispatch(organize());
