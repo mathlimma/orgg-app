@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { BackHandler } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -26,17 +26,17 @@ const TaskScreen = () => {
   const today = new Date();
   const dayName = days[today.getDay()];
   const monthName = months[today.getMonth()];
+  const [startedTask, setStartedTask] = useState(false);
 
   function nextTask() {
     navigation.replace('Task', { index: index + 1 });
   }
 
   function startTask() {
+    setStartedTask(true);
     dispatchNotification(item.Name);
     BackHandler.exitApp();
   }
-
-  console.log(item);
 
   const disableNextTask = index === tasks.length - 1;
 
@@ -71,7 +71,7 @@ const TaskScreen = () => {
               {priorities[item?.Priority]}
             </PriorityTextBold>
           </PriorityText>
-          {true ? (
+          {startedTask ? (
             <ButtonsContainerRow>
               <ButtonSize>
                 <OrggButton label="Pausar" onPress={startTask} />

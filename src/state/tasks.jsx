@@ -314,7 +314,7 @@ function ADDUSER(payload) {
       isTaskFixed: (payload.isTaskFixed == undefined) ? false : payload.isTaskFixed,
       canBeInterrupted: (payload.canBeInterrupted == undefined) ? false : payload.canBeInterrupted,
       Day: (payload.Day == undefined) ? new Date() : payload.Day,
-      Status: (payload.Status == undefined) ? 'To Do' : payload.Status,
+      Status: (payload.Status == undefined) ? TaskStatus.TODO : payload.Status,
     };
 
     UserDatabase.push(task);
