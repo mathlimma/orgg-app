@@ -36,8 +36,8 @@ function organizeByVariables() {
       for (let i = n - 1; i > 0; i--) {
         for (let j = 0; j < i; j++) {
           if (
-            (4 - arr[j].Difficulty) * arr[j].EstimatedTime <
-            (4 - arr[j + 1].Difficulty) * arr[j + 1].EstimatedTime
+            (4 - arr[j].Difficulty) * arr[j].EstimatedTime
+            < (4 - arr[j + 1].Difficulty) * arr[j + 1].EstimatedTime
           ) {
             const aux = arr[j];
             arr[j] = arr[j + 1];
@@ -77,23 +77,23 @@ function ORGANIZE() {
 
   for (let i = 0; i < days.length; i++) {
     const UserTaskDay = UserDatabaseByTODO.filter(
-      (UserTask) => UserTask.Day === days[i]
+      (UserTask) => UserTask.Day === days[i],
     );
     const newOrderTask = POMODORO(UserTaskDay, 6, 22);
     for (let j = 0; j < newOrderTask.length; j++) {
-      newUserDatabase.push(newOrderTask[j]);
+      newUserDatabase.push(newOrderTask[j].ID);
     }
   }
 
   const arrDOING = getAllUserTasks().filter(
     (item) => item.Status === TaskStatus.DOING,
-  );
+  ).map((item) => item.ID);
 
   if (arrDOING.length !== 0) newUserDatabase.push(arrDOING);
 
   const arrDONE = getAllUserTasks().filter(
     (item) => item.Status === TaskStatus.DONE,
-  );
+  ).map((item) => item.ID);
 
   if (arrDONE.length !== 0) newUserDatabase.push(arrDONE);
 
