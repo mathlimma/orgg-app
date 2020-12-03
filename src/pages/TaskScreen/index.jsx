@@ -3,7 +3,9 @@ import { BackHandler } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { format } from 'date-fns';
-import { getUserTask } from '../../state/tasks';
+import {
+  getUserTask, pauseTask, endTask, tasksContext, startTask, TaskStatus,
+} from '../../state/tasks';
 import OrggButton from '../../components/OrggButton';
 import {
   Container, TitleText, Content, OrdinaryText, TaskNameText, TimeText,
@@ -18,6 +20,7 @@ import { dayContext } from '../../state/day';
 
 const TaskScreen = () => {
   const { state: taskIDList } = useContext(dayContext);
+  const { dispatch } = useContext(tasksContext);
 
   const tasks = taskIDList.map((id) => getUserTask(id));
 
@@ -30,14 +33,16 @@ const TaskScreen = () => {
   const today = new Date();
   const dayName = days[today.getDay()];
   const monthName = months[today.getMonth()];
-  const [startedTask, setStartedTask] = useState(false);
+  const [startedTask, setStartedTask] = useState(item.Status === TaskStatus.DOING);
 
   function nextTask() {
     navigation.replace('Task', { index: index + 1 });
   }
 
-  function startTask() {
+  function handleStart() {
     setStartedTask(true);
+    dispatch(startTask(item.ID));
+
     dispatchNotification(item.Name);
     BackHandler.exitApp();
   }
@@ -78,13 +83,13 @@ const TaskScreen = () => {
           {startedTask ? (
             <ButtonsContainerRow>
               <ButtonSize>
-                <OrggButton label="Pausar" onPress={startTask} />
+                <OrggButton label="Pausar" onPress={() => dispatch(pauseTask())} />
               </ButtonSize>
               <ButtonSize>
-                <OrggButton label="Finalizar" onPress={startTask} />
+                <OrggButton label="Finalizar" onPress={() => dispatch(endTask())} />
               </ButtonSize>
             </ButtonsContainerRow>
-          ) : <OrggButton label="Iniciar" onPress={startTask} />}
+          ) : <OrggButton label="Iniciar" onPress={handleStart} />}
         </TaskContainer>
       </Content>
 

@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import addMinutes from 'date-fns/addMinutes';
-import subMinutes from 'date-fns/subMinutes';
+import { addMinutes, subMinutes, format } from 'date-fns';
 import { Input, Label, Text } from './styles';
 
 const OrggDateTimePicker = ({
@@ -29,7 +28,7 @@ const OrggDateTimePicker = ({
   const formatValue = () => (
     mode === 'duration'
       ? `${formatDuration(value.getUTCHours(), 'horas')} ${formatDuration(value.getMinutes(), 'minutos')}`
-      : `${String(value.getHours()).padStart(2, '0')}:${String(value.getMinutes()).padStart(2, '0')}`
+      : `${format(value, 'hh:mm')}`
   );
 
   return (
