@@ -32,7 +32,7 @@ const OrggAddTask = ({
   const [difficulty, setDifficulty] = useState(task ? task.Difficulty : 2);
   const [priority, setPriority] = useState(task ? task.Priority : 1);
   const [estimatedTime, setEstimatedTime] = useState(
-    new Date(task ? task.EstimatedTime : 30 * 60 * 1000),
+    new Date((task ? task.EstimatedTime : 30) * 60 * 1000),
   );
   const [isTimeFixed, setIsTimeFixed] = useState(task ? task.isTaskFixed : false);
   const [startingTime, setStartingTime] = useState(new Date(task ? task.StartingTime : 0));
