@@ -5,7 +5,7 @@ import Colors from '../../utils/colors';
 export const Container = styled.ScrollView.attrs({
   showsVerticalScrollIndicator: false,
 })`
-    padding: 26px;
+    padding-horizontal: 26px;
     background-color: ${Colors.background};
     width: 100%;
     height: 100%;

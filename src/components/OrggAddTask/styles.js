@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 import Colors from '../../utils/colors';
 
-export const Container = styled.View`
+export const Container = styled.ScrollView.attrs({
+  showsVerticalScrollIndicator: false,
+})`
     margin: 26px;
+    margin-bottom: 0;
 `;
 
 export const TaskContainer = styled.View`

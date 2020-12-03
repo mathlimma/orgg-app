@@ -187,6 +187,7 @@ const OrggAddTask = ({
         onPress={createTask}
         color={colors.primary}
         disabled={confirmDisabled}
+        marginBottom={26}
       />
     </Container>
   );
@@ -194,6 +195,7 @@ const OrggAddTask = ({
 
 OrggAddTask.propTypes = {
   task: PropTypes.shape({
+    ID: PropTypes.number.isRequired,
     Name: PropTypes.string.isRequired,
     Priority: PropTypes.number.isRequired,
     Difficulty: PropTypes.number.isRequired,
