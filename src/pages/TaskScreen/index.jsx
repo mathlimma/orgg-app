@@ -38,7 +38,9 @@ const TaskScreen = () => {
   const disableNextTask = itemIndex === taskIDList.length - 1;
 
   function nextTask() {
-    navigation.replace('Task', { id: taskIDList[itemIndex + 1] });
+    if (itemIndex + 1 < taskIDList.length) {
+      navigation.replace('Task', { id: taskIDList[itemIndex + 1] });
+    }
   }
 
   function handleStart() {
