@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { TaskStatus, getUserTask } from '../../state/tasks';
+import { tasksContext, TaskStatus, getUserTask } from '../../state/tasks';
 import TaskListItem from './components/TaskListItem';
 import OrggButton from '../../components/OrggButton';
 import {
@@ -11,6 +11,7 @@ import { dayContext } from '../../state/day';
 
 const YourDayScreen = () => {
   const { state: taskIDList } = useContext(dayContext);
+  const { state: tasksDB } = useContext(tasksContext);
   const navigation = useNavigation();
 
   const tasks = taskIDList.map((id) => getUserTask(id));
@@ -35,7 +36,7 @@ const YourDayScreen = () => {
     setDoingTasks(filterTasks(TaskStatus.DOING));
     setTodoTasks(filterTasks(TaskStatus.TODO));
     setDoneTasks(filterTasks(TaskStatus.DONE));
-  }, []);
+  }, [tasksDB]);
 
   return (
     <Container>
