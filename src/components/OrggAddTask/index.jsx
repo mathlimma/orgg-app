@@ -187,7 +187,7 @@ const OrggAddTask = ({
         onPress={createTask}
         color={colors.primary}
         disabled={confirmDisabled}
-        marginBottom={26}
+        marginBottom
       />
     </Container>
   );

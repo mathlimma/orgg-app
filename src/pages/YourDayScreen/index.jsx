@@ -115,7 +115,7 @@ const YourDayScreen = () => {
           />
         </>
       )}
-      <OrggButton label="Começar" onPress={handleBegin} marginBottom={52} />
+      <OrggButton label="Começar" onPress={handleBegin} marginBottom />
     </Container>
   );
 };
