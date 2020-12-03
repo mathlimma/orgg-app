@@ -15,7 +15,7 @@ import OrggCreateTask from '../../../../components/OrggAddTask';
 import OrggBottomSheet from '../../../../components/OrggBottomSheet';
 
 const TaskListItem = ({
-  item, handleNavigation, drag, isActive,
+  item, handleNavigation, drag,
 }) => {
   const [showEditTask, setShowEditTask] = useState(false);
 
@@ -29,13 +29,11 @@ const TaskListItem = ({
     setShowEditTask(!showEditTask);
   }
 
-  console.log(item);
-
   return (
     <>
       {showEditTask && (
       <OrggBottomSheet onPressOpacity={toggleEdit}>
-        <OrggCreateTask task={item} onFinish={toggleEdit} isEditing />
+        <OrggCreateTask task={item} onFinish={toggleEdit} isEditing day={new Date()} />
       </OrggBottomSheet>
       )}
       <TouchableOpacity onPress={() => handleNavigation(item)} onLongPress={drag}>
@@ -72,8 +70,14 @@ TaskListItem.propTypes = {
     Name: PropTypes.string.isRequired,
     Priority: PropTypes.number.isRequired,
     EstimatedTime: PropTypes.number.isRequired,
+    StartingTime: PropTypes.oneOfType([
+      PropTypes.instanceOf(Date),
+      PropTypes.number,
+    ]).isRequired,
+    isTaskFixed: PropTypes.bool.isRequired,
   }).isRequired,
   handleNavigation: PropTypes.func.isRequired,
+  drag: PropTypes.func.isRequired,
 };
 
 export default TaskListItem;

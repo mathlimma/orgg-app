@@ -22,10 +22,10 @@ const YourDayScreen = () => {
 
   const today = new Date().getDay();
   const dayName = daysFull[today].toLowerCase();
-  const your = today === 0 || today === 6 ? 'Seu' : 'Sua';
+  const your = today === 0 || today === 6 ? 'Meu' : 'Minha';
 
-  function handleNavigation(index) {
-    navigation.push('Task', { index });
+  function handleNavigation(id) {
+    navigation.push('Task', { id });
   }
 
   function filterTasks(filter) {
@@ -38,6 +38,12 @@ const YourDayScreen = () => {
     setDoneTasks(filterTasks(TaskStatus.DONE));
   }, [tasksDB]);
 
+  const handleBegin = () => handleNavigation(
+    tasks.find(
+      (task) => task.Status !== TaskStatus.DONE,
+    ).ID,
+  );
+
   return (
     <Container>
       <TitleText>
@@ -45,17 +51,16 @@ const YourDayScreen = () => {
         {' '}
         {dayName}
       </TitleText>
-      { doingTasks
-      && doingTasks.length > 0 && (
+      { doingTasks && doingTasks.length > 0 && (
       <>
         <SubTitleText doing>Fazendo agora</SubTitleText>
         <List
           data={doingTasks}
           renderItem={({
-            item, index, drag, isActive,
+            item, drag, isActive,
           }) => (
             <TaskListItem
-              handleNavigation={() => handleNavigation(index)}
+              handleNavigation={() => handleNavigation(item.ID)}
               item={item}
               drag={drag}
               isActive={isActive}
@@ -74,10 +79,10 @@ const YourDayScreen = () => {
         <List
           data={todoTasks}
           renderItem={({
-            item, index, drag, isActive,
+            item, drag, isActive,
           }) => (
             <TaskListItem
-              handleNavigation={() => handleNavigation(index)}
+              handleNavigation={() => handleNavigation(item.ID)}
               item={item}
               drag={drag}
               isActive={isActive}
@@ -95,10 +100,10 @@ const YourDayScreen = () => {
           <List
             data={doneTasks}
             renderItem={({
-              item, index, drag, isActive,
+              item, drag, isActive,
             }) => (
               <TaskListItem
-                handleNavigation={() => handleNavigation(index)}
+                handleNavigation={() => handleNavigation(item.ID)}
                 item={item}
                 drag={drag}
                 isActive={isActive}
@@ -110,7 +115,7 @@ const YourDayScreen = () => {
           />
         </>
       )}
-      <OrggButton label="Começar" onPress={() => handleNavigation(0)} />
+      <OrggButton label="Começar" onPress={handleBegin} marginBottom={52} />
     </Container>
   );
 };

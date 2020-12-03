@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { BackHandler } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -27,27 +27,59 @@ const TaskScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const { index } = route.params;
-  const item = tasks[index];
+  const { id } = route.params;
+  const itemIndex = taskIDList.findIndex((currentId) => currentId === id);
+  const item = tasks[itemIndex];
 
   const today = new Date();
   const dayName = days[today.getDay()];
   const monthName = months[today.getMonth()];
-  const [startedTask, setStartedTask] = useState(item.Status === TaskStatus.DOING);
+
+  const disableNextTask = itemIndex === taskIDList.length - 1;
 
   function nextTask() {
-    navigation.replace('Task', { index: index + 1 });
+    navigation.replace('Task', { id: taskIDList[itemIndex + 1] });
   }
 
   function handleStart() {
-    setStartedTask(true);
     dispatch(startTask(item.ID));
 
     dispatchNotification(item.Name);
     BackHandler.exitApp();
   }
 
-  const disableNextTask = index === taskIDList.length - 1;
+  const handleEnd = () => {
+    dispatch(endTask());
+    nextTask();
+  };
+
+  const handleStatusText = () => {
+    switch (item.Status) {
+      case TaskStatus.TODO: return 'A fazer';
+      case TaskStatus.DOING: return 'Fazendo';
+      case TaskStatus.DONE: return 'Feito';
+      default: return '';
+    }
+  };
+
+  const handleCardButtons = () => {
+    switch (item.Status) {
+      case TaskStatus.TODO: return (
+        <OrggButton label="Iniciar" onPress={handleStart} />
+      );
+      case TaskStatus.DOING: return (
+        <ButtonsContainerRow>
+          <ButtonSize>
+            <OrggButton label="Pausar" onPress={() => dispatch(pauseTask())} />
+          </ButtonSize>
+          <ButtonSize>
+            <OrggButton label="Finalizar" onPress={handleEnd} />
+          </ButtonSize>
+        </ButtonsContainerRow>
+      );
+      default: return null;
+    }
+  };
 
   return (
     <Container>
@@ -63,7 +95,7 @@ const TaskScreen = () => {
         <TaskProgress taskList={tasks} />
 
         <TaskContainer>
-          <OrdinaryText>A fazer</OrdinaryText>
+          <OrdinaryText>{handleStatusText()}</OrdinaryText>
           <TaskNameText>{item?.Name}</TaskNameText>
           <TimeText>
             Tempo estimado:
@@ -80,16 +112,7 @@ const TaskScreen = () => {
               {priorities[item?.Priority]}
             </PriorityTextBold>
           </PriorityText>
-          {startedTask ? (
-            <ButtonsContainerRow>
-              <ButtonSize>
-                <OrggButton label="Pausar" onPress={() => dispatch(pauseTask())} />
-              </ButtonSize>
-              <ButtonSize>
-                <OrggButton label="Finalizar" onPress={() => dispatch(endTask())} />
-              </ButtonSize>
-            </ButtonsContainerRow>
-          ) : <OrggButton label="Iniciar" onPress={handleStart} />}
+          {handleCardButtons()}
         </TaskContainer>
       </Content>
 

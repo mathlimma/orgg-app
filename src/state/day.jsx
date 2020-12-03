@@ -40,8 +40,8 @@ function organizeByVariables() {
       for (let i = n - 1; i > 0; i--) {
         for (let j = 0; j < i; j++) {
           if (
-            (4 - arr[j].Difficulty) * arr[j].EstimatedTime <
-            (4 - arr[j + 1].Difficulty) * arr[j + 1].EstimatedTime
+            (4 - arr[j].Difficulty) * arr[j].EstimatedTime
+            < (4 - arr[j + 1].Difficulty) * arr[j + 1].EstimatedTime
           ) {
             const aux = arr[j];
             arr[j] = arr[j + 1];
@@ -64,7 +64,7 @@ function POMODORO(UserTask, StartHours) {
   if (UserTask.filter((Task) => Task.isTaskFixed === true).length !== 0) {
     let UserTaskFixed = [];
     const auxUSerTaskFixed = getAllUserTasks().filter(
-      (UserTask) => UserTask.isTaskFixed === true
+      (UserTask) => UserTask.isTaskFixed === true,
     );
 
     for (let i = 0; i < auxUSerTaskFixed.length; i++) {
@@ -73,24 +73,21 @@ function POMODORO(UserTask, StartHours) {
       } else {
         const UserTaskFixedLength = UserTaskFixed.length;
         for (let j = 0; j < UserTaskFixedLength; j++) {
-          const auxUSerTaskFixedTime =
-            auxUSerTaskFixed[i].StartingTime.getHours() * 60 +
-            auxUSerTaskFixed[i].StartingTime.getMinutes();
-          const UserTaskFixedTime =
-            UserTaskFixed[j].StartingTime.getHours() * 60 +
-            UserTaskFixed[j].StartingTime.getMinutes();
+          const auxUSerTaskFixedTime = auxUSerTaskFixed[i].StartingTime.getHours() * 60
+            + auxUSerTaskFixed[i].StartingTime.getMinutes();
+          const UserTaskFixedTime = UserTaskFixed[j].StartingTime.getHours() * 60
+            + UserTaskFixed[j].StartingTime.getMinutes();
 
           if (auxUSerTaskFixedTime <= UserTaskFixedTime) {
-            let aux = [];
+            const aux = [];
 
             for (let x = 0; x < j; x++) {
               aux.push(UserTaskFixed[x]);
             }
 
             while (j < UserTaskFixedLength) {
-              let USerTaskFixedTime2 =
-                UserTaskFixed[j].StartingTime.getHours() * 60 +
-                UserTaskFixed[j].StartingTime.getMinutes();
+              const USerTaskFixedTime2 = UserTaskFixed[j].StartingTime.getHours() * 60
+                + UserTaskFixed[j].StartingTime.getMinutes();
               if (auxUSerTaskFixedTime === USerTaskFixedTime2) {
                 if (auxUSerTaskFixed[i].Priority > UserTaskFixed[j].Priority) {
                   aux.push(auxUSerTaskFixed[i]);
@@ -100,10 +97,10 @@ function POMODORO(UserTask, StartHours) {
                   auxUSerTaskFixed[i].Priority === UserTaskFixed[j].Priority
                 ) {
                   if (
-                    (4 - auxUSerTaskFixed[i].Difficulty) *
-                      auxUSerTaskFixed[i].EstimatedTime >
-                    (4 - UserTaskFixed[j].Difficulty) *
-                      UserTaskFixed[j].EstimatedTime
+                    (4 - auxUSerTaskFixed[i].Difficulty)
+                      * auxUSerTaskFixed[i].EstimatedTime
+                    > (4 - UserTaskFixed[j].Difficulty)
+                      * UserTaskFixed[j].EstimatedTime
                   ) {
                     aux.push(auxUSerTaskFixed[i]);
                     break;
@@ -135,7 +132,7 @@ function POMODORO(UserTask, StartHours) {
     }
 
     let UserTaskNotFixed = UserTask.filter(
-      (Task) => Task.isTaskFixed === false
+      (Task) => Task.isTaskFixed === false,
     );
 
     if (UserTaskNotFixed.length === 0) {
@@ -144,31 +141,28 @@ function POMODORO(UserTask, StartHours) {
 
     for (let i = 0; i < UserTaskFixed.length; i++) {
       let restTime = 0;
-      let aux = [];
+      const aux = [];
 
       if (UserTaskFixed[i].StartingTime.getDay() === new Date().getDay()) {
         const date = new Date();
-        restTime =
-          UserTaskFixed[i].StartingTime.getHours() * 60 +
-          UserTaskFixed[i].StartingTime.getMinutes() -
-          date.getHours() * 60 +
-          date.getMinutes();
+        restTime = UserTaskFixed[i].StartingTime.getHours() * 60
+          + UserTaskFixed[i].StartingTime.getMinutes()
+          - date.getHours() * 60
+          + date.getMinutes();
       } else {
-        restTime =
-          UserTaskFixed[i].StartingTime.getHours() * 60 +
-          UserTaskFixed[i].StartingTime.getMinutes() -
-          StartHours * 60;
+        restTime = UserTaskFixed[i].StartingTime.getHours() * 60
+          + UserTaskFixed[i].StartingTime.getMinutes()
+          - StartHours * 60;
       }
 
       for (let j = 0; j < UserTaskNotFixed.length; j++) {
-        const taskTime =
-          UserTaskNotFixed[j].EstimatedTime +
-          Math.ceil(UserTaskNotFixed[j].EstimatedTime / 25) * 5;
+        const taskTime = UserTaskNotFixed[j].EstimatedTime
+          + Math.ceil(UserTaskNotFixed[j].EstimatedTime / 25) * 5;
 
         if (restTime - taskTime <= 0) {
           while (
-            UserTaskNotFixed[j].isTaskFixed &&
-            j < UserTaskNotFixed.length
+            UserTaskNotFixed[j].isTaskFixed
+            && j < UserTaskNotFixed.length
           ) {
             aux.push(UserTaskNotFixed[j]);
             j++;
@@ -211,27 +205,27 @@ function ORGANIZE() {
     }
   }
 
+  const arrDONE = getAllUserTasks()
+    .filter((item) => item.Status === TaskStatus.DONE)
+    .map((item) => item.ID);
+
+  if (arrDONE.length !== 0) newUserDatabase.push(...arrDONE);
+
+  const arrDOING = getAllUserTasks()
+    .filter((item) => item.Status === TaskStatus.DOING)
+    .map((item) => item.ID);
+
+  if (arrDOING.length !== 0) newUserDatabase.push(...arrDOING);
+
   for (let i = 0; i < days.length; i++) {
     const UserTaskDay = UserDatabaseByTODO.filter(
-      (UserTask) => UserTask.Day === days[i]
+      (UserTask) => UserTask.Day === days[i],
     );
     const newOrderTask = POMODORO(UserTaskDay, 6, 22);
     for (let j = 0; j < newOrderTask.length; j++) {
       newUserDatabase.push(newOrderTask[j].ID);
     }
   }
-
-  const arrDOING = getAllUserTasks()
-    .filter((item) => item.Status === TaskStatus.DOING)
-    .map((item) => item.ID);
-
-  if (arrDOING.length !== 0) newUserDatabase.push(arrDOING);
-
-  const arrDONE = getAllUserTasks()
-    .filter((item) => item.Status === TaskStatus.DONE)
-    .map((item) => item.ID);
-
-  if (arrDONE.length !== 0) newUserDatabase.push(arrDONE);
 
   return newUserDatabase;
 }
