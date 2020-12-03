@@ -166,7 +166,7 @@ export const getIndexUserTask = (ID) => {
 export const getAllUserTasksByPriorityByStatus = (priority) => {
   const databaseByPriority = [];
   const database = getAllUserTasks().filter(
-    (item) => item.Status === TaskStatus.TODO
+    (UserTask) => UserTask.Status === TaskStatus.TODO
   );
 
   for (let i = 0; i < database.length; i++) {
