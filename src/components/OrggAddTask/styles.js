@@ -8,6 +8,11 @@ export const Container = styled.ScrollView.attrs({
     margin-bottom: 0;
 `;
 
+export const TitleContainer = styled.View`
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
 export const TaskContainer = styled.View`
     flex-direction: row;
     justify-content: space-between;

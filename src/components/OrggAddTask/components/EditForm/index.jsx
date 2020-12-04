@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, View } from 'react-native';
-import { subMinutes, addMinutes, differenceInMinutes } from 'date-fns';
+import { addMinutes, differenceInMinutes } from 'date-fns';
 import OrggOptionGroup from '../../../OrggOptionGroup';
 import OrggCheckBox from '../../../OrggCheckBox';
 
@@ -20,6 +20,11 @@ const EditForm = ({
   const [canPause, setCanPause] = canPauseState;
 
   const handleEstimatedTime = (date) => {
+    const estimatedMinutes = date.getUTCHours() * 60 + date.getUTCMinutes();
+    setEstimatedTime(estimatedMinutes >= 5 ? estimatedMinutes : 5);
+  };
+
+  const handleEndTime = (date) => {
     setEstimatedTime(differenceInMinutes(date, startingTime) > 5
       ? differenceInMinutes(date, startingTime)
       : 5);
@@ -103,7 +108,7 @@ const EditForm = ({
                   estimatedTime,
                 )
               }
-              onChange={(date) => handleEstimatedTime(date)}
+              onChange={(date) => handleEndTime(date)}
               containerStyle={{ width: '48%' }}
               mode="time"
             />

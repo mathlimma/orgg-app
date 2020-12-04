@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   getAllUserTasks,
   getAllUserTasksByPriorityByStatus,
+  getUserTask,
   TaskStatus,
 } from './tasks';
 
@@ -13,7 +14,7 @@ const { Provider } = dayContext;
 // Types
 export const Types = {
   ORGANIZE: 'day/ORGANIZE',
-  UPDATE: 'day/UPDATE',
+  CLEANUP: 'day/CLEANUP',
 };
 
 // Action Creators
@@ -21,11 +22,8 @@ export const organize = () => ({
   type: Types.ORGANIZE,
 });
 
-export const update = (taskIDs) => ({
-  type: Types.UPDATE,
-  payload: {
-    taskIDs,
-  },
+export const cleanup = () => ({
+  type: Types.CLEANUP,
 });
 
 // Priority => Difficulty * EstimatedTime
@@ -144,9 +142,9 @@ function POMODORO(UserTask, StartHours) {
       const aux = [];
 
       if (
-        new Date(UserTaskFixed[i].Day).getDay() === new Date().getDay() &&
-        new Date(UserTaskFixed[i].Day).getMonth() === new Date().getMonth() &&
-        new Date(UserTaskFixed[i].Day).getFullYear() === new Date().getFullYear()
+        new Date(UserTaskFixed[i].Day).getDay() === new Date().getDay()
+        && new Date(UserTaskFixed[i].Day).getMonth() === new Date().getMonth()
+        && new Date(UserTaskFixed[i].Day).getFullYear() === new Date().getFullYear()
       ) {
         const date = new Date();
         restTime = UserTaskFixed[i].StartingTime.getHours() * 60
@@ -162,9 +160,8 @@ function POMODORO(UserTask, StartHours) {
       for (let j = 0; j < UserTaskNotFixed.length; j++) {
         let taskTime = 0;
         if (UserTaskNotFixed[j].canBeInterrupted === true) {
-          taskTime =
-            UserTaskNotFixed[j].EstimatedTime +
-            Math.ceil(UserTaskNotFixed[j].EstimatedTime / 25) * 5;
+          taskTime = UserTaskNotFixed[j].EstimatedTime
+            + Math.ceil(UserTaskNotFixed[j].EstimatedTime / 25) * 5;
         } else {
           taskTime = UserTaskNotFixed[j].EstimatedTime;
         }
@@ -239,15 +236,16 @@ function ORGANIZE() {
 
   const tasksDay = getAllUserTasks()
     .filter(
-      (Task) =>
-        new Date(Task.Day).getDay() == new Date().getDay() &&
-        new Date(Task.Day).getMonth() == new Date().getMonth() &&
-        new Date(Task.Day).getFullYear() == new Date().getFullYear()
+      (Task) => new Date(Task.Day).getDay() == new Date().getDay()
+        && new Date(Task.Day).getMonth() == new Date().getMonth()
+        && new Date(Task.Day).getFullYear() == new Date().getFullYear(),
     )
     .map((Task) => Task.ID);
 
   return newUserDatabase.filter((Task) => tasksDay.includes(Task));
 }
+
+const CLEANUP = (state) => state.filter((elem) => getUserTask(elem) !== undefined);
 
 // Reducer
 const DayProvider = ({ children }) => {
@@ -255,8 +253,8 @@ const DayProvider = ({ children }) => {
     switch (action.type) {
       case Types.ORGANIZE:
         return ORGANIZE();
-      case Types.UPDATE:
-        return [...action.payload];
+      case Types.CLEANUP:
+        return CLEANUP(currentState);
       default:
         return currentState;
     }

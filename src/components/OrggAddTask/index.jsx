@@ -7,10 +7,11 @@ import EditForm from './components/EditForm';
 import colors from '../../utils/colors';
 
 import {
-  Container, DifficultyOption, OptionText, TaskButtonContainer, TaskContainer, TitleText,
+  Container, DifficultyOption, OptionText, TaskButtonContainer, TaskContainer, TitleContainer,
+  TitleText,
 } from './styles';
 import {
-  getAllOrggTasks, getAllUserTasks, insertUserTask, tasksContext, updateUserTask,
+  getAllOrggTasks, getAllUserTasks, insertUserTask, removeUserTask, tasksContext, updateUserTask,
 } from '../../state/tasks';
 
 import LowPriorityIcon from '../../../assets/LowPriorityIcon';
@@ -18,10 +19,13 @@ import MediumPriorityIcon from '../../../assets/MediumPriorityIcon';
 import HighPriorityIcon from '../../../assets/HighPriorityIcon';
 import VeryHighPriorityIcon from '../../../assets/VeryHighPriorityIcon';
 import OrggAutoComplete from '../OrggAutoComplete';
+import TrashcanIcon from '../../../assets/TrashcanIcon';
+import { cleanup, dayContext } from '../../state/day';
 
 const OrggAddTask = ({
   task, onFinish, isEditing, day,
 }) => {
+  console.log(task);
   const [displayEditButton, setDisplayEditButton] = useState(false);
   const [displayEditForm, setDisplayEditForm] = useState(isEditing);
   const [confirmDisabled, setConfirmDisabled] = useState(!isEditing);
@@ -36,7 +40,8 @@ const OrggAddTask = ({
   const [startingTime, setStartingTime] = useState(new Date(task ? task.StartingTime : 0));
   const [canPause, setCanPause] = useState(task ? task.canBeInterrupted : true);
 
-  const { dispatch } = useContext(tasksContext);
+  const { dispatch: tasksDispatch } = useContext(tasksContext);
+  const { dispatch: dayDispatch } = useContext(dayContext);
 
   const uniqByKeepLast = (a, key) => [
     ...new Map(
@@ -66,7 +71,7 @@ const OrggAddTask = ({
   }, [taskName]);
 
   const createTask = () => {
-    dispatch(isEditing
+    tasksDispatch(isEditing
       ? updateUserTask(
         task.ID, taskName, priority, estimatedTime, startingTime, undefined,
         isTimeFixed, difficulty, canPause,
@@ -107,6 +112,12 @@ const OrggAddTask = ({
     Keyboard.dismiss();
   };
 
+  const removeTask = () => {
+    tasksDispatch(removeUserTask(task.ID));
+    dayDispatch(cleanup());
+    onFinish();
+  };
+
   const priorityOptions = [
     {
       element: () => (
@@ -143,7 +154,14 @@ const OrggAddTask = ({
 
   return (
     <Container>
-      <TitleText>Nova tarefa</TitleText>
+      <TitleContainer>
+        <TitleText>Nova tarefa</TitleText>
+        {isEditing && (
+          <TouchableOpacity onPress={removeTask}>
+            <TrashcanIcon width={25} height={25} />
+          </TouchableOpacity>
+        )}
+      </TitleContainer>
       <TaskContainer>
         <OrggAutoComplete
           label="Minha tarefa"

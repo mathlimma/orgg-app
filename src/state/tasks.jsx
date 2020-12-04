@@ -215,10 +215,11 @@ function ADDUSER(payload) {
       Name: payload.Name,
       Priority: payload.Priority,
       Difficulty: payload.Difficulty == undefined ? 2 : payload.Difficulty,
-      EstimatedTime:
+      EstimatedTime: Number(
         payload.EstimatedTime == undefined || payload.EstimatedTime == ''
           ? getEstimatedTimeOrggTask(payload.Name, payload.Difficulty)
           : payload.EstimatedTime,
+      ),
       StartingTime:
         payload.StartingTime == undefined || payload.isTaskFixed != true
           ? 0
