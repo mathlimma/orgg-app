@@ -10,7 +10,7 @@ import {
   Container, DifficultyOption, OptionText, TaskButtonContainer, TaskContainer, TitleText,
 } from './styles';
 import {
-  getAllOrggTasks, getAllUserTasks, getUserTask, insertUserTask, tasksContext, updateUserTask,
+  getAllOrggTasks, getAllUserTasks, insertUserTask, tasksContext, updateUserTask,
 } from '../../state/tasks';
 
 import LowPriorityIcon from '../../../assets/LowPriorityIcon';
@@ -31,9 +31,7 @@ const OrggAddTask = ({
   const [taskName, setTaskName] = useState(task ? task.Name : '');
   const [difficulty, setDifficulty] = useState(task ? task.Difficulty : 2);
   const [priority, setPriority] = useState(task ? task.Priority : 1);
-  const [estimatedTime, setEstimatedTime] = useState(
-    new Date((task ? task.EstimatedTime : 30) * 60 * 1000),
-  );
+  const [estimatedTime, setEstimatedTime] = useState(task ? task.EstimatedTime : 30);
   const [isTimeFixed, setIsTimeFixed] = useState(task ? task.isTaskFixed : false);
   const [startingTime, setStartingTime] = useState(new Date(task ? task.StartingTime : 0));
   const [canPause, setCanPause] = useState(task ? task.canBeInterrupted : true);
@@ -68,14 +66,12 @@ const OrggAddTask = ({
   }, [taskName]);
 
   const createTask = () => {
-    const estimatedMinutes = estimatedTime.getUTCHours() * 60 + estimatedTime.getUTCMinutes();
-
     dispatch(isEditing
       ? updateUserTask(
-        task.ID, taskName, priority, estimatedMinutes, startingTime, undefined,
+        task.ID, taskName, priority, estimatedTime, startingTime, undefined,
         isTimeFixed, difficulty, canPause,
       ) : insertUserTask(
-        Date.now(), taskName, priority, startingTime, isTimeFixed, estimatedMinutes, difficulty,
+        Date.now(), taskName, priority, startingTime, isTimeFixed, estimatedTime, difficulty,
         canPause, undefined, day,
       ));
     onFinish();

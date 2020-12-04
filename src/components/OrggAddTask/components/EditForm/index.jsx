@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, View } from 'react-native';
-import addMinutes from 'date-fns/addMinutes';
+import { subMinutes, addMinutes, differenceInMinutes } from 'date-fns';
 import OrggOptionGroup from '../../../OrggOptionGroup';
 import OrggCheckBox from '../../../OrggCheckBox';
 
@@ -18,6 +18,12 @@ const EditForm = ({
   const [isTimeFixed, setIsTimeFixed] = isTimeFixedState;
   const [startingTime, setStartingTime] = startingTimeState;
   const [canPause, setCanPause] = canPauseState;
+
+  const handleEstimatedTime = (date) => {
+    setEstimatedTime(differenceInMinutes(date, startingTime) > 5
+      ? differenceInMinutes(date, startingTime)
+      : 5);
+  };
 
   const difficultyOptions = [{
     element: () => (
@@ -74,8 +80,11 @@ const EditForm = ({
         {!isTimeFixed ? (
           <OrggDateTimePicker
             label="Quantas horas devo usar?"
-            value={estimatedTime}
-            onChange={(date) => setEstimatedTime(date)}
+            value={addMinutes(
+              startingTime,
+              estimatedTime,
+            )}
+            onChange={(date) => handleEstimatedTime(date)}
           />
         ) : (
           <FixedTimeContainer>
@@ -91,10 +100,10 @@ const EditForm = ({
               value={
                 addMinutes(
                   startingTime,
-                  estimatedTime.getUTCHours() * 60 + estimatedTime.getUTCMinutes(),
+                  estimatedTime,
                 )
               }
-              onChange={(date) => setEstimatedTime(date)}
+              onChange={(date) => handleEstimatedTime(date)}
               containerStyle={{ width: '48%' }}
               mode="time"
             />
@@ -117,7 +126,7 @@ EditForm.propTypes = {
     PropTypes.func,
   ])).isRequired,
   estimatedTimeState: PropTypes.arrayOf(PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
+    PropTypes.number,
     PropTypes.func,
   ])).isRequired,
   isTimeFixedState: PropTypes.arrayOf(PropTypes.oneOfType([
