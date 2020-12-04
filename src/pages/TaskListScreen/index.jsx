@@ -12,7 +12,7 @@ import OrggButton from '../../components/OrggButton';
 import { daysFull } from '../../utils/utils';
 
 const TaskListScreen = () => {
-  let { state: tasks } = useContext(tasksContext);
+  const { state: tasks } = useContext(tasksContext);
 
   const [showAddTask, setShowAddTask] = useState(false);
   const [isEditingTask, setIsEditingTask] = useState(false);
@@ -24,7 +24,7 @@ const TaskListScreen = () => {
   const today = new Date().getDay();
   const weekDay = new Date(route.params.selectedDate).getDay();
 
-  tasks = tasks.filter((task) => (
+  const filteredTasks = tasks.filter((task) => (
     isSameDay(new Date(task.Day), new Date(route.params.selectedDate))));
 
   const handleTaskPress = (item) => {
@@ -43,9 +43,9 @@ const TaskListScreen = () => {
     <Container>
       <TitleText>{daysFull[weekDay]}</TitleText>
       <List
-        data={tasks}
+        data={filteredTasks}
         renderItem={({ item }) => <TaskListItem item={item} onPress={handleTaskPress} />}
-        keyExtractor={(item) => item.Name}
+        keyExtractor={(item) => String(item.ID)}
         showsVerticalScrollIndicator={false}
       />
       <ButtonRow>

@@ -88,7 +88,7 @@ const YourDayScreen = () => {
               isActive={isActive}
             />
           )}
-          keyExtractor={(item) => item.Name}
+          keyExtractor={(item) => String(item.ID)}
           showsVerticalScrollIndicator={false}
           onDragEnd={({ data }) => console.log(data)}
         />
