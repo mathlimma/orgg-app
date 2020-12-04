@@ -218,12 +218,7 @@ function ADDUSER(payload) {
       EstimatedTime:
         payload.EstimatedTime == undefined || payload.EstimatedTime == ''
           ? getEstimatedTimeOrggTask(payload.Name, payload.Difficulty)
-          : payload.isTaskFixed != true
-            ? payload.EstimatedTime
-            : Math.floor(
-              Math.abs(payload.EstimatedTime - payload.StartingTime)
-              / (1000 * 60),
-            ),
+          : payload.EstimatedTime,
       StartingTime:
         payload.StartingTime == undefined || payload.isTaskFixed != true
           ? 0
@@ -261,12 +256,7 @@ function UPDATEUSER(payload) {
       EstimatedTime:
         payload.EstimatedTime == undefined
           ? getUserTask(payload.ID).EstimatedTime
-          : payload.isTaskFixed != true
-            ? payload.EstimatedTime
-            : Math.floor(
-              Math.abs(payload.EstimatedTime - payload.StartingTime)
-              / (1000 * 60),
-            ),
+          : payload.EstimatedTime,
       StartingTime:
         payload.StartingTime == undefined
           ? getUserTask(payload.ID).StartingTime
