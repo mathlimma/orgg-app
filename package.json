@@ -36,7 +36,7 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
     "react-native-autocomplete-input": "^4.2.0",
-    "react-native-calendar-picker": "^7.0.3",
+    "react-native-calendar-picker": "7.0.1",
     "react-native-draggable-flatlist": "^2.5.1",
     "react-native-elements": "^3.0.0-alpha.1",
     "react-native-gesture-handler": "~1.7.0",
