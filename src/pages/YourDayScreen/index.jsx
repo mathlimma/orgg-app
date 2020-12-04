@@ -1,16 +1,17 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { FlatList, View } from 'react-native';
 import { tasksContext, TaskStatus, getUserTask } from '../../state/tasks';
 import TaskListItem from './components/TaskListItem';
 import OrggButton from '../../components/OrggButton';
 import {
-  Container, List, TitleText, SubTitleText,
+  ScreenContainer, Container, List, TitleText, SubTitleText,
 } from './styles';
 import { daysFull } from '../../utils/utils';
-import { dayContext } from '../../state/day';
+import { dayContext, update } from '../../state/day';
 
 const YourDayScreen = () => {
-  const { state: taskIDList } = useContext(dayContext);
+  const { state: taskIDList, dispatch } = useContext(dayContext);
   const { state: tasksDB } = useContext(tasksContext);
   const navigation = useNavigation();
 
@@ -36,7 +37,12 @@ const YourDayScreen = () => {
     setDoingTasks(filterTasks(TaskStatus.DOING));
     setTodoTasks(filterTasks(TaskStatus.TODO));
     setDoneTasks(filterTasks(TaskStatus.DONE));
-  }, [tasksDB]);
+  }, [tasksDB, taskIDList]);
+
+  const handleTodoDrag = (data) => {
+    const draggedTaskIDList = [...doneTasks, ...doingTasks, ...data].map((task) => task.ID);
+    dispatch(update(draggedTaskIDList));
+  };
 
   const handleBegin = () => handleNavigation(
     tasks.find(
@@ -45,34 +51,33 @@ const YourDayScreen = () => {
   );
 
   return (
-    <Container>
-      <TitleText>
-        {your}
-        {' '}
-        {dayName}
-      </TitleText>
-      { doingTasks && doingTasks.length > 0 && (
-      <>
-        <SubTitleText doing>Fazendo agora</SubTitleText>
-        <List
-          data={doingTasks}
-          renderItem={({
-            item, drag, isActive,
-          }) => (
-            <TaskListItem
-              handleNavigation={() => handleNavigation(item.ID)}
-              item={item}
-              drag={drag}
-              isActive={isActive}
-            />
-          )}
-          keyExtractor={(item) => item.Name}
-          showsVerticalScrollIndicator={false}
-          onDragEnd={({ data }) => console.log(data)}
-        />
-      </>
-      )}
-      { todoTasks
+    <ScreenContainer>
+      <Container>
+        <TitleText>
+          {your}
+          {' '}
+          {dayName}
+        </TitleText>
+        { doingTasks && doingTasks.length > 0 && (
+        <>
+          <SubTitleText doing>Fazendo agora</SubTitleText>
+          <FlatList
+            data={doingTasks}
+            renderItem={({
+              item, isActive,
+            }) => (
+              <TaskListItem
+                handleNavigation={() => handleNavigation(item.ID)}
+                item={item}
+                isActive={isActive}
+              />
+            )}
+            keyExtractor={(item) => item.Name}
+            showsVerticalScrollIndicator={false}
+          />
+        </>
+        )}
+        { todoTasks
       && todoTasks.length > 0 && (
       <>
         <SubTitleText>A fazer</SubTitleText>
@@ -90,33 +95,34 @@ const YourDayScreen = () => {
           )}
           keyExtractor={(item) => String(item.ID)}
           showsVerticalScrollIndicator={false}
-          onDragEnd={({ data }) => console.log(data)}
+          onDragEnd={({ data }) => handleTodoDrag(data)}
         />
       </>
-      )}
-      { doneTasks && doneTasks.length > 0 && (
+        )}
+        { doneTasks && doneTasks.length > 0 && (
         <>
           <SubTitleText>Finalizadas</SubTitleText>
-          <List
+          <FlatList
             data={doneTasks}
             renderItem={({
-              item, drag, isActive,
+              item, isActive,
             }) => (
               <TaskListItem
                 handleNavigation={() => handleNavigation(item.ID)}
                 item={item}
-                drag={drag}
                 isActive={isActive}
               />
             )}
             keyExtractor={(item) => item.Name}
             showsVerticalScrollIndicator={false}
-            onDragEnd={({ data }) => console.log(data)}
           />
         </>
-      )}
-      <OrggButton label="Começar" onPress={handleBegin} marginBottom />
-    </Container>
+        )}
+      </Container>
+      <View style={{ paddingHorizontal: 26 }}>
+        <OrggButton label="Começar" onPress={handleBegin} marginBottom />
+      </View>
+    </ScreenContainer>
   );
 };
 

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import addMinutes from 'date-fns/addMinutes';
 
 import {
   Container, TaskTitle, TopContent, BottomContent, TimeText, EditButtonText,
 } from './styles';
-import LowPriorityIcon from '../../../../../assets/LowPriorityIcon';
 import ClockIcon from '../../../../../assets/ClockIcon';
+import DragHandleIcon from '../../../../../assets/DragHandleIcon';
+import LowPriorityIcon from '../../../../../assets/LowPriorityIcon';
 import MediumPriorityIcon from '../../../../../assets/MediumPriorityIcon';
 import HighPriorityIcon from '../../../../../assets/HighPriorityIcon';
 import VeryHighPriorityIcon from '../../../../../assets/VeryHighPriorityIcon';
@@ -37,29 +38,31 @@ const TaskListItem = ({
       </OrggBottomSheet>
       )}
       <TouchableOpacity onPress={() => handleNavigation(item)} onLongPress={drag}>
-        <Container>
-          <TopContent>
-            <TaskTitle>{item?.Name}</TaskTitle>
-            {item?.isTaskFixed ? <ClockIcon /> : <Icon />}
-          </TopContent>
-
-          <BottomContent>
-            {item?.isTaskFixed ? (
-              <TimeText>
-                {/* TODO(mathlimma): Better formatting of beginning and end times */}
-                Iniciar:
-                {` ${new Date(item.StartingTime).getHours()} h ${new Date(item.StartingTime).getMinutes()} m `}
-                Finalizar:
-                {` ${new Date(addMinutes(item.StartingTime, item.EstimatedTime)).getHours()} h ${new Date(addMinutes(item.StartingTime, item.EstimatedTime)).getMinutes()} m`}
-              </TimeText>
-            ) : <TimeText>{`Tempo utilizado: ${item.EstimatedTime} minutos`}</TimeText>}
-            <TouchableOpacity onPress={toggleEdit}>
-              <EditButtonText>
-                Editar
-              </EditButtonText>
-            </TouchableOpacity>
-          </BottomContent>
-        </Container>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: drag ? -8 : 0 }}>
+          {drag && <DragHandleIcon />}
+          <Container>
+            <TopContent>
+              <TaskTitle>{item?.Name}</TaskTitle>
+              {item?.isTaskFixed ? <ClockIcon /> : <Icon />}
+            </TopContent>
+            <BottomContent>
+              {item?.isTaskFixed ? (
+                <TimeText>
+                  {/* TODO(mathlimma): Better formatting of beginning and end times */}
+                  Iniciar:
+                  {` ${new Date(item.StartingTime).getHours()} h ${new Date(item.StartingTime).getMinutes()} m `}
+                  Finalizar:
+                  {` ${new Date(addMinutes(item.StartingTime, item.EstimatedTime)).getHours()} h ${new Date(addMinutes(item.StartingTime, item.EstimatedTime)).getMinutes()} m`}
+                </TimeText>
+              ) : <TimeText>{`Tempo utilizado: ${item.EstimatedTime} minutos`}</TimeText>}
+              <TouchableOpacity onPress={toggleEdit}>
+                <EditButtonText>
+                  Editar
+                </EditButtonText>
+              </TouchableOpacity>
+            </BottomContent>
+          </Container>
+        </View>
       </TouchableOpacity>
     </>
 
@@ -77,7 +80,11 @@ TaskListItem.propTypes = {
     isTaskFixed: PropTypes.bool.isRequired,
   }).isRequired,
   handleNavigation: PropTypes.func.isRequired,
-  drag: PropTypes.func.isRequired,
+  drag: PropTypes.func,
+};
+
+TaskListItem.defaultProps = {
+  drag: null,
 };
 
 export default TaskListItem;

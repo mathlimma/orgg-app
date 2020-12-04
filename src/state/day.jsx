@@ -15,6 +15,7 @@ const { Provider } = dayContext;
 export const Types = {
   ORGANIZE: 'day/ORGANIZE',
   CLEANUP: 'day/CLEANUP',
+  UPDATE: 'day/UPDATE',
 };
 
 // Action Creators
@@ -24,6 +25,11 @@ export const organize = () => ({
 
 export const cleanup = () => ({
   type: Types.CLEANUP,
+});
+
+export const update = (tasksIdList) => ({
+  type: Types.UPDATE,
+  payload: tasksIdList,
 });
 
 // Priority => Difficulty * EstimatedTime
@@ -255,6 +261,8 @@ const DayProvider = ({ children }) => {
         return ORGANIZE();
       case Types.CLEANUP:
         return CLEANUP(currentState);
+      case Types.UPDATE:
+        return [...action.payload];
       default:
         return currentState;
     }

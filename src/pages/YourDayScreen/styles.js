@@ -2,13 +2,19 @@ import styled from 'styled-components/native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import Colors from '../../utils/colors';
 
+export const ScreenContainer = styled.View`
+    justify-content: space-between;
+    background-color: ${Colors.background};
+    width: 100%;
+    height: 100%;
+  `;
+
 export const Container = styled.ScrollView.attrs({
   showsVerticalScrollIndicator: false,
 })`
     padding-horizontal: 26px;
     background-color: ${Colors.background};
     width: 100%;
-    height: 100%;
 `;
 
 export const TitleText = styled.Text`
