@@ -40,17 +40,31 @@ const OrggAddTask = ({
 
   const { dispatch } = useContext(tasksContext);
 
+  const uniqByKeepLast = (a, key) => [
+    ...new Map(
+      a.map((x) => [key(x), x]),
+    ).values(),
+  ];
+
   const removeDuplicatedTasks = (orggDB, userDB) => {
+    let handledUserDB = userDB.sort((item1, item2) => item1.ID > item2.ID);
+    handledUserDB = uniqByKeepLast([...userDB], (item) => item.Name);
     const userTaskNames = userDB.map((element) => element.Name);
     const filteredOrggDB = orggDB.filter((element) => !userTaskNames.includes(element.Name));
-    return [...userDB, ...filteredOrggDB];
+    return [...handledUserDB, ...filteredOrggDB];
   };
 
   useEffect(() => {
-    setFilteredTasks(taskName
+    let taskList = taskName
       ? removeDuplicatedTasks(getAllOrggTasks(), getAllUserTasks())
-        .filter((item) => item.Name.startsWith(taskName))
-      : []);
+        .filter((item) => item.Name.toLowerCase().startsWith(taskName.toLowerCase()))
+      : [];
+
+    if (
+      taskName
+      && !taskList.some((elem) => elem.Name.toLowerCase() === taskName.toLowerCase())
+    ) taskList = [{ Name: taskName }, ...taskList];
+    setFilteredTasks(taskList);
   }, [taskName]);
 
   const createTask = () => {
@@ -69,37 +83,32 @@ const OrggAddTask = ({
 
   const handleTaskName = (input) => {
     setTaskName(input);
+    setConfirmDisabled(true);
   };
 
   const handleTaskListItemPress = (item) => {
     setHideAutocompleteList(true);
-    Keyboard.dismiss();
 
     setTaskName(item.Name);
-    setDifficulty(item.Difficulty || 2);
-    setPriority(item.Priority || 1);
-    setEstimatedTime(new Date(item.EstimatedTime * 60 * 1000));
-    setIsTimeFixed(item.isTaskFixed || false);
-    setStartingTime(new Date(item.StartingTime * 60 * 1000 || 0));
-    setCanPause(item.canBeInterrupted || true);
+    setDifficulty(item.Difficulty || difficulty);
+    setPriority(item.Priority || priority);
+    setEstimatedTime(new Date(item.EstimatedTime * 60 * 1000 || estimatedTime));
+    setIsTimeFixed(item.isTaskFixed || isTimeFixed);
+    setStartingTime(new Date(item.StartingTime * 60 * 1000 || startingTime));
+    setCanPause(item.canBeInterrupted || canPause);
 
+    let shouldDisplayEditForm = false;
     if (item.Difficulty === undefined || item.Priority === undefined
       || item.isTaskFixed === undefined || item.canBeInterrupted === undefined
       || (item.isTaskFixed && item.startingTime === undefined)) {
-      setDisplayEditForm(true);
+      shouldDisplayEditForm = true;
     }
-
-    setConfirmDisabled(false);
-  };
-
-  const handleEndEditingTaskName = () => {
-    setHideAutocompleteList(true);
-    const shouldDisplayEditForm = !getUserTask(taskName);
 
     setDisplayEditButton(!shouldDisplayEditForm);
     setDisplayEditForm(shouldDisplayEditForm);
 
     setConfirmDisabled(false);
+    Keyboard.dismiss();
   };
 
   const priorityOptions = [
@@ -150,7 +159,6 @@ const OrggAddTask = ({
           containerStyle={{ width: displayEditButton ? '70%' : '100%' }}
           hideResults={hideAutocompleteList}
           onFocus={() => setHideAutocompleteList(false)}
-          onEndEditing={handleEndEditingTaskName}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handleTaskListItemPress(item)}>
               <Text>{item.Name}</Text>
