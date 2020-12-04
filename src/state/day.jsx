@@ -144,9 +144,9 @@ function POMODORO(UserTask, StartHours) {
       const aux = [];
 
       if (
-        UserTaskFixed[i].StartingTime.getDay() === new Date().getDay() &&
-        UserTaskFixed[i].StartingTime.getMonth() === new Date().getMonth() &&
-        UserTaskFixed[i].StartingTime.getFullYear() === new Date().getFullYear()
+        new Date(UserTaskFixed[i].Day).getDay() === new Date().getDay() &&
+        new Date(UserTaskFixed[i].Day).getMonth() === new Date().getMonth() &&
+        new Date(UserTaskFixed[i].Day).getFullYear() === new Date().getFullYear()
       ) {
         const date = new Date();
         restTime = UserTaskFixed[i].StartingTime.getHours() * 60
