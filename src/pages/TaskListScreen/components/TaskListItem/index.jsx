@@ -11,7 +11,7 @@ import ClockIcon from '../../../../../assets/ClockIcon';
 
 // TODO: User can delete tasks
 
-const TaskListItem = ({ item }) => {
+const TaskListItem = ({ item, onPress }) => {
   let Icon;
   if (item.Priority === 0) Icon = LowPriorityIcon;
   else if (item.Priority === 1) Icon = MediumPriorityIcon;
@@ -19,7 +19,7 @@ const TaskListItem = ({ item }) => {
   else if (item.Priority === 3) Icon = VeryHighPriorityIcon;
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => onPress(item)}>
       <Container>
         <TaskTitle>{item.Name}</TaskTitle>
         {item?.isTaskFixed ? <ClockIcon /> : <Icon />}
@@ -31,7 +31,9 @@ TaskListItem.propTypes = {
   item: PropTypes.shape({
     Name: PropTypes.string.isRequired,
     Priority: PropTypes.number.isRequired,
+    isTaskFixed: PropTypes.bool.isRequired,
   }).isRequired,
+  onPress: PropTypes.func.isRequired,
 };
 
 export default TaskListItem;

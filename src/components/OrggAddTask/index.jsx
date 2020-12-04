@@ -200,7 +200,10 @@ OrggAddTask.propTypes = {
     Priority: PropTypes.number.isRequired,
     Difficulty: PropTypes.number.isRequired,
     EstimatedTime: PropTypes.number.isRequired,
-    StartingTime: PropTypes.number.isRequired,
+    StartingTime: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
     isTaskFixed: PropTypes.bool.isRequired,
     canBeInterrupted: PropTypes.bool.isRequired,
   }),

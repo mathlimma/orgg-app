@@ -15,6 +15,8 @@ const TaskListScreen = () => {
   let { state: tasks } = useContext(tasksContext);
 
   const [showAddTask, setShowAddTask] = useState(false);
+  const [isEditingTask, setIsEditingTask] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -25,18 +27,30 @@ const TaskListScreen = () => {
   tasks = tasks.filter((task) => (
     isSameDay(new Date(task.Day), new Date(route.params.selectedDate))));
 
+  const handleTaskPress = (item) => {
+    setIsEditingTask(true);
+    setSelectedTask(item);
+    setShowAddTask(!showAddTask);
+  };
+
+  const toggleAddTask = () => {
+    setIsEditingTask(false);
+    setSelectedTask(null);
+    setShowAddTask(!showAddTask);
+  };
+
   return (
     <Container>
       <TitleText>{daysFull[weekDay]}</TitleText>
       <List
         data={tasks}
-        renderItem={TaskListItem}
+        renderItem={({ item }) => <TaskListItem item={item} onPress={handleTaskPress} />}
         keyExtractor={(item) => item.Name}
         showsVerticalScrollIndicator={false}
       />
       <ButtonRow>
         <ButtonContainer>
-          <OrggButton label="+" onPress={() => setShowAddTask(!showAddTask)} />
+          <OrggButton label="+" onPress={toggleAddTask} />
         </ButtonContainer>
         {weekDay === today
         && (
@@ -46,10 +60,12 @@ const TaskListScreen = () => {
         )}
       </ButtonRow>
       {showAddTask && (
-        <OrggBottomSheet onPressOpacity={() => setShowAddTask(!showAddTask)}>
+        <OrggBottomSheet onPressOpacity={toggleAddTask}>
           <OrggAddTask
-            onFinish={() => setShowAddTask(!showAddTask)}
+            onFinish={toggleAddTask}
             day={route.params.selectedDate}
+            task={selectedTask}
+            isEditing={isEditingTask}
           />
         </OrggBottomSheet>
       )}

@@ -28,7 +28,7 @@ const OrggDateTimePicker = ({
   const formatValue = () => (
     mode === 'duration'
       ? `${formatDuration(value.getUTCHours(), 'horas')} ${formatDuration(value.getMinutes(), 'minutos')}`
-      : `${format(value, 'hh:mm')}`
+      : `${format(value, 'HH:mm')}`
   );
 
   return (

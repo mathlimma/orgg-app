@@ -88,7 +88,12 @@ const EditForm = ({
             />
             <OrggDateTimePicker
               label="Fim"
-              value={addMinutes(startingTime, estimatedTime.getMinutes())}
+              value={
+                addMinutes(
+                  startingTime,
+                  estimatedTime.getUTCHours() * 60 + estimatedTime.getUTCMinutes(),
+                )
+              }
               onChange={(date) => setEstimatedTime(date)}
               containerStyle={{ width: '48%' }}
               mode="time"
