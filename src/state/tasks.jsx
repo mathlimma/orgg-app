@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react';
 import PropTypes from 'prop-types';
-import { AsyncStorage } from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-community/async-storage';
 import * as db from '../db/orgg-database.json';
 
 let OrggDatabase = db.OrggDB;
@@ -25,13 +25,13 @@ export const TaskStatus = {
 };
 
 // Store and Read database
-storeDatabase = async (key, data) => {
+const storeDatabase = async (key, data) => {
   try {
     await AsyncStorage.setItem(key, JSON.stringify(data));
   } catch (error) { }
 };
-/*
-readDatabase = async (key) => {
+
+const readDatabase = async (key) => {
   try {
     const db = await AsyncStorage.getItem(key);
     if (db !== null) {
@@ -39,14 +39,14 @@ readDatabase = async (key) => {
     }
   } catch (error) { }
 };
-*/
-getKeys = async () => {
+
+const getKeys = async () => {
   try {
     await AsyncStorage.getAllKeys().then((result) => result);
   } catch (error) { }
 };
 
-initialize = async () => {
+const initialize = async () => {
   const databases = ['OrggDB', 'UserDB'];
 
   const log = {
