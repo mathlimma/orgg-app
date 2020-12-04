@@ -98,9 +98,9 @@ function POMODORO(UserTask, StartHours) {
                 ) {
                   if (
                     (4 - auxUSerTaskFixed[i].Difficulty)
-                      * auxUSerTaskFixed[i].EstimatedTime
+                    * auxUSerTaskFixed[i].EstimatedTime
                     > (4 - UserTaskFixed[j].Difficulty)
-                      * UserTaskFixed[j].EstimatedTime
+                    * UserTaskFixed[j].EstimatedTime
                   ) {
                     aux.push(auxUSerTaskFixed[i]);
                     break;
@@ -143,7 +143,11 @@ function POMODORO(UserTask, StartHours) {
       let restTime = 0;
       const aux = [];
 
-      if (UserTaskFixed[i].StartingTime.getDay() === new Date().getDay()) {
+      if (
+        UserTaskFixed[i].StartingTime.getDay() === new Date().getDay() &&
+        UserTaskFixed[i].StartingTime.getMonth() === new Date().getMonth() &&
+        UserTaskFixed[i].StartingTime.getFullYear() === new Date().getFullYear()
+      ) {
         const date = new Date();
         restTime = UserTaskFixed[i].StartingTime.getHours() * 60
           + UserTaskFixed[i].StartingTime.getMinutes()
@@ -156,8 +160,14 @@ function POMODORO(UserTask, StartHours) {
       }
 
       for (let j = 0; j < UserTaskNotFixed.length; j++) {
-        const taskTime = UserTaskNotFixed[j].EstimatedTime
-          + Math.ceil(UserTaskNotFixed[j].EstimatedTime / 25) * 5;
+        let taskTime = 0;
+        if (UserTaskNotFixed[j].canBeInterrupted === true) {
+          taskTime =
+            UserTaskNotFixed[j].EstimatedTime +
+            Math.ceil(UserTaskNotFixed[j].EstimatedTime / 25) * 5;
+        } else {
+          taskTime = UserTaskNotFixed[j].EstimatedTime;
+        }
 
         if (restTime - taskTime <= 0) {
           while (
@@ -227,7 +237,16 @@ function ORGANIZE() {
     }
   }
 
-  return newUserDatabase;
+  const tasksDay = getAllUserTasks()
+    .filter(
+      (Task) =>
+        new Date(Task.Day).getDay() == new Date().getDay() &&
+        new Date(Task.Day).getMonth() == new Date().getMonth() &&
+        new Date(Task.Day).getFullYear() == new Date().getFullYear()
+    )
+    .map((Task) => Task.ID);
+
+  return newUserDatabase.filter((Task) => tasksDay.includes(Task));
 }
 
 // Reducer
