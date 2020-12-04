@@ -99,13 +99,12 @@ export const getEstimatedTimeOrggTask = (name, difficulty) => {
     .filter((UserTask) => UserTask.Name.toLowerCase() === name.toLowerCase());
 
   if (UserTask.length !== 0) {
-    if (UserTask.length === 1) return UserTask.ElapsedTime;
+    if (UserTask.length === 1) return UserTask[0].ElapsedTime;
 
-    const average = 0;
+    let average = 0;
     for (let i = 0; i < UserTask.length; i++) {
-      average += UserTask.ElapsedTime;
+      average += UserTask[i].ElapsedTime;
     }
-
     return Math.floor(average / UserTask.length);
   }
 
@@ -113,7 +112,7 @@ export const getEstimatedTimeOrggTask = (name, difficulty) => {
     (OrggTask) => OrggTask.Name.toLowerCase() === name.toLowerCase(),
   );
 
-  if (OrggTask.length !== 0) return OrggTask.EstimatedTime;
+  if (OrggTask.length !== 0) return OrggTask[0].EstimatedTime;
 
   switch (difficulty) {
     case 4:
@@ -254,10 +253,11 @@ function UPDATEUSER(payload) {
         payload.Priority == undefined
           ? getUserTask(payload.ID).Priority
           : payload.Priority,
-      EstimatedTime:
+      EstimatedTime: Number(
         payload.EstimatedTime == undefined
           ? getUserTask(payload.ID).EstimatedTime
           : payload.EstimatedTime,
+      ),
       StartingTime:
         payload.StartingTime == undefined
           ? getUserTask(payload.ID).StartingTime

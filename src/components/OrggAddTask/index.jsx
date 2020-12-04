@@ -11,7 +11,8 @@ import {
   TitleText,
 } from './styles';
 import {
-  getAllOrggTasks, getAllUserTasks, insertUserTask, removeUserTask, tasksContext, updateUserTask,
+  getAllOrggTasks, getAllUserTasks, getEstimatedTimeOrggTask, insertUserTask, removeUserTask,
+  tasksContext, updateUserTask,
 } from '../../state/tasks';
 
 import LowPriorityIcon from '../../../assets/LowPriorityIcon';
@@ -25,7 +26,6 @@ import { cleanup, dayContext } from '../../state/day';
 const OrggAddTask = ({
   task, onFinish, isEditing, day,
 }) => {
-  console.log(task);
   const [displayEditButton, setDisplayEditButton] = useState(false);
   const [displayEditForm, setDisplayEditForm] = useState(isEditing);
   const [confirmDisabled, setConfirmDisabled] = useState(!isEditing);
@@ -93,7 +93,7 @@ const OrggAddTask = ({
     setTaskName(item.Name);
     setDifficulty(item.Difficulty || difficulty);
     setPriority(item.Priority || priority);
-    setEstimatedTime(new Date(item.EstimatedTime * 60 * 1000 || estimatedTime));
+    setEstimatedTime(getEstimatedTimeOrggTask(item.Name, item.Priority || priority));
     setIsTimeFixed(item.isTaskFixed || isTimeFixed);
     setStartingTime(new Date(item.StartingTime * 60 * 1000 || startingTime));
     setCanPause(item.canBeInterrupted || canPause);
