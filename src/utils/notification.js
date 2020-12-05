@@ -1,18 +1,18 @@
 import * as Notifications from 'expo-notifications';
 
-const sendNotification = async (taskName) => {
+const sendNotification = async (title, body, secondsDelay) => {
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: 'Tarefa iniciada',
-      body: `Você está a ${taskName}. Bom trabalho!`,
+      title,
+      body,
     },
     trigger: {
-      seconds: 0,
+      seconds: secondsDelay,
     },
   });
 };
 
-const Notification = (taskName) => {
+const Notification = (taskName, type = 'start') => {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true,
@@ -20,7 +20,11 @@ const Notification = (taskName) => {
       shouldSetBadge: true,
     }),
   });
-  sendNotification(taskName);
+  const titleTxt = type === 'start' ? 'Tarefa iniciada' : 'Que tal parar um pouco?';
+  const bodyTxt = type === 'start' ? `Você está fazendo: ${taskName}. Bom trabalho!` : 'Aproveite pra pegar um ar ou beber uma água.';
+  const secondsDelay = type === 'start' ? 0 : 30;
+
+  sendNotification(titleTxt, bodyTxt, secondsDelay);
 };
 
 export default Notification;

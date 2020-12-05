@@ -47,6 +47,8 @@ const TaskScreen = () => {
     dispatch(startTask(item.ID));
 
     dispatchNotification(item.Name);
+    const type = 'end';
+    dispatchNotification(item.Name, type);
     BackHandler.exitApp();
   }
 
