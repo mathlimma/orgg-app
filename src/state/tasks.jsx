@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as db from '../db/orgg-database.json';
 
-let OrggDatabase = db.OrggDB;
-let UserDatabase = db.UserDB;
-
 // Types
 export const Types = {
   ADDUSER: 'tasks/ADDUSER',
@@ -36,57 +33,20 @@ const readDatabase = async (key) => {
     const db = await AsyncStorage.getItem(key);
     if (db !== null) {
       return JSON.parse(db);
+    } else {
+      return [];
     }
   } catch (error) { }
 };
 
-const getKeys = async () => {
-  try {
-    await AsyncStorage.getAllKeys().then((result) => result);
-  } catch (error) { }
-};
+let OrggDatabase = db.OrggDB;
+let UserDatabase = [];
 
-const initialize = async () => {
-  const databases = ['OrggDB', 'UserDB'];
+readDatabase('UserDB').then((result) => {
+  UserDatabase = result;
+});
 
-  const log = {
-    OrggDB: false,
-    UserDB: false,
-  };
-
-  const keys = getKeys();
-
-  for (key in keys) {
-    log[keys[key]] = true;
-  }
-
-  for (i in databases) {
-    // if (!log[databases[i]]) {
-    switch (databases[i]) {
-      case 'OrggDB':
-        storeDatabase(key, db.OrggDB);
-        OrggDatabase = db.OrggDB;
-        break;
-      case 'UserDB':
-        storeDatabase(key, db.UserDB);
-        UserDatabase = db.UserDB;
-        break;
-      default:
-        break;
-    }
-    /* } else {
-      switch (databases[i]) {
-        case 'OrggDB': OrggDatabase = readDatabase('OrggDB'); break;
-        case 'UserDB': UserDatabase = readDatabase('UserDB'); break;
-        default: break;
-      }
-    } */
-  }
-};
-
-initialize();
-
-const initialState = db.UserDB;
+const initialState = UserDatabase;
 const tasksContext = createContext(initialState);
 const { Provider } = tasksContext;
 
@@ -206,7 +166,7 @@ export const updateEstimatedTime = (ID, CurrentTime) => {
   updateUserDB();
 };
 
-// --------
+// Action functions
 function ADDUSER(payload) {
   if (!isExistsUserTask(payload.ID)) {
     const task = {
