@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as db from '../db/orgg-database.json';
@@ -12,6 +12,7 @@ export const Types = {
   PAUSETASK: 'tasks/PAUSETASK',
   STARTTASK: 'tasks/STARTTASK',
   POMODORO: 'tasks/POMODORO',
+  INITIALIZE: 'tasks/INITIALIZE',
 };
 
 // Status
@@ -33,18 +34,13 @@ const readDatabase = async (key) => {
     const db = await AsyncStorage.getItem(key);
     if (db !== null) {
       return JSON.parse(db);
-    } else {
-      return [];
     }
+    return [];
   } catch (error) { }
 };
 
-let OrggDatabase = db.OrggDB;
+const OrggDatabase = db.OrggDB;
 let UserDatabase = [];
-
-readDatabase('UserDB').then((result) => {
-  UserDatabase = result;
-});
 
 const initialState = UserDatabase;
 const tasksContext = createContext(initialState);
@@ -406,6 +402,11 @@ export const startTask = (ID, CurrentTime) => ({
   },
 });
 
+export const initialize = (db) => ({
+  type: Types.INITIALIZE,
+  payload: db,
+});
+
 // Reducer
 const TasksProvider = ({ children }) => {
   const [state, dispatch] = useReducer((currentState, action) => {
@@ -422,10 +423,19 @@ const TasksProvider = ({ children }) => {
         return [...PAUSETASK()];
       case Types.STARTTASK:
         return [...STARTTASK(action.payload)];
+      case Types.INITIALIZE:
+        return [...action.payload];
       default:
         return currentState;
     }
   }, initialState);
+
+  useEffect(() => {
+    readDatabase('UserDB').then((result) => {
+      dispatch(initialize(result));
+      UserDatabase = result;
+    });
+  }, []);
 
   return <Provider value={{ state, dispatch }}>{children}</Provider>;
 };
