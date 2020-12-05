@@ -205,7 +205,7 @@ const OrggAddTask = ({
         options={priorityOptions}
       />
       <OrggButton
-        label="Próximo"
+        label={isEditing ? 'Atualizar tarefa' : 'Criar tarefa'}
         onPress={createTask}
         color={colors.primary}
         disabled={confirmDisabled}

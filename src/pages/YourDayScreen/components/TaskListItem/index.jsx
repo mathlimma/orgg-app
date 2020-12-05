@@ -14,6 +14,7 @@ import HighPriorityIcon from '../../../../../assets/HighPriorityIcon';
 import VeryHighPriorityIcon from '../../../../../assets/VeryHighPriorityIcon';
 import OrggCreateTask from '../../../../components/OrggAddTask';
 import OrggBottomSheet from '../../../../components/OrggBottomSheet';
+import { TaskStatus } from '../../../../state/tasks';
 
 const TaskListItem = ({
   item, handleNavigation, drag,
@@ -29,6 +30,13 @@ const TaskListItem = ({
   function toggleEdit() {
     setShowEditTask(!showEditTask);
   }
+
+  const handleEstimatedTimeText = () => {
+    switch (item.Status) {
+      case TaskStatus.DONE: return `Tempo utilizado: ${item.ElapsedTime} minutos`;
+      default: return `Tempo estimado: ${item.EstimatedTime} minutos`;
+    }
+  };
 
   return (
     <>
@@ -49,16 +57,18 @@ const TaskListItem = ({
               {item?.isTaskFixed ? (
                 <TimeText>
                   {/* TODO(mathlimma): Better formatting of beginning and end times */}
-                  Iniciar:
+                  Inicio:
                   {` ${new Date(item.StartingTime).getHours()} h ${new Date(item.StartingTime).getMinutes()} m `}
-                  Finalizar:
+                  Fim:
                   {` ${new Date(addMinutes(item.StartingTime, item.EstimatedTime)).getHours()} h ${new Date(addMinutes(item.StartingTime, item.EstimatedTime)).getMinutes()} m`}
                 </TimeText>
-              ) : <TimeText>{`Tempo utilizado: ${item.EstimatedTime} minutos`}</TimeText>}
+              ) : <TimeText>{handleEstimatedTimeText()}</TimeText>}
               <TouchableOpacity onPress={toggleEdit}>
+                {item.Status !== TaskStatus.DONE && (
                 <EditButtonText>
                   Editar
                 </EditButtonText>
+                )}
               </TouchableOpacity>
             </BottomContent>
           </Container>
@@ -77,7 +87,9 @@ TaskListItem.propTypes = {
       PropTypes.instanceOf(Date),
       PropTypes.number,
     ]).isRequired,
+    ElapsedTime: PropTypes.number.isRequired,
     isTaskFixed: PropTypes.bool.isRequired,
+    Status: PropTypes.string.isRequired,
   }).isRequired,
   handleNavigation: PropTypes.func.isRequired,
   drag: PropTypes.func,
