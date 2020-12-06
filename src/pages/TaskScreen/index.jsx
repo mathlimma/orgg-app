@@ -71,7 +71,7 @@ const TaskScreen = () => {
       case TaskStatus.TODO: return (
         <OrggButton label="Iniciar" onPress={handleStart} />
       );
-      case TaskStatus.DOING: return (
+      case TaskStatus.DOING: return item.canBeInterrupted ? (
         <ButtonsContainerRow>
           <ButtonSize>
             <OrggButton label="Pausar" onPress={() => dispatch(pauseTask())} />
@@ -80,6 +80,8 @@ const TaskScreen = () => {
             <OrggButton label="Finalizar" onPress={handleEnd} />
           </ButtonSize>
         </ButtonsContainerRow>
+      ) : (
+        <OrggButton label="Finalizar" onPress={handleEnd} />
       );
       default: return null;
     }
