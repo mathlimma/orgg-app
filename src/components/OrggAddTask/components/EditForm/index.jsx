@@ -86,7 +86,7 @@ const EditForm = ({
           <OrggDateTimePicker
             label="Quantas horas devo usar?"
             value={addMinutes(
-              startingTime,
+              new Date(0),
               estimatedTime,
             )}
             onChange={(date) => handleEstimatedTime(date)}
