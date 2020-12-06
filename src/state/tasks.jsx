@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-community/async-storage';
+import { isSameDay } from 'date-fns';
 import * as db from '../db/orgg-database.json';
 
 // Types
@@ -268,8 +269,8 @@ function REMOVEUSER(payload) {
 
 function STARTTASK(payload) {
   if (
-    getAllUserTasks().filter((UserTask) => UserTask.Status === TaskStatus.DOING)
-      .length === 0
+    getAllUserTasks().filter((UserTask) => (
+      UserTask.Status === TaskStatus.DOING && isSameDay(UserTask.Day, new Date()))).length === 0
   ) {
     const newUserDatabase = getAllUserTasks();
     newUserDatabase[getIndexUserTask(payload.ID)].StartingTime = new Date();
