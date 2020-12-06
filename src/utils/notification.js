@@ -1,14 +1,14 @@
 import * as Notifications from 'expo-notifications';
 
 const sendNotification = async (title, body, secondsDelay) => {
-  await Notifications.scheduleNotificationAsync({
+  Notifications.scheduleNotificationAsync({
     content: {
       title,
       body,
     },
-    trigger: {
+    trigger: secondsDelay > 3 ? {
       seconds: secondsDelay,
-    },
+    } : null,
   });
 };
 
